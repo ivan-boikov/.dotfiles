@@ -1,0 +1,2 @@
+export QT_STYLE_OVERRIDE=gtk
+export QT_QPA_PLATFORMTHEME=gtk2

@@ -1,0 +1,41 @@
+#!/bin/bash
+
+args=("$@")
+
+#echo Number of arguments: $#
+
+tablet=$(xsetwacom list | grep stylus | cut -f 1 | xargs)
+
+Wx=${args[0]}
+Wy=${args[1]}
+alpha=${args[2]}
+Sx=${args[3]}
+Sy=${args[4]}
+skewX=${args[5]}
+skewY=${args[6]}
+
+xsetwacom --set "$tablet" ResetArea
+Nx=$(xsetwacom get "$tablet" Area | cut -f 3 -d ' ')
+Ny=$(xsetwacom get "$tablet" Area | cut -f 4 -d ' ')
+
+resX=$(xdpyinfo | awk '/dimensions/{print $2}' | cut -f 1 -d 'x')
+resY=$(xdpyinfo | awk '/dimensions/{print $2}' | cut -f 2 -d 'x')
+
+#dual display hack
+#resX=$(($resX/2))
+
+Nxx=$(($Nx/$alpha))
+Nyy=$(($Sx*$Ny*$Wy/$alpha/$Sy/$Wx))
+
+dx=$((($resX-$Wx)/2 + $skewX))
+dy=$((($resY-$Wy)/2 + $skewY))
+
+#echo $tablet
+#echo Area 0 0 $Nxx $Nyy
+#echo MapToOutput ${Wx} ${Wy} ${dx} ${dy}
+
+#xsetwacom --set "${tablet}" Area 0 0 $Nxx $Nyy
+xsetwacom --set "${tablet}" Area $((($Nx-$Nxx)/2)) 0 $((($Nx+$Nxx)/2)) $Nyy
+#xsetwacom --set "${tablet}" Area 0 $(($Ny-$Nyy)) $Nxx $Ny
+xsetwacom --set "${tablet}" MapToOutput ${Wx}x${Wy}+$dx+$dy
+

@@ -1,0 +1,34 @@
+[ -x "$(command -v nvim)" ] && alias vim="nvim" vimdiff="nvim -d"
+
+# Verbosity and settings that you pretty much just always are going to want.
+alias \
+        cp="cp -iv" \
+        mv="mv -iv" \
+        rm="rm -vI" \
+        mkd="mkdir -pv" \
+        yt="youtube-dl --add-metadata -i" \
+        yta="yt -x -f bestaudio/best" \
+        ffmpeg="ffmpeg -hide_banner" \
+	nnn="nnn -de"
+
+# Colorize commands when possible.
+alias \
+        ls="ls -hN --color=auto --group-directories-first" \
+        grep="grep --color=auto" \
+        diff="diff --color=auto" \
+        ccat="highlight --out-format=ansi"
+
+
+alias \
+        yt="youtube-dl --add-metadata -ic" \
+        yta="youtube-dl --add-metadata -xic" \
+        ka="killall" \
+        g="git" \
+        f="$FILE" \
+        ssd="systemctl shutdown" \
+        ssp="systemctl suspend" \
+        e="$EDITOR" \
+        v="$EDITOR" \
+        a="sudo apt" \
+        z="zathura" \
+	mpv60="mpv --input-ipc-server=/tmp/mpvsocket --hwdec=auto-copy"

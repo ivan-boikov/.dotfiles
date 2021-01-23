@@ -1,0 +1,18 @@
+directory: ~/music
+library: ~/music/beets.db
+
+import:
+  move: yes
+  copy: no
+  write: yes
+  log: ~/music/beets.log
+  resume: ask
+
+
+plugins: fetchart lastgenre vgmdb 
+
+paths:
+  default: $albumartist/$album-$format/$disc-$track-$title
+  singleton: singletons/$artist-$title
+  comp: various-artists/$album%aunique{}/$disc-$track-$title
+  albumtype:soundtrack: soundtracks/$album/$disc-$track-$title
