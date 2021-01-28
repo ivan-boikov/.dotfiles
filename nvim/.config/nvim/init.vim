@@ -20,10 +20,13 @@ Plug 'neovim/nvim-lspconfig'
 Plug 'ervandew/supertab'
 call plug#end()
 
+nnoremap <F4> :NERDTreeToggle<CR>
+
+
+"JULIA STUFF
 let g:slime_paste_file = "$HOME/.cache/slime_paste"
 
 autocmd Filetype julia setlocal omnifunc=v:lua.vim.lsp.omnifunc
-
 lua << EOF
 require'lspconfig'.julials.setup{
     on_new_config = function(new_config,new_root_dir)
