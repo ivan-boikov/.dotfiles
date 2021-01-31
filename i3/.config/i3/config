@@ -142,10 +142,10 @@ bindsym XF86MonBrightnessDown       exec xbacklight -dec 5
 bindsym Shift+XF86MonBrightnessDown exec xbacklight -dec 20 
 
 # mediaplayer controls
-bindsym XF86AudioPlay exec playerctl play-pause 
-bindsym XF86AudioStop exec playerctl stop
-bindsym XF86AudioNext exec playerctl next
-bindsym XF86AudioPrev exec playerctl previous
+bindsym XF86AudioPlay exec "playerctl play-pause ; mpc toggle"
+bindsym XF86AudioStop exec "playerctl stop ; mpc stop"
+bindsym XF86AudioNext exec "playerctl next ; mpc next"
+bindsym XF86AudioPrev exec "playerctl previous ; mpc prev"
 
 # screenshot
 bindsym --release Print exec xfce4-screenshooter
@@ -201,6 +201,7 @@ set $workspace10 ""
 
 assign [class="QtCreator"]          $workspace3
 assign [class="matplotlib"]         $workspace4
+assign [class="Matplotlib"]         $workspace4
 assign [class="Matlab"]             $workspace4
 assign [class="Steam"]              $workspace5
 assign [class="qBittorrent"]        $workspace6
