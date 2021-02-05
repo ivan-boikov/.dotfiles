@@ -18,6 +18,8 @@ Plug 'jpalardy/vim-slime'
 Plug 'scrooloose/nerdtree'
 Plug 'neovim/nvim-lspconfig'
 Plug 'ervandew/supertab'
+" A Vim Plugin for Lively Previewing LaTeX PDF Output
+Plug 'xuhdev/vim-latex-live-preview', { 'for': 'tex' }
 call plug#end()
 
 nnoremap <F4> :NERDTreeToggle<CR>
@@ -63,3 +65,10 @@ nnoremap <silent> gr    <cmd>lua vim.lsp.buf.references()<CR>
 nnoremap <silent> g0    <cmd>lua vim.lsp.buf.document_symbol()<CR>
 nnoremap <silent> gW    <cmd>lua vim.lsp.buf.workspace_symbol()<CR>
 nnoremap <silent> gd    <cmd>lua vim.lsp.buf.declaration()<CR>
+
+" TEX Live Preview
+let g:livepreview_previewer = 'zathura'
+let g:livepreview_use_biber = 1
+let g:livepreview_cursorhold_recompile = 1
+
+set updatetime=750
