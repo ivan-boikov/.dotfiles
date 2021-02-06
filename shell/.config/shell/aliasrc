@@ -1,4 +1,4 @@
-[ -x "$(command -v nvim)" ] && alias vim='nvim" vimdiff="nvim -d"
+[ -x "$(command -v nvim)" ] && alias vim='nvim' vimdiff='nvim -d'
 
 # Verbosity and settings that you pretty much just always are going to want.
 alias \
@@ -40,5 +40,8 @@ alias xargs='xargs '
 
 # pass files selected in nnn to a program
 # e.g. "nsel mpv60" to play multiple videos one after another
-nsel_internal() {cat ${NNN_SEL:-${XDG_CONFIG_HOME:-$HOME/.config}/nnn/.selection} | tr '\0' '\n' | awk 'NF { print "\""$0"\""}' | tr '\n' ' '}
+nsel_internal() {
+    cat ${NNN_SEL:-${XDG_CONFIG_HOME:-$HOME/.config}/nnn/.selection} | \
+    tr '\0' '\n' | awk 'NF { print "\""$0"\""}' | tr '\n' ' '
+    }
 alias nsel='nsel_internal | xargs '
