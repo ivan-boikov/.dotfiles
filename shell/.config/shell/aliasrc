@@ -1,34 +1,44 @@
-[ -x "$(command -v nvim)" ] && alias vim="nvim" vimdiff="nvim -d"
+[ -x "$(command -v nvim)" ] && alias vim='nvim" vimdiff="nvim -d"
 
 # Verbosity and settings that you pretty much just always are going to want.
 alias \
-        cp="cp -iv" \
-        mv="mv -iv" \
-        rm="rm -vI" \
-        mkd="mkdir -pv" \
-        yt="youtube-dl --add-metadata -i" \
-        yta="yt -x -f bestaudio/best" \
-        ffmpeg="ffmpeg -hide_banner" \
-	nnn="nnn -de"
+        cp='cp -iv' \
+        mv='mv -iv' \
+        rm='rm -vI' \
+        mkd='mkdir -pv' \
+        yt='youtube-dl --add-metadata -i' \
+        yta='yt -x -f bestaudio/best' \
+        ffmpeg='ffmpeg -hide_banner' \
+    	nnn='nnn -de'
 
 # Colorize commands when possible.
 alias \
-        ls="ls -hN --color=auto --group-directories-first" \
-        grep="grep --color=auto" \
-        diff="diff --color=auto" \
-        ccat="highlight --out-format=ansi"
+        ls='ls -hN --color=auto --group-directories-first' \
+        grep='grep --color=auto' \
+        diff='diff --color=auto' \
+        ccat='highlight --out-format=ansi'
 
 
 alias \
-        yt="youtube-dl --add-metadata -ic" \
-        yta="youtube-dl --add-metadata -xic" \
-        ka="killall" \
-        g="git" \
-        f="$FILE" \
-        ssd="systemctl shutdown" \
-        ssp="systemctl suspend" \
-        e="$EDITOR" \
-        v="$EDITOR" \
-        a="sudo apt" \
-        z="zathura" \
-	mpv60="mpv --input-ipc-server=/tmp/mpvsocket --hwdec=auto-copy"
+        yt='youtube-dl --add-metadata -ic' \
+        yta='youtube-dl --add-metadata -xic' \
+        ka='killall' \
+        g='git' \
+        f='$FILE' \
+        ssd='systemctl shutdown' \
+        ssp='systemctl suspend' \
+        e='$EDITOR' \
+        v='$EDITOR' \
+        a='sudo apt' \
+        z='zathura'
+
+# run mpv with SVP, if SVP not active, works as usual mpv
+alias mpv60='mpv --input-ipc-server=/tmp/mpvsocket --hwdec=auto-copy'
+
+# allow calls of aliases by xargs
+alias xargs='xargs '
+
+# pass files selected in nnn to a program
+# e.g. "nsel mpv60" to play multiple videos one after another
+nsel_internal() {cat ${NNN_SEL:-${XDG_CONFIG_HOME:-$HOME/.config}/nnn/.selection} | tr '\0' '\n' | awk 'NF { print "\""$0"\""}' | tr '\n' ' '}
+alias nsel='nsel_internal | xargs '
