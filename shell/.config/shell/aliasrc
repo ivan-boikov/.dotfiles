@@ -1,5 +1,8 @@
 [ -x "$(command -v nvim)" ] && alias vim='nvim' vimdiff='nvim -d'
 
+# allow calls of aliases by xargs
+alias xargs='xargs '
+
 # Verbosity and settings that you pretty much just always are going to want.
 alias \
         cp='cp -iv' \
@@ -32,11 +35,11 @@ alias \
         a='sudo apt' \
         z='zathura'
 
+# spawn terminal
+alias st="$TERMINAL </dev/null &>/dev/null & disown ;"
+
 # run mpv with SVP, if SVP not active, works as usual mpv
 alias mpv60='mpv --input-ipc-server=/tmp/mpvsocket --hwdec=auto-copy'
-
-# allow calls of aliases by xargs
-alias xargs='xargs '
 
 # pass files selected in nnn to a program
 # e.g. "nsel mpv60" to play multiple videos one after another
@@ -45,3 +48,9 @@ nsel_internal() {
     tr '\0' '\n' | awk 'NF { print "\""$0"\""}' | tr '\n' ' '
     }
 alias nsel='nsel_internal | xargs '
+
+
+# window swallowing
+alias sxiv="devour sxiv"
+alias mpv="devour mpv"
+alias zathura="devour zathura"

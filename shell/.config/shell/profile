@@ -19,7 +19,7 @@ if [ -n "$BASH_VERSION" ]; then
 fi
 
 # Adds `~/.local/bin` to $PATH
-export PATH="$PATH:$(du "$HOME/.local/bin" | cut -f2 | paste -sd ':')"
+export PATH="$PATH:$(du -a "$HOME/.local/bin" | cut -f2 | paste -sd ':')"
 
 export EDITOR="nvim"
 export TERMINAL="st"
@@ -31,11 +31,20 @@ export XDG_CONFIG_HOME="$HOME/.config"
 export XDG_DATA_HOME="$HOME/.local/share"
 
 export GTK2_RC_FILES="${XDG_CONFIG_HOME:-$HOME/.config}/gtk-2.0/gtkrc-2.0"
-export LESSHISTFILE="-"
 export ZDOTDIR="${XDG_CONFIG_HOME:-$HOME/.config}/zsh"
 export GNUPGHOME="${XDG_DATA_HOME:-$HOME/.local/share}/gnupg"
 export WINEPREFIX="${XDG_DATA_HOME:-$HOME/.local/share}/wineprefixes/default"
 export HISTFILE="${XDG_DATA_HOME:-$HOME/.local/share}/history"
 
-export QT_QPA_PLATFORMTHEME="gtk2"	# Have QT use gtk2 theme.
-export MOZ_USE_XINPUT2="1" 		# Mozilla smooth scrolling/touchpads
+# I don't need history from less
+export LESSHISTFILE="-"
+
+# Have QT use gtk2 theme.
+export QT_QPA_PLATFORMTHEME="gtk2"	
+
+# Mozilla smooth scrolling/touchpad support
+export MOZ_USE_XINPUT2="1" 		
+
+# nnn things
+export NNN_BMS='w:/media/wdblue;v:~/vid;d:~/dox;m:/mnt;M:/media'
+export NNN_PLUG="t:st"
