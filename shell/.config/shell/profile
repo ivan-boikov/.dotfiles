@@ -21,6 +21,7 @@ fi
 # Adds `~/.local/bin` to $PATH
 export PATH="$PATH:$(du -a "$HOME/.local/bin" | cut -f2 | paste -sd ':')"
 
+export PAGER="less"
 export EDITOR="nvim"
 export TERMINAL="st"
 export BROWSER="firefox"
@@ -47,4 +48,8 @@ export MOZ_USE_XINPUT2="1"
 
 # nnn things
 export NNN_BMS='w:/media/wdblue;v:~/vid;d:~/dox;m:/mnt;M:/media'
-export NNN_PLUG="t:st"
+export NNN_PLUG="t:st;m:mediainf"
+
+# fixing VapourSynth problem
+# TODO change 3.9 to whatever may be later
+export PYTHONPATH=/usr/local/lib/python3.9/site-packages

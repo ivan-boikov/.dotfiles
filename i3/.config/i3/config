@@ -47,6 +47,8 @@ bindsym $mod+Shift+Right move right
 # split in horizontal/vertical orientation
 bindsym $mod+v split toggle
 
+bindsym $mod+z sticky toggle
+
 # enter fullscreen mode for the focused container
 bindsym $mod+f fullscreen toggle
 
@@ -202,6 +204,7 @@ set $workspace10 ""
 assign [class="QtCreator"]          $workspace3
 assign [class="matplotlib"]         $workspace4
 assign [class="Matplotlib"]         $workspace4
+assign [class="gksqt"]              $workspace4
 assign [class="Matlab"]             $workspace4
 assign [class="Steam"]              $workspace5
 assign [class="qBittorrent"]        $workspace6
@@ -261,7 +264,7 @@ exec --no-startup-id discord
 exec_always --no-startup-id "setxkbmap -model pc105 -layout us,ru -option grp:ctrl_shift_toggle"
 
 # keyboard hold-down buttons rate
-exec_always --no-startup-id "xset r rate 200 80"
+exec_always --no-startup-id "xset r rate 200 75"
 
 # set wallpaper
 exec_always --no-startup-id "feh --no-fehbg --bg-scale ~/.local/share/wallpapers/bg.jpg"

@@ -8,7 +8,7 @@ stty stop undef		# Disable ctrl-s to freeze terminal.
 setopt interactive_comments
 
 # Lines configured by zsh-newuser-install
-HISTFILE=~/.histfile
+HISTFILE=~/.local/share/.histfile
 HISTSIZE=1000000000
 SAVEHIST=1000000000
 bindkey -v

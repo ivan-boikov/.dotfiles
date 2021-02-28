@@ -1,7 +1,12 @@
-#input file full name
+# input file full name
 iffname=$1
-ifname=${iffname%.*}
-ifext=${iffname##*.}
+quality=$2 #23..12, less is better quality
+threads=$3
+
+# getting input file name without path and extension and extension
+ifname=$(basename -- "$iffname")
+ifext="${ifname##*.}"
+ifname="${ifname%.*}"
 
 #temporary file full name
 tffname=$ifname.temp.mkv
@@ -9,13 +14,11 @@ tffname=$ifname.temp.mkv
 #output file full name
 offname=$ifname-60fps.mp4
 
-quality=$2 #23..12, less is more quality
-
-threads=$3
-
-#echo $iffname $ifname $ifext
-#echo $tffname
-#echo $offname
+echo "Input full filename:" $iffname
+echo "Input filename:" $ifname
+echo "Input file extension:" $ifext
+echo "Temporary full filename:" $tffname
+echo "Output full filename:" $offname
 
 mpv \
 	"$iffname" \
@@ -26,7 +29,7 @@ mpv \
 	--input-ipc-server=/tmp/mpvencodesocket \
 	--input-media-keys=no \
 	--no-msg-color \
-	--vf=vapoursynth:/home/ivan/.local/share/SVP4/scripts/ffff.py:4:6 \
+	--vf=vapoursynth:$(echo $HOME)/.local/share/SVP4/scripts/ffff.py:4:6 \
 	--of=matroska \
 	--ovc=libx264 \
 	--ovcopts=crf=$quality,preset=slow,threads=$threads

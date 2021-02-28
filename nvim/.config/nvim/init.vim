@@ -20,6 +20,7 @@ Plug 'neovim/nvim-lspconfig'
 Plug 'ervandew/supertab'
 " A Vim Plugin for Lively Previewing LaTeX PDF Output
 Plug 'xuhdev/vim-latex-live-preview', { 'for': 'tex' }
+Plug 'https://github.com/christoomey/vim-tmux-navigator'
 call plug#end()
 
 nnoremap <F4> :NERDTreeToggle<CR>
@@ -27,6 +28,8 @@ nnoremap <F4> :NERDTreeToggle<CR>
 
 "JULIA STUFF
 let g:slime_paste_file = "$HOME/.cache/slime_paste"
+let g:slime_target = "tmux"
+let g:slime_default_config = {"socket_name": "default", "target_pane": "{last}"}
 
 autocmd Filetype julia setlocal omnifunc=v:lua.vim.lsp.omnifunc
 lua << EOF
@@ -71,4 +74,4 @@ let g:livepreview_previewer = 'zathura'
 let g:livepreview_use_biber = 1
 let g:livepreview_cursorhold_recompile = 1
 
-set updatetime=750
+set updatetime=2000
