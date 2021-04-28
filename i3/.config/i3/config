@@ -57,7 +57,7 @@ bindsym $mod+s layout stacking
 bindsym $mod+w layout tabbed
 bindsym $mod+e layout toggle split
 
-bindsym $mod+x move workspace to output right
+#bindsym $mod+x move workspace to output right
 
 # toggle tiling / floating
 bindsym $mod+Shift+space floating toggle
@@ -97,6 +97,9 @@ bindsym $mod+Shift+7 move container to workspace $workspace7
 bindsym $mod+Shift+8 move container to workspace $workspace8
 bindsym $mod+Shift+9 move container to workspace $workspace9
 bindsym $mod+Shift+0 move container to workspace $workspace10
+
+bindsym $mod+Shift+x [floating] move scratchpad
+bindsym $mod+x scratchpad show
 
 # reload the configuration file
 bindsym $mod+Shift+c reload
@@ -261,7 +264,11 @@ exec --no-startup-id telegram-desktop
 exec --no-startup-id discord
 
 # keyboard layout toggle
-exec_always --no-startup-id "setxkbmap -model pc105 -layout us,ru -option grp:ctrl_shift_toggle"
+exec_always --no-startup-id "setxkbmap -model pc105 -layout fr,ru -variant us, -option grp:ctrl_shift_toggle lv3:alt_switch"
+
+# external keyboard Alt_R may be mapped to Multi_Key instead of ISO_Level3_Shift, this breaks French QWERTY layout
+exec_always --no-startup-id "xmodmap -e 'keycode 64 = Alt_L'"
+exec_always --no-startup-id "xmodmap -e 'keycode 108 = ISO_Level3_Shift'"
 
 # keyboard hold-down buttons rate
 exec_always --no-startup-id "xset r rate 200 75"
