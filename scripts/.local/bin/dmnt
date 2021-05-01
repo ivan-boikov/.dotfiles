@@ -1,0 +1,83 @@
+#!/bin/sh
+
+getmount() { \
+	[ -z "$chosen" ] && exit 1
+        # shellcheck disable=SC2086
+	mp="$(find $1 2>/dev/null | dmenu -l 30 -i -p "Type in mount point.")" || exit 1
+	[ "$mp" = "" ] && exit 1
+	if [ ! -d "$mp" ]; then
+		mkdiryn=$(printf "No\\nYes" | dmenu -i -p "$mp does not exist. Create it?") || exit 1
+		[ "$mkdiryn" = "Yes" ] && (mkdir -p "$mp" || sudo -A mkdir -p "$mp")
+	fi
+	}
+
+mountusb() { \
+    sudo -A mount "$1" 2>/dev/null && notify-send "USB mounting" "$1 mounted." && exit 0
+    alreadymounted=$(lsblk -nrpo "name,type,mountpoint" | awk '$3!~/\/boot|\/home$|SWAP/&&length($3)>1{printf "-not ( -path *%s -prune ) ",$3}')
+    getmount "/mnt -maxdepth 1 -type d $alreadymounted"
+    partitiontype="$(lsblk -no "fstype" "$1")"
+    case "$partitiontype" in
+        "vfat") sudo -A mount -t vfat "$1" "$mp" -o rw,umask=0000;;
+        "exfat") sudo -A mount "$1" "$mp" -o uid="$(id -u)",gid="$(id -g)";;
+        *) sudo -A mount "$1" "$mp"; user="$(whoami)"; ug="$(groups | awk '{print $1}')"; sudo -A chown "$user":"$ug" "$mp";;
+    esac
+    notify-send "USB mounting" "$1 mounted to $mp."
+}
+
+mountandroid() { \
+    getmount "/mnt -maxdepth 1 -type d"
+    jmtpfs -device="$1" "$mp"
+    #echo "OK" | dmenu -i -p "Tap Allow on your phone if it asks for permission and then press enter" || exit 1
+    #jmtpfs -device="$1" "$mp"
+    notify-send "Android mounting" "Android device mounted to $mp."
+}
+
+unmountdev() {
+    result=$(sudo -A umount "$1" 2>&1)
+    if [ -z "$result" ]; then
+        notify-send "Unmount device" "$1 unmounted"
+    else
+        notify-send -u critical -t 4000 "Unmount device" "$result"
+    fi
+}
+
+selectusb() { \
+    chosen=$(lsblk -lpo "vendor,model,name,label,size,mountpoint" | dmenu -l 30 | xargs | cut -d' ' -f 1)
+    # if mounted
+    if [ ! -z "$(grep $chosen "/etc/mtab")" ] ; then
+        choice=$(echo "No\nYes" | dmenu -l 2 -p "Partition is mounted. Unmount?")
+        case $choice in
+            Yes) unmountdev $chosen ;;
+            No) exit ;;
+        esac
+    else
+        mountusb $chosen
+    fi
+}
+
+selectandroid() { \
+    unmounted=$(jmtpfs -l | sed -e '1,2d')
+    mounted=$(grep "jmtpfs" "/etc/mtab")
+
+    list="Mounted:\n"
+    if [ ! -z "$mounted" ]; then
+        list="$list$mounted"
+    fi
+    list="$list\nUnmounted:\n"
+    if [ ! -z "$unmounted" ]; then
+        list="$list$unmounted"
+    fi
+
+    chosen=$(echo "$list" "$mounted" | dmenu -i -l 30)
+    echo "CHOSEN" $chosen
+    case $chosen in 
+        *jmtpfs*) unmountdev $(echo $chosen | cut -d' ' -f 2) ;; 
+        *) mountandroid $(echo $chosen | awk '{print $1 $2}' | cut -d, -f1-2) ;; 
+    esac
+}
+
+choice="$(printf "USB\\nAndroid" | dmenu -i -p "(Un-)mount a USB drive or Android device?")" || exit 1
+case $choice in
+    USB) selectusb ;;
+    Android) selectandroid ;;
+esac

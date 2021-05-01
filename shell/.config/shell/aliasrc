@@ -49,8 +49,8 @@ nsel_internal() {
     }
 alias nsel='nsel_internal | xargs '
 
-
-# window swallowing
-alias sxiv="devour sxiv"
+# window swallowing, also autoplay gifs in sxiv
+alias sxiv="devour sxiv -a"
 alias mpv="devour mpv"
 alias zathura="devour zathura"
+
