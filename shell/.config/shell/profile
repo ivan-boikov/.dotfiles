@@ -48,8 +48,16 @@ export MOZ_USE_XINPUT2="1"
 
 # nnn things
 export NNN_BMS='w:/media/wdblue;v:~/vid;d:~/dox;m:/mnt;M:/media'
-export NNN_PLUG="t:st;m:mediainf"
+export NNN_PLUG="t:st;m:mediainf;d:dragdrop;l:mimelist"
+export NNN_TRASH=1
+export NNN_SSHFS="sshfs -o follow_symlinks"
 
 # fixing VapourSynth problem
 # TODO change 3.9 to whatever may be later
 export PYTHONPATH=/usr/local/lib/python3.9/site-packages
+
+if [ -d "$HOME/platform-tools" ] ; then
+    export PATH="$HOME/platform-tools:$PATH"
+fi
+
+

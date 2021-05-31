@@ -9,8 +9,10 @@ setopt interactive_comments
 
 # Lines configured by zsh-newuser-install
 HISTFILE=~/.local/share/.histfile
-HISTSIZE=1000000000
-SAVEHIST=1000000000
+HISTSIZE=100000
+SAVEHIST=100000
+setopt SHARE_HISTORY
+setopt appendhistory
 bindkey -v
 
 #Load aliases and shortcuts if existent.
