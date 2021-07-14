@@ -1,9 +1,10 @@
 #!/bin/sh
 # Setting this, so the repo does not need to be given on the commandline:
-export BORG_REPO=ssh://pi@192.168.3.1/media/nas/borgbackup
+#export BORG_REPO=ssh://pi@192.168.3.1/media/nas/borgbackup
+export BORG_REPO=/media/wdblue-old/borgbackup
 # See the section "Passphrase notes" for more infos.
 #export BORG_PASSPHRASE='XYZl0ngandsecurepa_55_phrasea&&123'
-export BORG_PASSCOMMAND="cat $HOME/.borg-backup-passphrase"
+#export BORG_PASSCOMMAND="cat $HOME/.config/borg/keys/media_wdblue_old_borgbackup"
 # some helpers and error handling:
 info() { printf "\n%s %s\n\n" "$( date )" "$*" >&2; }
 trap 'echo $( date ) Backup interrupted >&2; exit 2' INT TERM
@@ -28,9 +29,14 @@ borg create                         \
     --exclude='*log*'		    \
     --exclude='*old*'		    \
     --exclude='*bak*'		    \
-                                    \
-    ::'{hostname}-{now}'            \
-    TODO-ADD-SOME-PATHS
+                                \
+    ::'{hostname}-{now}'        \
+    /media/wdblue/dox           \
+    /media/wdblue/dox-arch      \
+    /media/wdblue/vid/gachi           \
+    /media/wdblue/pix           \
+    /media/wdblue/tracks        \
+    /media/wdblue/sync          \
 
 backup_exit=$?
 

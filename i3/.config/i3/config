@@ -186,7 +186,7 @@ bindsym XF86AudioNext exec "playerctl next ; mpc next"
 bindsym XF86AudioPrev exec "playerctl previous ; mpc prev"
 
 # screenshot
-bindsym --release Print exec xfce4-screenshooter
+bindsym --release Print exec ~/.local/bin/maimpick
 
 # other shortcuts
 bindsym ctrl+F1 exec tabletreset
@@ -299,12 +299,14 @@ exec --no-startup-id discord
 # keyboard layout toggle
 exec_always --no-startup-id "setxkbmap -model pc105 -layout fr,ru -variant us, -option grp:ctrl_shift_toggle lv3:alt_switch"
 
-# external keyboard Alt_R may be mapped to Multi_Key instead of ISO_Level3_Shift, this breaks French QWERTY layout
-exec_always --no-startup-id "xmodmap -e 'keycode 64 = Alt_L'"
-exec_always --no-startup-id "xmodmap -e 'keycode 108 = ISO_Level3_Shift'"
+exec_always --no-startup-id "~/.local/bin/remaps"
+# external keyboard Alt_R may be mapped to Multi_Key instead of ISO_Level3_Shift, which breaks French QWERTY layout
+#exec_always --no-startup-id xmodmap -e "keycode 64 = Alt_L"
+#exec_always --no-startup-id xmodmap -e "keycode 64 = ISO_Level3_Shift"
+#exec_always --no-startup-id xmodmap -e "keycode 108 = ISO_Level3_Shift"
 
 # keyboard hold-down buttons rate
-exec_always --no-startup-id "xset r rate 200 75"
+#exec_always --no-startup-id "xset r rate 200 75"
 
 # set wallpaper
 exec_always --no-startup-id "feh --no-fehbg --bg-scale ~/.local/share/wallpapers/bg.jpg"

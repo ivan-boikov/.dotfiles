@@ -47,10 +47,11 @@ export QT_QPA_PLATFORMTHEME="gtk2"
 export MOZ_USE_XINPUT2="1" 		
 
 # nnn things
-export NNN_BMS='w:/media/wdblue;v:~/vid;d:~/dox;m:/mnt;M:/media'
-export NNN_PLUG="t:st;m:mediainf;d:dragdrop;l:mimelist"
+export NNN_BMS='v:~/vid;p:~/pix;d:~/dox;M:/mnt;m:/media'
+export NNN_PLUG="t:!st;m:mediainf;d:dragdrop;l:mimelist;p:preview-tabbed;o:organize;r:renamer;c:rsynccp;x:toggleex;u:umounttree;g:getplugs;s:x2sel;f:finder;2:dups"
 export NNN_TRASH=1
 export NNN_SSHFS="sshfs -o follow_symlinks"
+export NNN_FIFO=/tmp/nnn.fifo
 
 # fixing VapourSynth problem
 # TODO change 3.9 to whatever may be later
