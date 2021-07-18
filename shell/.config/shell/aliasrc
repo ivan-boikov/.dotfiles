@@ -1,4 +1,12 @@
+#!/bin/sh
+
+# Use neovim for vim if present.
 [ -x "$(command -v nvim)" ] && alias vim='nvim' vimdiff='nvim -d'
+
+# sudo not required for some system commands
+for command in mount umount sv pacman updatedb su ; do
+	alias $command="sudo $command"
+done; unset command
 
 # allow calls of aliases by xargs
 alias xargs='xargs '
@@ -35,8 +43,8 @@ alias \
         a='sudo apt' \
         z='zathura'
 
-# spawn terminal
-alias st="$TERMINAL </dev/null &>/dev/null & disown ;"
+# spawn detached terminal 
+alias dst="$TERMINAL </dev/null &>/dev/null & disown ;"
 
 # run mpv with SVP, if SVP not active, works as usual mpv
 alias mpv60='mpv --input-ipc-server=/tmp/mpvsocket --hwdec=auto-copy'

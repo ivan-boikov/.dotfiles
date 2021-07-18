@@ -9,5 +9,6 @@ xset r rate 200 75
 xmodmap -e 'keycode 135 = Super_R'
 
 # external keyboard Alt_R may be mapped to Multi_Key instead of ISO_Level3_Shift, which breaks French QWERTY layout
+#xmodmap -e "keycode 64 = Alt_L"
 xmodmap -e "keycode 64 = ISO_Level3_Shift"
 xmodmap -e "keycode 108 = ISO_Level3_Shift"
