@@ -42,7 +42,7 @@ umi_all() { \
 
 if [ "$1" = "i" ]; then 
     # stuff I use
-    sudo apt-get -y install git libnotify-bin jmtpfs unrar unzip p7zip-full maim xwallpaper python3-pip sxiv mpv zathura nnn xfce4-power-manager redshift   
+    sudo apt-get -y install git libnotify-bin jmtpfs unrar unzip p7zip-full maim xwallpaper python3-pip sxiv mpv zathura nnn xfce4-power-manager redshift pass
 
     # theming
     sudo apt-get -y install oxygen-icon-theme   
