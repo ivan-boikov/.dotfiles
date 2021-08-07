@@ -29,7 +29,31 @@ password=$(printf '%s\n' "${password_files[@]}" | "$dmenu" -l 30 "$@")
 [[ -n $password ]] || exit
 
 if [[ $typeit -eq 0 ]]; then
-	pass show -c "$password" 2>/dev/null
+    action=$(printf "login\npass\ninfo" | dmenu -l 3)
+    case $action in
+    login)
+   	pass show "$password" | sed -n -e '/^login:/p' | awk '{print $2}' | xclip -sel c
+    notify-send "Login for $password was copied to clipboard"
+    ;;
+    pass)
+   	pass show -c "$password" 2>/dev/null
+    notify-send "Password for $password was copied to clipboard"
+    ;;
+    info)
+        data=$(pass show $password | sed 1d | dmenu -l 30)
+        if [[ -n "$data"  ]] 
+        then
+            do_trim=$(printf 'No\nYes' | dmenu -p "Trim \"$(echo $data | awk '{print $1}')\" in front?" -l 2)
+            if [[ $do_trim == "Yes" ]]; then
+                data=$(echo "$data" | cut -f 2- -d ' ')
+            fi
+            echo $data | xclip -sel c
+            notify-send "Info for $password was copied to clipboard"
+        else
+            notify-send "No info for $password was selected, clipboard not changed"
+        fi
+    ;;
+    esac
 else
 	pass show "$password" | { IFS= read -r pass; printf %s "$pass"; } | $xdotool
 fi
