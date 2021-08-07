@@ -37,6 +37,9 @@ export GNUPGHOME="${XDG_DATA_HOME:-$HOME/.local/share}/gnupg"
 export WINEPREFIX="${XDG_DATA_HOME:-$HOME/.local/share}/wineprefixes/default"
 export HISTFILE="${XDG_DATA_HOME:-$HOME/.local/share}/history"
 
+export PASSWORD_STORE_DIR="${XDG_DATA_HOME:-$HOME/.local/share}/password-store"
+export SUDO_ASKPASS="$HOME/.local/bin/pass-askpass"
+
 # I don't need history from less
 export LESSHISTFILE="-"
 
