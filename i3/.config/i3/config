@@ -202,7 +202,7 @@ default_border pixel 3
 set $bg-color 	            #00b1ff
 set $inactive-bg-color      #020e1d
 set $text-color             #000000
-set $inactive-text-color    #00b1ff
+set $inactive-text-color    #ffffff
 set $urgent-bg-color        #ff0000
 
 # window colors
@@ -280,7 +280,6 @@ for_window [title="^Steam Keyboard$"] floating enable
 #exec --no-startup-id virt-manager
 # workspace 8
 exec --no-startup-id firefox
-exec --no-startup-id soft/firefox/firefox
 #exec --no-startup-id keepassxc
 #workspace 9
 exec --no-startup-id thunderbird 
