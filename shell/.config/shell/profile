@@ -18,8 +18,8 @@ if [ -n "$BASH_VERSION" ]; then
     fi
 fi
 
-# Adds `~/.local/bin` to $PATH
-export PATH="$PATH:$(du -a "$HOME/.local/bin" | cut -f2 | paste -sd ':')"
+#export PATH="$PATH:$(du -a "$HOME/.local/bin" | cut -f2 | paste -sd ':')"
+export PATH="$PATH:$HOME/.local/bin"
 
 export PAGER="less"
 export EDITOR="nvim"
@@ -45,6 +45,14 @@ export QT_QPA_PLATFORMTHEME="gtk2"
 
 # Mozilla smooth scrolling/touchpad support
 export MOZ_USE_XINPUT2="1" 		
+
+# prevent i3-volume indicator to change color
+export COLOR_MUTED="#00b1ff"
+export COLOR_MUTED_TO_BASE="#00b1ff"
+export COLOR_BASE_TO_NORM="#00b1ff"
+export COLOR_NORM_TO_MAX="#00b1ff"
+export COLOR_OTHER="#00b1ff"
+export COLOR_XOSD_OUTLINE="#00b1ff"
 
 # nnn things
 export NNN_BMS='v:~/vid;p:~/pix;d:~/dox;M:/mnt;m:/media'

@@ -17,7 +17,7 @@ bindsym $mod+Return exec --no-startup-id st
 bindsym $mod+Shift+q kill
 
 # start dmenu (a program launcher)
-bindsym $mod+d exec dmenu_run
+bindsym $mod+d exec dmenu_run -nb '#020e1d' -nf '#00b1ff' -sb '#00b1ff' -sf '#020e1d' 
 
 # change focus
 bindsym $mod+h focus left
@@ -199,10 +199,10 @@ hide_edge_borders smart
 
 default_border pixel 3
 
-set $bg-color 	            #084698
-set $inactive-bg-color      #000000
-set $text-color             #ffffff
-set $inactive-text-color    #ffffff
+set $bg-color 	            #00b1ff
+set $inactive-bg-color      #020e1d
+set $text-color             #000000
+set $inactive-text-color    #00b1ff
 set $urgent-bg-color        #ff0000
 
 # window colors
@@ -216,11 +216,10 @@ client.urgent           $urgent-bg-color    $urgent-bg-color    $text-color     
 # finds out, if available)
 bar {
     status_command i3blocks -c ~/.config/i3/i3blocks.conf
-    # only show statusbar on Mod key press
-    mode hide
+    mode hide # only show statusbar on Mod key press 
 	colors {
 		background $inactive-bg-color
-		statusline $text-color
+		statusline $inactive-text-color
 	}
 }
 
@@ -250,6 +249,7 @@ assign [class="keepassxc"]          $workspace8
 assign [class="protonmail-bridge"]  $workspace9
 assign [class="Tor Browser"]        $workspace9
 assign [class="thunderbird"]        $workspace9
+assign [class="Signal"]             $workspace10
 assign [class="discord"]            $workspace10
 assign [class="Telegram"]           $workspace10
 
@@ -276,11 +276,12 @@ for_window [title="^Steam Keyboard$"] floating enable
 #workspace 2
 #exec --no-startup-id st -e nnn
 # workspace 7
-exec --no-startup-id teamviewer 
-exec --no-startup-id virt-manager
+#exec --no-startup-id teamviewer 
+#exec --no-startup-id virt-manager
 # workspace 8
 exec --no-startup-id firefox
-exec --no-startup-id keepassxc
+exec --no-startup-id soft/firefox/firefox
+#exec --no-startup-id keepassxc
 #workspace 9
 exec --no-startup-id thunderbird 
 # workspace 10
@@ -292,7 +293,8 @@ exec_always --no-startup-id "/usr/bin/setxkbmap -model pc105 -layout fr,ru -vari
 
 # keyboard repeat rate and remappings
 # external keyboard Alt_R may be mapped to Multi_Key instead of ISO_Level3_Shift, which breaks French QWERTY layout
-#exec_always --no-startup-id "~/.local/bin/remaps"
+#exec_always --no-startup-id "(sleep 5 ; ~/.local/bin/remaps) & "
+exec_always --no-startup-id "~/.local/bin/remaps"
 
 # set wallpaper and terminal color theme
 exec --no-startup-id "wal -R" # unnesessary?
@@ -315,4 +317,4 @@ exec --no-startup-id protonmail-bridge --no-window
 
 # for some reason only on my PC i3 keybinding stop working after login
 # this is solved by manual i3 restart
-exec --no-startup-id "i3-msg restart"
+#exec --no-startup-id "notify-send asd ; sleep 10 ; notify-osd dfsfef ; i3-msg restart"

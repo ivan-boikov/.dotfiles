@@ -62,3 +62,5 @@ alias sxiv="devour sxiv -a"
 alias mpv="devour mpv"
 alias zathura="devour zathura"
 
+# dmenu with colors
+alias dmenu="dmenu -nb '#020e1d' -nf '#00b1ff' -sb '#00b1ff' -sf '#020e1d'"
