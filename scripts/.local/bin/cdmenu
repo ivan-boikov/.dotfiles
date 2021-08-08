@@ -1,0 +1,3 @@
+#! /bin/bash
+# colored dmenu for use in scripts
+dmenu -nb '#020e1d' -nf '#00b1ff' -sb '#00b1ff' -sf '#020e1d' "$@"

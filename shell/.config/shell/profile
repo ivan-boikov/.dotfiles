@@ -44,10 +44,10 @@ export SUDO_ASKPASS="$HOME/.local/bin/pass-askpass"
 export LESSHISTFILE="-"
 
 # Have QT use gtk2 theme.
-export QT_QPA_PLATFORMTHEME="gtk2"	
+export QT_QPA_PLATFORMTHEME="gtk2"
 
 # Mozilla smooth scrolling/touchpad support
-export MOZ_USE_XINPUT2="1" 		
+export MOZ_USE_XINPUT2="1"
 
 # prevent i3-volume indicator to change color
 export COLOR_MUTED="#00b1ff"

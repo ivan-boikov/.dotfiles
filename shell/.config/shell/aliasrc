@@ -43,7 +43,7 @@ alias \
         a='sudo apt' \
         z='zathura'
 
-# spawn detached terminal 
+# spawn detached terminal
 alias dst="$TERMINAL </dev/null &>/dev/null & disown ;"
 
 # run mpv with SVP, if SVP not active, works as usual mpv
@@ -61,6 +61,3 @@ alias nsel='nsel_internal | xargs '
 alias sxiv="devour sxiv -a"
 alias mpv="devour mpv"
 alias zathura="devour zathura"
-
-# dmenu with colors
-alias dmenu="dmenu -nb '#020e1d' -nf '#00b1ff' -sb '#00b1ff' -sf '#020e1d'"
