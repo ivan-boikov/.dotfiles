@@ -5,5 +5,4 @@ caller="$(ps -o comm= -p $(ps -o ppid= -p $$))"
 prompt="${1:-[$caller]}"
 hidden=black
 
-dmenu -p "$prompt" -nf "$hidden" -nb "$hidden"  <&-
-
+cdmenu -p "$prompt" -nf "$hidden" -nb "$hidden"  <&-

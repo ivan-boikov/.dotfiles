@@ -12,7 +12,7 @@ if [[ -n $WAYLAND_DISPLAY ]]; then
 	dmenu=dmenu-wl
 	xdotool="ydotool type --file -"
 elif [[ -n $DISPLAY ]]; then
-	dmenu=dmenu
+	dmenu=cdmenu
 	xdotool="xdotool type --clearmodifiers --file -"
 else
 	echo "Error: No Wayland or X11 display detected" >&2
@@ -29,7 +29,7 @@ password=$(printf '%s\n' "${password_files[@]}" | "$dmenu" -l 30 "$@")
 [[ -n $password ]] || exit
 
 if [[ $typeit -eq 0 ]]; then
-    action=$(printf "login\npass\ninfo" | dmenu -l 3)
+    action=$(printf "login\npass\ninfo" | "$dmenu" -l 3)
     case $action in
     login)
    	pass show "$password" | sed -n -e '/^login:/p' | awk '{print $2}' | xclip -sel c
@@ -40,10 +40,10 @@ if [[ $typeit -eq 0 ]]; then
     notify-send "Password for $password was copied to clipboard"
     ;;
     info)
-        data=$(pass show $password | sed 1d | dmenu -l 30)
-        if [[ -n "$data"  ]] 
+        data=$(pass show $password | sed 1d | "$dmenu" -l 30)
+        if [[ -n "$data"  ]]
         then
-            do_trim=$(printf 'No\nYes' | dmenu -p "Trim \"$(echo $data | awk '{print $1}')\" in front?" -l 2)
+            do_trim=$(printf 'No\nYes' | "$dmenu" -p "Trim \"$(echo $data | awk '{print $1}')\" in front?" -l 2)
             if [[ $do_trim == "Yes" ]]; then
                 data=$(echo "$data" | cut -f 2- -d ' ')
             fi
@@ -57,4 +57,3 @@ if [[ $typeit -eq 0 ]]; then
 else
 	pass show "$password" | { IFS= read -r pass; printf %s "$pass"; } | $xdotool
 fi
-

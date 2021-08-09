@@ -1,3 +1,2 @@
 #!/bin/sh
-pactl list sinks short | awk '{print $2}' | dmenu -l 100 | setsink
-
+pactl list sinks short | awk '{print $2}' | cdmenu -l 100 | setsink
