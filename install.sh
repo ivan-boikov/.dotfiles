@@ -18,7 +18,7 @@ umi_all() { \
     umi "dragon"
     umi "neovim"
     umi "st"
-    
+
     cd ~/soft/xournalpp
     mkdir build ; cd build
     rm -rf packages
@@ -40,12 +40,12 @@ umi_all() { \
     sudo checkinstall --nodoc -y sudo make strip install -j
 }
 
-if [ "$1" = "i" ]; then 
+if [ "$1" = "i" ]; then
     # stuff I use
     sudo apt-get -y install git libnotify-bin jmtpfs unrar unzip p7zip-full maim xwallpaper python3-pip sxiv mpv zathura nnn xfce4-power-manager redshift pass
 
     # theming
-    sudo apt-get -y install oxygen-icon-theme   
+    sudo apt-get -y install oxygen-icon-theme sox imagemagick
     pip3 install pywal
 
     # required for devour
@@ -59,7 +59,7 @@ if [ "$1" = "i" ]; then
 
     # required for st
     sudo apt-get -y install libfontconfig-dev libx11-dev libxft-dev
-    
+
     # required for digimend drives
     sudo apt-get -y install -y "linux-headers-$(uname -r)"
 
