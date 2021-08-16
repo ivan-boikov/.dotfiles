@@ -32,7 +32,7 @@ if [[ $typeit -eq 0 ]]; then
     action=$(printf "login\npass\ninfo" | "$dmenu" -l 3)
     case $action in
     login)
-   	pass show "$password" | sed -n -e '/^login:/p' | awk '{print $2}' | xclip -sel c
+   	pass show "$password" | sed -n -e '/^login:/p' | awk '{print $2}' | xclip -selection clipboard
     notify-send "Login for $password was copied to clipboard"
     ;;
     pass)
@@ -47,7 +47,7 @@ if [[ $typeit -eq 0 ]]; then
             if [[ $do_trim == "Yes" ]]; then
                 data=$(echo "$data" | cut -f 2- -d ' ')
             fi
-            echo $data | xclip -sel c
+            echo $data | xclip -selection clipboard
             notify-send "Info for $password was copied to clipboard"
         else
             notify-send "No info for $password was selected, clipboard not changed"
