@@ -16,7 +16,11 @@ umi() { \
     git pull
     git checkout "$branch"
     make -j
-    sudo checkinstall --nodoc -y sudo make "$3" install
+    if [ -z "$1" ]; then
+        sudo checkinstall --nodoc -y sudo make install
+    else
+        sudo checkinstall --nodoc -y sudo make "$3" install
+    fi
 }
 
 umi_all() { \
@@ -103,4 +107,22 @@ fi
 
 if [ "$1" = "u" ]; then
     umi_all
+fi
+
+# cleaning Firefox, schizo-style
+# https://12bytes.org/articles/tech/firefox/firefoxgecko-configuration-guide-for-privacy-and-performance-buffs/
+if [ "$1" = "f" ]; then
+    cd /usr/lib/firefox/browser/features
+    sudo rm *.xpi
+
+    cd "$SRCDIR"
+    git clone https://github.com/arkenfox/user.js
+    wget https://github.com/arkenfox/user.js/blob/master/updater.sh
+    wget https://github.com/arkenfox/user.js/blob/master/prefsCleaner.sh
+    wget https://github.com/ivan-boikov/user-overrides.js
+    cp -r ~/.mozilla ~/.mozilla.bak
+    chmod +x updater.sh
+    chmod +x prefsCleaner.sh
+    ./updater.sh
+    ./prefsCleaner.sh
 fi
