@@ -55,7 +55,8 @@ umi_all() { \
 
 if [ "$1" = "i" ]; then
     # system
-    sudo apt-get -y install xserver-xorg dbus-x11 xclip python python2 python3 python-virtualenv fonts-liberation gawk fonts-font-awesome xdotool zsh libnotify-bin jmtpfs maim xwallpaper python3-pip xfce4-power-manager redshift i3lock dmenu suckless-tools pass git picom
+    sudo apt-get -y install xserver-xorg dbus-x11 lm-sensors xclip python2 python3 python3-pip virtualenv fonts-liberation gawk fonts-font-awesome xdotool zsh libnotify-bin jmtpfs maim xwallpaper xfce4-power-manager redshift i3lock dmenu suckless-tools pass git picom
+    python3 -m pip install --user --upgrade pynvim
     # media
     sudo apt-get -y install sxiv mpv ncmpcpp mpd ffmpeg pulseeffects
     # web
