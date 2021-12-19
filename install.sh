@@ -1,6 +1,6 @@
 #!/bin/sh
 
-SRCDIR="~/.local/src/"
+SRCDIR="$HOME/.local/src/"
 
 rm ~/.config/mimeapps.list
 rm ~/.local/share/wallpapers/bg
