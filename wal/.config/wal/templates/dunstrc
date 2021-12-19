@@ -15,8 +15,8 @@
 
 [urgency_low]
     background = "{color0}" # color0
-    foreground = "{color7}" # color4
-    frame_color = "{color7}" # color0
+    foreground = "{color7}" # color7
+    frame_color = "{color7}" # color7
     timeout = 3
 
 [urgency_normal]
