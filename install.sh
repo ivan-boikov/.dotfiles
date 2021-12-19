@@ -32,6 +32,7 @@ umi_all() { \
     umi "st"
     umi "neovim"
     umi "nnn" "master" "strip"
+    umi "pamixer"
     umi "devour"
     umi "dragon"
 
@@ -58,7 +59,7 @@ if [ "$1" = "i" ]; then
     sudo apt-get -y install xserver-xorg dbus-x11 lm-sensors xclip python2 python3 python3-pip virtualenv fonts-liberation gawk fonts-font-awesome xdotool zsh libnotify-bin jmtpfs maim xwallpaper xfce4-power-manager redshift i3lock dmenu suckless-tools pass git picom
     python3 -m pip install --user --upgrade pynvim
     # media
-    sudo apt-get -y install sxiv mpv ncmpcpp mpd ffmpeg pulseeffects
+    sudo apt-get -y install sxiv mpv ncmpcpp mpd mpv ffmpeg pulseeffects
     # web
     sudo apt-get -y install firefox chromium thunderbird
     # office
@@ -78,6 +79,9 @@ if [ "$1" = "i" ]; then
 
     # required for nvim
     sudo apt-get -y install ninja-build gettext libtool libtool-bin autoconf automake cmake g++ pkg-config unzip curl
+
+    # required for pamixer
+    sudo apt-get -y install libpulse libpulse-dev
 
     # required for devour
     sudo apt-get -y install libx11-dev
@@ -102,6 +106,7 @@ if [ "$1" = "i" ]; then
     git clone https://github.com/lukesmithxyz/st
     git clone https://github.com/neovim/neovim
     git clone https://github.com/jarun/nnn
+    git clone https://github.com/cdemoulins/pamixer
     # is it necessary with dwm swallow patch?
     git clone https://github.com/salman-abedin/devour
     git clone https://github.com/mwh/dragon
