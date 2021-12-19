@@ -16,7 +16,7 @@ umi() { \
     git pull
     git checkout "$branch"
     make -j
-    if [ -z "$1" ]; then
+    if [ -z "$3" ]; then
         sudo checkinstall --nodoc -y sudo make install
     else
         sudo checkinstall --nodoc -y sudo make "$3" install
