@@ -54,7 +54,7 @@ if [ "$1" = "i" ]; then
     # web
     sudo apt-get -y install firefox chromium thunderbird
     # office
-    sudo apt-get -y install git unrar unzip p7zip-full zathura texlive
+    sudo apt-get -y install git unrar unzip p7zip-full zathura texlive virt-manager
     # theming
     sudo apt-get -y install oxygen-icon-theme sox imagemagick
     pip3 install pywal
