@@ -26,5 +26,6 @@ redshift -l40:2 &
 syncthing &
 xfce4-power-manager &
 
+dwmblocks &
 
 /usr/bin/dwm
