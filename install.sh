@@ -90,7 +90,7 @@ if [ "$1" = "i" ]; then
     sudo apt-get -y install pkg-config libncursesw5-dev libreadline-dev
 
     cd "$SRCDIR"
-    git clone https://github.com/nullgemm/ly
+    git clone --recurse-submodules https://github.com/nullgemm/ly.git
     git clone https://github.com/ivan-boikov/dwm
     git clone https://github.com/ivan-boikov/dwmblocks
     git clone https://github.com/lukesmithxyz/st
