@@ -32,9 +32,14 @@ umi_all() { \
     umi "st"
     umi "neovim"
     umi "nnn" "master" "strip"
-    umi "pamixer"
     umi "devour"
     umi "dragon"
+
+    cd "$SRCDIR/pamixer"
+    git pull
+    meson setup build
+    meson compile -C build
+    sudo meson install -C build
 
     cd "$SRCDIR/digimend-kernel-drivers"
     git pull
@@ -81,7 +86,7 @@ if [ "$1" = "i" ]; then
     sudo apt-get -y install ninja-build gettext libtool libtool-bin autoconf automake cmake g++ pkg-config unzip curl
 
     # required for pamixer
-    sudo apt-get -y install libpulse0 libpulse-dev
+    sudo apt-get -y install meson libboost-dev libpulse0 libpulse-dev
 
     # required for devour
     sudo apt-get -y install libx11-dev
@@ -126,14 +131,16 @@ if [ "$1" = "f" ]; then
     cd /usr/lib/firefox/browser/features
     sudo rm *.xpi
 
-    cd "$SRCDIR"
-    git clone https://github.com/arkenfox/user.js
+    cp -r ~/.mozilla ~/.mozilla.bak
+
+    cd ~/.mozilla
+    FFPATH=$(dirname $(find ~/.mozilla -wholename "*release/prefs.js"));
+    cd "$FFPATH"
     wget https://github.com/arkenfox/user.js/blob/master/updater.sh
     wget https://github.com/arkenfox/user.js/blob/master/prefsCleaner.sh
     wget https://github.com/ivan-boikov/user-overrides.js
-    cp -r ~/.mozilla ~/.mozilla.bak
     chmod +x updater.sh
     chmod +x prefsCleaner.sh
-    ./updater.sh
-    ./prefsCleaner.sh
+    bash updater.sh
+    bash prefsCleaner.sh
 fi
