@@ -59,7 +59,7 @@ if [ "$1" = "i" ]; then
     sudo apt-get -y install xserver-xorg dbus-x11 lm-sensors xclip python2 python3 python3-pip virtualenv fonts-liberation gawk fonts-font-awesome xdotool zsh libnotify-bin jmtpfs maim xwallpaper xfce4-power-manager redshift i3lock dmenu suckless-tools pass git picom
     python3 -m pip install --user --upgrade pynvim
     # media
-    sudo apt-get -y install sxiv mpv ncmpcpp mpd mpv ffmpeg pulseeffects
+    sudo apt-get -y install alsa-tools pulseaudio sxiv mpv ncmpcpp mpd mpv ffmpeg pulseeffects
     # web
     sudo apt-get -y install firefox chromium thunderbird
     # office
@@ -81,7 +81,7 @@ if [ "$1" = "i" ]; then
     sudo apt-get -y install ninja-build gettext libtool libtool-bin autoconf automake cmake g++ pkg-config unzip curl
 
     # required for pamixer
-    sudo apt-get -y install libpulse libpulse-dev
+    sudo apt-get -y install libpulse0 libpulse-dev
 
     # required for devour
     sudo apt-get -y install libx11-dev
