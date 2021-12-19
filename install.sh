@@ -61,7 +61,7 @@ umi_all() { \
 
 if [ "$1" = "i" ]; then
     # system
-    sudo apt-get -y install xserver-xorg dbus-x11 lm-sensors xclip python2 python3 python3-pip virtualenv fonts-liberation gawk fonts-font-awesome xdotool zsh libnotify-bin jmtpfs maim xwallpaper xfce4-power-manager redshift i3lock dmenu suckless-tools pass git picom
+    sudo apt-get -y install xserver-xorg dbus-x11 lm-sensors xclip python2 python3 python3-pip virtualenv fonts-liberation gawk fonts-font-awesome xdotool zsh libnotify-bin jmtpfs maim xwallpaper xfce4-power-manager redshift i3lock dmenu suckless-tools pass git picom trash-cli
     python3 -m pip install --user --upgrade pynvim
     # media
     sudo apt-get -y install alsa-tools pulseaudio sxiv mpv ncmpcpp mpd mpv ffmpeg pulseeffects
@@ -137,9 +137,9 @@ if [ "$1" = "f" ]; then
     FFPATH=$(dirname $(find ~/.mozilla -wholename "*release/prefs.js"));
     cd "$FFPATH"
     rm -f updater.sh prefsCleaner.sh user-overrides.js
-    wget https://github.com/arkenfox/user.js/blob/master/updater.sh
-    wget https://github.com/arkenfox/user.js/blob/master/prefsCleaner.sh
-    wget https://github.com/ivan-boikov/user-overrides.js
+    wget https://raw.githubusercontent.com/arkenfox/user.js/master/updater.sh
+    wget https://raw.githubusercontent.com/arkenfox/user.js/master/prefsCleaner.sh
+    wget https://raw.githubusercontent.com/ivan-boikov/user-overrides.js/master/user-overrides.js
     chmod +x updater.sh
     chmod +x prefsCleaner.sh
     bash updater.sh
