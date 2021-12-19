@@ -8,6 +8,8 @@ mkdir -p "$SRCDIR"
 
 stow $(ls -d */)
 
+ln -sf ~/.local/share/wallpapers/mountains.jpg ~/.local/share/wallpapers/bg
+
 # Update Make Install
 umi() { \
     branch=${2:-master}
@@ -53,7 +55,7 @@ umi_all() { \
 
 if [ "$1" = "i" ]; then
     # system
-    sudo apt-get -y install libnotify-bin jmtpfs maim xwallpaper python3-pip xfce4-power-manager redshift i3lock dmenu suckless-tools pass git picom
+    sudo apt-get -y install xserver-xorg dbus-x11 fonts-liberation fonts-font-awesome libnotify-bin jmtpfs maim xwallpaper python3-pip xfce4-power-manager redshift i3lock dmenu suckless-tools pass git picom
     # media
     sudo apt-get -y install sxiv mpv ncmpcpp mpd ffmpeg pulseeffects
     # web
@@ -66,6 +68,9 @@ if [ "$1" = "i" ]; then
 
     # required for ly
     sudo apt-get -y install build-essential libpam0g-dev libxcb-xkb-dev
+
+    # required for dwm
+    sudo apt-get -y install libx11-xcb-dev libxcb-res0-dev
 
     # required for st and dwm
     sudo apt-get -y install libfontconfig-dev libx11-dev libxft-dev
