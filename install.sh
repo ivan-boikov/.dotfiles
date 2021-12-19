@@ -128,7 +128,7 @@ fi
 # cleaning Firefox, schizo-style
 # https://12bytes.org/articles/tech/firefox/firefoxgecko-configuration-guide-for-privacy-and-performance-buffs/
 if [ "$1" = "f" ]; then
-    cd /usr/lib/firefox/browser/features
+    sudo cd /usr/lib/firefox/browser/features
     sudo rm *.xpi
 
     cp -r ~/.mozilla ~/.mozilla.bak
@@ -136,6 +136,7 @@ if [ "$1" = "f" ]; then
     cd ~/.mozilla
     FFPATH=$(dirname $(find ~/.mozilla -wholename "*release/prefs.js"));
     cd "$FFPATH"
+    rm -f updater.sh prefsCleaner.sh user-overrides.js
     wget https://github.com/arkenfox/user.js/blob/master/updater.sh
     wget https://github.com/arkenfox/user.js/blob/master/prefsCleaner.sh
     wget https://github.com/ivan-boikov/user-overrides.js
