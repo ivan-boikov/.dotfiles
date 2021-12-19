@@ -4,6 +4,7 @@ SRCDIR="~/.local/src/"
 
 rm ~/.config/mimeapps.list
 rm ~/.local/share/wallpapers/bg
+mkdir -p "$SRCDIR"
 
 stow $(ls -d */)
 
@@ -84,7 +85,7 @@ if [ "$1" = "i" ]; then
     # required for nnn
     sudo apt-get -y install pkg-config libncursesw5-dev libreadline-dev
 
-    mkdir "$SRCDIR" ; cd "$SRCDIR"
+    cd "$SRCDIR"
     git clone https://github.com/nullgemm/ly
     git clone https://github.com/ivan-boikov/dwm
     git clone https://github.com/ivan-boikov/dwmblocks
