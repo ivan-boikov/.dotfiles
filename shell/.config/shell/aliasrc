@@ -61,3 +61,7 @@ alias nsel='nsel_internal | xargs '
 alias sxiv="devour sxiv -a"
 alias mpv="devour mpv"
 alias zathura="devour zathura"
+
+# required for $HOME cleanup
+alias nvidia-settings="nvidia-settings --config="$XDG_CONFIG_HOME"/nvidia/settings"
+alias wget='wget --hsts-file="$XDG_CACHE_HOME/wget-hsts"'

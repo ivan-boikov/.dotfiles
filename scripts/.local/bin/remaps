@@ -6,9 +6,29 @@
 xset r rate 200 75
 
 # Map the menu button to right super as well.
-xmodmap -e 'keycode 135 = Super_R'
+#xmodmap -e 'keycode 135 = Super_R'
 
 # external keyboard Alt_R may be mapped to Multi_Key instead of ISO_Level3_Shift, which breaks French QWERTY layout
-xmodmap -e "keycode 64 = Alt_L"
-#xmodmap -e "keycode 64 = ISO_Level3_Shift"
-xmodmap -e "keycode 108 = ISO_Level3_Shift"
+#xmodmap -e "keycode 64 = Alt_L"
+#xmodmap -e "keycode 108 = ISO_Level3_Shift"
+
+
+# reset all options
+/usr/bin/setxkbmap -option
+
+# 105-key generic keyboard
+# utilize french and russian layouts
+# use qwerty instead of aqerty for french layout
+# toggle layout with shift+caps
+# french accents on right alt
+# compose on right ctrl
+# non-breaking spaces on right alt + space
+# kill X on left ctrl + left alt + backspace
+/usr/bin/setxkbmap -model pc105 \
+    -layout fr,ru \
+    -variant us, \
+    -option grp:shift_caps_toggle \
+    -option lv3:ralt_switch \
+    -option compose:rctrl \
+    -option nbsp:level3n \
+    -option terminate:ctrl_alt_bkspc

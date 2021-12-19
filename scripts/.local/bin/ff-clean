@@ -1,0 +1,3 @@
+#!/bin/sh
+# remove firefox extensions
+sudo rm /usr/lib/firefox/browser/features/*.xpi -v

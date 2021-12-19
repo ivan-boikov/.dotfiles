@@ -1,15 +1,15 @@
-directory: ~/music
-library: ~/music/beets.db
+directory: ~/audio/music
+library: ~/.local/share/beet/beets.db
 
 import:
   move: yes
   copy: no
   write: yes
-  log: ~/music/beets.log
+  log: ~/.cache/beet/beets.log
   resume: ask
 
 
-plugins: fetchart lastgenre vgmdb 
+plugins: fetchart lastgenre
 
 paths:
   default: $albumartist/$album-$format/$disc-$track-$title

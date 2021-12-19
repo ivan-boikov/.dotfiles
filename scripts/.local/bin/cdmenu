@@ -1,3 +1,8 @@
 #! /bin/bash
 # colored dmenu for use in scripts
-dmenu -nb '#020e1d' -nf '#00b1ff' -sb '#00b1ff' -sf '#020e1d' "$@"
+
+getcolor() {
+    xrdb -query | awk '/*.color'"$1":'/ { print substr($2,2) }'
+}
+# sync that with dwm's config.h!
+dmenu -nb "#$(getcolor 0)" -nf "#$(getcolor 4)" -sb "#$(getcolor 4)" -sf "#$(getcolor 0)" "$@"

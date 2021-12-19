@@ -1,0 +1,32 @@
+[global]
+    monitor = 0
+    follow = keyboard
+    width=370
+    height=350
+    geometry="500x70-0+18"
+    offset = 0x19
+    padding = 5
+    horizontal_padding = 5
+    transparency = 15
+    font = Liberation Mono 12
+    format = "<b>%s</b>\n%b"
+    frame_width=5
+    corner_radius=0
+
+[urgency_low]
+    background = "{color0}" # color0
+    foreground = "{color7}" # color4
+    frame_color = "{color7}" # color0
+    timeout = 3
+
+[urgency_normal]
+    background = "{color0}" # color0
+    foreground = "{color4}" # color4
+    frame_color = "{color4}" # color4
+    timeout = 5
+
+[urgency_critical]
+    background = "{color4}" # color4
+    foreground = "{color0}" # color0
+    frame_color = "{color4}" # color4
+    timeout = 10

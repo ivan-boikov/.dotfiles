@@ -14,8 +14,6 @@ else
 	. "$HOME/.xprofile"
 fi
 
-setbg &
-
 picom &
 firefox &
 # delay thunderbird to allow protonmail initialize and avoid thunderbirds' "no connection to 127.0.0.1"

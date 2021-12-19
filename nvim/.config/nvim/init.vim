@@ -9,6 +9,7 @@ endif
 
 call plug#begin('~/.config/nvim/plugged')
 "Plug 'ervandew/supertab'
+Plug 'nekonako/xresources-nvim'
 Plug 'scrooloose/nerdtree'
 Plug 'lervag/vimtex'
 Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
@@ -19,8 +20,10 @@ Plug 'jpalardy/vim-slime'
 Plug 'JuliaEditorSupport/julia-vim'
 Plug 'xuhdev/vim-latex-live-preview', { 'for': 'tex' }
 Plug 'christoomey/vim-tmux-navigator'
+Plug 'vimwiki/vimwiki'
 call plug#end()
 
+colorscheme xresources
 
 " experimental
 set title
@@ -28,15 +31,15 @@ set bg=light
 set go=a
 set mouse=a
 set nohlsearch
+" allow copy-paste to X11 clipboard
 set clipboard+=unnamedplus
 set noshowmode
 set noruler
 set laststatus=0
 set noshowcmd
 
-
 set nocompatible
-filetype plugin on
+filetype plugin indent on
 syntax on
 set encoding=utf-8
 set number relativenumber
@@ -47,7 +50,7 @@ set shiftwidth=4
 set autoindent
 set smartindent
 " don't use acual <Tab> character
-set expandtab 
+set expandtab
 
 " autocompletion
 set wildmode=longest:list,full
@@ -93,7 +96,7 @@ map <leader>r :vsp<space>$REFER<CR>
 nnoremap S :%s//g<Left><Left>
 
 " compile document, be it groff/LaTeX/markdown/etc.
-map <leader>c :w! \| !compiler "<c-r>%"<CR>
+map <leader>c :w! \| !compile "<c-r>%"<CR>
 
 " open corresponding .pdf/.html or preview
 map <leader>p :!opout <c-r>%<CR><CR>
@@ -113,9 +116,22 @@ autocmd BufRead,BufNewFile *.tex set filetype=tex
 cnoremap w!! execute 'silent! write !sudo tee % >/dev/null' <bar> edit!
 
 " automatically delete all trailing whitespace and newlines at end of file on save
-autocmd BufWritePre * %s/\s\+$//e
-autocmd BufWritePre * %s/\n\+\%$//e
-autocmd BufWritePre *.[ch] %s/\%$/\r/e
+"autocmd BufWritePre * %s/\s\+$//e
+"autocmd BufWritePre * %s/\n\+\%$//e
+"autocmd BufWritePre *.[ch] %s/\%$/\r/e
+fun! TrimWhitespace()
+    let l:save = winsaveview()
+    keeppatterns %s/\s\+$//e
+    call winrestview(l:save)
+endfun
+fun! TrimTrailingLines()
+    let l:save = winsaveview()
+    keeppatterns :v/\_s*\S/d
+    call winrestview(l:save)
+endfun
+autocmd BufWritePre * call TrimWhitespace()
+autocmd BufWritePre * call TrimTrailingLines()
+
 
 " turn off highlighting on the bits of code that are changed, so the line that is changed is highlighted but the actual text that has changed stands out on the line and is readable
 if &diff
@@ -200,3 +216,33 @@ let g:livepreview_use_biber = 1
 let g:livepreview_cursorhold_recompile = 1
 
 set updatetime=1000
+
+
+" copy-paste remapping for newbies like me
+" CTRL-X and SHIFT-Del are Cut
+vnoremap <C-X> "+x
+vnoremap <S-Del> "+x
+" CTRL-C and CTRL-Insert are Copy
+vnoremap <C-C> "+y
+vnoremap <C-Insert> "+y
+
+
+
+" Enable saving of undo history data from the buffer to a file.  Next
+" time Vim starts, the undo file is loaded.
+set undofile
+
+" Directory for the undo files.  This can be multiple entries separated
+" by comma, in which the first found one will be used.  "." means
+" current directory of the file.
+if !isdirectory($HOME."/.cache/nvim/")
+    call mkdir($HOME."/.cache/nvim", "", 0770)
+endif
+if !isdirectory($HOME."/.cache/nvim/undodir")
+    call mkdir($HOME."/.cache/nvim/undodir", "", 0700)
+endif
+set undodir=~/.cache/nvim/undodir
+
+
+" autocompile dwmblocks
+autocmd BufWritePost ~/.local/src/dwmblocks/config.h !cd ~/.local/src/dwmblocks/; sudo make install && { killall -q dwmblocks;setsid dwmblocks & }
