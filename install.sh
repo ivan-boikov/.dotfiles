@@ -25,7 +25,7 @@ umi() { \
 
 umi_all() { \
     umi "ly"
-    umi "dwm" "master"
+    umi "dwm" "patched-config"
     umi "dwmblocks"
     umi "st"
     umi "neovim"
