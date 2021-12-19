@@ -8,16 +8,24 @@ stow $(ls -d */)
 # Update Make Install
 umi() { \
     echo "[UPDATE] $1"
-    cd ~/soft/"$1"
+    cd ~/.local/src/"$1"
     git pull
     sudo checkinstall --nodoc -y sudo make install -j
 }
 
 umi_all() { \
+    umi "dwmblocks"
+    umi "nnn"
+    umi "st"
     umi "devour"
     umi "dragon"
     umi "neovim"
-    umi "st"
+
+    echo "[UPDATE] dwm"
+    cd ~/.local/src/dwm
+    git pull
+    git checkout patched-config
+    sudo checkinstall --nodoc -y sudo make install -j
 
     cd ~/soft/xournalpp
     mkdir build ; cd build
@@ -41,8 +49,8 @@ umi_all() { \
 }
 
 if [ "$1" = "i" ]; then
-    # stuff I use
-    sudo apt-get -y install git libnotify-bin jmtpfs unrar unzip p7zip-full maim xwallpaper python3-pip sxiv mpv zathura nnn xfce4-power-manager redshift pass
+    # stuff I regularly use
+    sudo apt-get -y install git libnotify-bin jmtpfs unrar unzip p7zip-full maim xwallpaper python3-pip sxiv mpv zathura nnn xfce4-power-manager redshift pass firefox chromium ncmpcpp mpd dmenu suckless-tools texlive ffmpeg i3lock
 
     # theming
     sudo apt-get -y install oxygen-icon-theme sox imagemagick
@@ -57,7 +65,7 @@ if [ "$1" = "i" ]; then
     # required for nvim
     sudo apt-get -y install ninja-build gettext libtool libtool-bin autoconf automake cmake g++ pkg-config unzip curl
 
-    # required for st
+    # required for st and dwm
     sudo apt-get -y install libfontconfig-dev libx11-dev libxft-dev
 
     # required for digimend drives
@@ -70,14 +78,17 @@ if [ "$1" = "i" ]; then
     # required for nnn
     sudo apt-get -y install pkg-config libncursesw5-dev libreadline-dev
 
-    mkdir ~/soft ; cd ~/soft
-    git clone https://github.com/salman-abedin/devour/
+    mkdir ~/.local/src ; cd ~/.local/src
+    git clone https://github.com/ivan-boikov/dwm
+    git clone https://github.com/ivan-boikov/dwmblocks
+    git clone https://github.com/lukesmithxyz/st
+    git clone https://github.com/jarun/nnn
+    # is it necessary with dwm swallow patch?
+    git clone https://github.com/salman-abedin/devour
     git clone https://github.com/mwh/dragon
     git clone https://github.com/neovim/neovim
-    git clone https://github.com/lukesmithxyz/st
     git clone https://github.com/DIGImend/digimend-kernel-drivers
     git clone https://github.com/xournalpp/xournalpp
-    git clone https://github.com/jarun/nnn
 
     umi_all
 fi
