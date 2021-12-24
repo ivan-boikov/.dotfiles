@@ -6,12 +6,57 @@ rm ~/.config/mimeapps.list
 rm ~/.local/share/wallpapers/bg
 mkdir -p "$SRCDIR"
 
+sudo apt-get -y install stow
 stow $(ls -d */)
 
 ln -sf ~/.local/share/wallpapers/mountains.jpg ~/.local/share/wallpapers/bg
 
+# yes/no dialog
+# https://gist.github.com/davejamesmiller/1965569
+ask() {
+    local prompt default reply
+
+    if [[ ${2:-} = 'Y' ]]; then
+        prompt='Y/n'
+        default='Y'
+    elif [[ ${2:-} = 'N' ]]; then
+        prompt='y/N'
+        default='N'
+    else
+        prompt='y/n'
+        default=''
+    fi
+
+    while true; do
+
+        # Ask the question (not using "read -p" as it uses stderr not stdout)
+        echo -n "$1 [$prompt] "
+
+        # Read the answer (use /dev/tty in case stdin is redirected from somewhere else)
+        read -r reply </dev/tty
+
+        # Default?
+        if [[ -z $reply ]]; then
+            reply=$default
+        fi
+
+        # Check if the reply is valid
+        case "$reply" in
+            Y*|y*) return 0 ;;
+            N*|n*) return 1 ;;
+        esac
+
+    done
+}
+
+
 # Update Make Install
 umi() { \
+    if [[ ! -d "$SRCDIR/$1" ]]; then
+        echo "$1 not found, skipping"
+        return
+    fi
+
     branch=${2:-master}
     echo "[UPDATE] $1 $branch"
     cd "$SRCDIR/$1"
@@ -25,28 +70,35 @@ umi() { \
     fi
 }
 
-umi_all() { \
-    umi "ly"
-    umi "dwm" "patched-config"
-    umi "dwmblocks"
-    umi "st"
-    umi "neovim"
-    umi "nnn" "master" "strip"
-    umi "devour"
-    umi "dragon"
-
+umi_pamixer() { \
+    if [[ ! -d "$SRCDIR/pamixer" ]]; then
+        echo "pamixer not found, skipping"
+        return
+    fi
     cd "$SRCDIR/pamixer"
     git pull
     meson setup build
     meson compile -C build
     sudo meson install -C build
+}
 
+umi_digimend() { \
+    if [[ ! -d "$SRCDIR/digimend-kernel-drivers" ]]; then
+        echo "digimend not found, skipping"
+        return
+    fi
     cd "$SRCDIR/digimend-kernel-drivers"
     git pull
     # TODO is it necessary to uninstall?
     sudo make dkms_uninstall
     sudo make dkms_install
+}
 
+umi_xournalpp() { \
+    if [[ ! -d "$SRCDIR/xournalpp" ]]; then
+        echo "xournalpp not found, skipping"
+        return
+    fi
     cd "$SRCDIR/xournalpp"
     mkdir build ; cd build
     rm -rf packages
@@ -59,89 +111,133 @@ umi_all() { \
     sudo dpkg -i xournalpp*
 }
 
-if [ "$1" = "i" ]; then
+umi_oomox() { \
+    if [[ ! -d "$SRCDIR/oomox" ]]; then
+        echo "oomox not found, skipping"
+        return
+    fi
+    cd "$SRCDIR/oomox"
+    make -f po.mk install
+}
+
+umi_all() { \
+    umi "ly"
+    umi "dwm" "patched-config"
+    umi "dwmblocks"
+    umi "st"
+    umi "neovim"
+    umi "nnn" "master" "strip"
+    umi "devour"
+    umi "dragon"
+
+    umi_pamixer
+    umi_digimend
+    umi_xournalpp
+    umi_oomox
+}
+
+if [ "$1" = "-i" ]; then
     # system
-    sudo apt-get -y install xserver-xorg dbus-x11 lm-sensors xclip python2 python3 python3-pip virtualenv fonts-liberation gawk fonts-font-awesome xdotool zsh libnotify-bin jmtpfs maim xwallpaper xfce4-power-manager redshift i3lock dmenu suckless-tools pass git picom trash-cli
+    sudo apt-get install xserver-xorg dbus-x11 lm-sensors xclip python2 python3 python3-pip gdebi virtualenv gawk xdotool zsh libnotify-bin jmtpfs maim xfce4-power-manager redshift i3lock dmenu suckless-tools pass git trash-cli htop network-manager rsync
     python3 -m pip install --user --upgrade pynvim
     # media
-    sudo apt-get -y install alsa-tools pulseaudio sxiv mpv ncmpcpp mpd mpv ffmpeg pulseeffects
+    sudo apt-get install alsa-tools sxiv mpv ncmpcpp mpd mpv ffmpeg syncthing
+    # TODO migrate to pipewire for good
+    sudo apt-get install pulseaudio
+    # sudo apt-get install pipewire wireplumber pipewire-pulse
+    sudo apt-get install pulseeffects
     # web
-    sudo apt-get -y install firefox chromium thunderbird
+    sudo apt-get install firefox
+    sudo apt-get install chromium
+    sudo apt-get install thunderbird
     # office
-    sudo apt-get -y install git unrar unzip p7zip-full zathura texlive virt-manager
+    sudo apt-get install git unrar unzip p7zip-full zathura texlive virt-manager
     # theming
-    sudo apt-get -y install oxygen-icon-theme sox imagemagick
+    sudo apt-get install oxygen-icon-theme sox imagemagick lxappearance xwallpaper fonts-symbola fonts-liberation fonts-font-awesome picom
     pip3 install pywal
 
-    # required for ly
-    sudo apt-get -y install build-essential libpam0g-dev libxcb-xkb-dev
-
-    # required for dwm
-    sudo apt-get -y install libx11-xcb-dev libxcb-res0-dev
-
-    # required for st and dwm
-    sudo apt-get -y install libfontconfig-dev libx11-dev libxft-dev
-
-    # required for nvim
-    sudo apt-get -y install ninja-build gettext libtool libtool-bin autoconf automake cmake g++ pkg-config unzip curl
-
-    # required for pamixer
-    sudo apt-get -y install meson libboost-dev libpulse0 libpulse-dev
-
-    # required for devour
-    sudo apt-get -y install libx11-dev
-
-    # required for dragon
-    sudo apt-get -y install libgtk-3-dev
-
-    # required for digimend drives
-    sudo apt-get -y install -y "linux-headers-$(uname -r)"
-
-    # required for xournalpp
-    sudo apt-get -y install -y "linux-headers-$(uname -r)" dkms
-    sudo apt-get -y install cmake libgtk-3-dev libpoppler-glib-dev portaudio19-dev libsndfile-dev libcppunit-dev dvipng texlive libxml2-dev liblua5.3-dev libzip-dev librsvg2-dev gettext lua-lgi
-
-    # required for nnn
-    sudo apt-get -y install pkg-config libncursesw5-dev libreadline-dev
 
     cd "$SRCDIR"
+
+    # required for ly
+    sudo apt-get install build-essential libpam0g-dev libxcb-xkb-dev
     git clone --recurse-submodules https://github.com/nullgemm/ly.git
+
+    # required for st, dwm and dwmblocks
+    sudo apt-get install libfontconfig-dev libx11-dev libxft-dev
+    # required for dwm
+    sudo apt-get install libx11-xcb-dev libxcb-res0-dev
     git clone https://github.com/ivan-boikov/dwm
     git clone https://github.com/ivan-boikov/dwmblocks
     git clone https://github.com/lukesmithxyz/st
-    git clone https://github.com/neovim/neovim
+
+    # required for neovim
+    sudo apt-get install ninja-build gettext libtool libtool-bin autoconf automake cmake g++ pkg-config unzip curlgit
+    clone https://github.com/neovim/neovim
     git clone https://github.com/jarun/nnn
+
+    # required for pamixer
+    sudo apt-get install meson libboost-dev libpulse0 libpulse-dev
     git clone https://github.com/cdemoulins/pamixer
+
+    # required for devour
+    sudo apt-get install libx11-dev
     # is it necessary with dwm swallow patch?
     git clone https://github.com/salman-abedin/devour
+
+    # dragon
+    sudo apt-get install libgtk-3-dev
     git clone https://github.com/mwh/dragon
-    git clone https://github.com/DIGImend/digimend-kernel-drivers
-    git clone https://github.com/xournalpp/xournalpp
+
+    # digimend drivers
+    if ask "Install DIGImend drivers?"; then
+        cd "$SRCDIR"
+        sudo apt-get install "linux-headers-$(uname -r)"
+        git clone https://github.com/DIGImend/digimend-kernel-drivers
+    fi
+
+    # xournalpp
+    if ask "Install xournalpp?"; then
+        sudo apt-get install "linux-headers-$(uname -r)" dkms
+        sudo apt-get install cmake libgtk-3-dev libpoppler-glib-dev portaudio19-dev libsndfile-dev libcppunit-dev dvipng texlive libxml2-dev liblua5.3-dev libzip-dev librsvg2-dev gettext lua-lgi
+        cd "$SRCDIR"
+        git clone https://github.com/xournalpp/xournalpp
+    fi
+
+    # required for nnn
+    sudo apt-get install pkg-config libncursesw5-dev libreadline-dev
+
+    # required for oomox
+    if ask "Install oomox theming engine?"; then
+        sudo apt-get install python3-gi python3-gi-cairo libglib2.0-bin libgdk-pixbuf2.0-dev libxml2-utils x11-xserver-utils gir1.2-gtk-3.0 gir1.2-glib-2.0 gir1.2-pango-1.0 gir1.2-gdkpixbuf-2.0 gtk2-engines gtk2-engines-murrine gtk2-engines-pixbuf bash bc sed grep parallel sassc libsass1 imagemagick optipng librsvg2-bin inkscape python3-pillow python3-pystache python3-yaml make automake libgtk-3-dev
+        cd "$SRCDIR"
+        git clone https://github.com/themix-project/oomox --recursive
+    fi
 
     umi_all
+
+    # cleaning Firefox, schizo-style
+    # https://12bytes.org/articles/tech/firefox/firefoxgecko-configuration-guide-for-privacy-and-performance-buffs/
+    if ask "Schizofy firefox?"; then
+        sudo cd /usr/lib/firefox/browser/features
+        sudo rm *.xpi
+
+        cp -r ~/.mozilla ~/.mozilla.bak
+
+        cd ~/.mozilla
+        FFPATH=$(dirname $(find ~/.mozilla -wholename "*release/prefs.js"));
+        cd "$FFPATH"
+        rm -f updater.sh prefsCleaner.sh user-overrides.js
+        wget https://raw.githubusercontent.com/arkenfox/user.js/master/updater.sh
+        wget https://raw.githubusercontent.com/arkenfox/user.js/master/prefsCleaner.sh
+        wget https://raw.githubusercontent.com/ivan-boikov/user-overrides.js/master/user-overrides.js
+        chmod +x updater.sh
+        chmod +x prefsCleaner.sh
+        bash updater.sh
+        bash prefsCleaner.sh
+    fi
 fi
 
-if [ "$1" = "u" ]; then
+if [ "$1" = "-u" ]; then
     umi_all
-fi
-
-# cleaning Firefox, schizo-style
-# https://12bytes.org/articles/tech/firefox/firefoxgecko-configuration-guide-for-privacy-and-performance-buffs/
-if [ "$1" = "f" ]; then
-    sudo cd /usr/lib/firefox/browser/features
-    sudo rm *.xpi
-
-    cp -r ~/.mozilla ~/.mozilla.bak
-
-    cd ~/.mozilla
-    FFPATH=$(dirname $(find ~/.mozilla -wholename "*release/prefs.js"));
-    cd "$FFPATH"
-    rm -f updater.sh prefsCleaner.sh user-overrides.js
-    wget https://raw.githubusercontent.com/arkenfox/user.js/master/updater.sh
-    wget https://raw.githubusercontent.com/arkenfox/user.js/master/prefsCleaner.sh
-    wget https://raw.githubusercontent.com/ivan-boikov/user-overrides.js/master/user-overrides.js
-    chmod +x updater.sh
-    chmod +x prefsCleaner.sh
-    bash updater.sh
-    bash prefsCleaner.sh
 fi
