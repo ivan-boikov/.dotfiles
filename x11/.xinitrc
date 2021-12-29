@@ -28,4 +28,4 @@ xfce4-power-manager &
 
 dwmblocks &
 
-/usr/bin/dwm
+ssh-agent /usr/bin/dwm

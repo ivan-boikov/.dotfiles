@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 SRCDIR="$HOME/.local/src/"
 
@@ -138,10 +138,10 @@ umi_all() { \
 
 if [ "$1" = "-i" ]; then
     # system
-    sudo apt-get install xserver-xorg dbus-x11 lm-sensors xclip python2 python3 python3-pip gdebi virtualenv gawk xdotool zsh libnotify-bin jmtpfs maim xfce4-power-manager redshift i3lock dmenu suckless-tools pass git trash-cli htop network-manager rsync
+    sudo apt-get install xserver-xorg dbus-x11 lm-sensors xclip python2 python3 python3-pip gdebi virtualenv gawk xdotool zsh libnotify-bin jmtpfs maim xfce4-power-manager redshift i3lock dmenu suckless-tools pass git trash-cli htop network-manager rsync ncdu
     python3 -m pip install --user --upgrade pynvim
     # media
-    sudo apt-get install alsa-tools sxiv mpv ncmpcpp mpd mpv ffmpeg syncthing
+    sudo apt-get install alsa-tools sxiv mpv ncmpcpp mpd mpv ffmpeg syncthing playerctl
     # TODO migrate to pipewire for good
     sudo apt-get install pulseaudio
     # sudo apt-get install pipewire wireplumber pipewire-pulse
@@ -151,9 +151,9 @@ if [ "$1" = "-i" ]; then
     sudo apt-get install chromium
     sudo apt-get install thunderbird
     # office
-    sudo apt-get install git unrar unzip p7zip-full zathura texlive virt-manager
+    sudo apt-get install git unrar unzip p7zip-full zathura texlive virt-manager gnome-keyring
     # theming
-    sudo apt-get install oxygen-icon-theme sox imagemagick lxappearance xwallpaper fonts-symbola fonts-liberation fonts-font-awesome picom
+    sudo apt-get install oxygen-icon-theme sox imagemagick lxappearance xwallpaper fonts-symbola fonts-liberation fonts-font-awesome picom dunst
     pip3 install pywal
 
 

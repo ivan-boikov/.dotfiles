@@ -13,4 +13,4 @@ RAM=$(free --mebi | sed -n '2{p;q}' | awk '{printf ("%2.1f/%2.1f\n", ( $3 / 1024
 
 swap=$(free --mebi | sed -n '3{p;q}' | awk '{printf ("%2.1f/%2.1f\n", ( $3 / 1024), ($2 / 1024))}')
 
-echo "$RAM $swap GiB"
+echo "$RAM $swap"
