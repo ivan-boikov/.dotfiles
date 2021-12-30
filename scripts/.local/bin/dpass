@@ -40,7 +40,7 @@ if [[ $typeit -eq 0 ]]; then
     notify-send "Password for $password was copied to clipboard"
     ;;
     info)
-        data=$(pass show $password | sed 1d | "$dmenu" -l 30)
+        data=$(pass show $password | "$dmenu" -l 30)
         if [[ -n "$data"  ]]
         then
             do_trim=$(printf 'No\nYes' | "$dmenu" -p "Trim \"$(echo $data | awk '{print $1}')\" in front?" -l 2)
