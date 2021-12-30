@@ -59,7 +59,8 @@ export ERRFILE="$XDG_CACHE_HOME/x11/xsession-errors"
 # libx11
 export XCOMPOSEFILE="$XDG_CONFIG_HOME/x11/xcompose"
 export XCOMPOSECACHE="$XDG_CACHE_HOME/x11/xcompose"
-
+# npm
+export NPM_CONFIG_USERCONFIG=$XDG_CONFIG_HOME/npm/npmrc
 
 # I don't need history from less
 export LESSHISTFILE="-"
