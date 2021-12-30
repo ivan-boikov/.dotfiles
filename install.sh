@@ -152,7 +152,7 @@ if [ "$1" = "-i" ]; then
     sudo apt-get install chromium
     sudo apt-get install thunderbird
     # office
-    sudo apt-get install git unrar unzip p7zip-full zathura texlive virt-manager gnome-keyring
+    sudo apt-get install git unrar unzip p7zip-full zathura zathura-pdf zathura-ps texlive virt-manager gnome-keyring
     # theming
     sudo apt-get install oxygen-icon-theme sox imagemagick lxappearance xwallpaper fonts-symbola fonts-liberation fonts-font-awesome picom dunst
     pip3 install pywal
