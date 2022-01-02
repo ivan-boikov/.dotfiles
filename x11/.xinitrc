@@ -28,4 +28,6 @@ xfce4-power-manager &
 
 dwmblocks &
 
+xrdb -merge ~/.Xresources
+
 ssh-agent /usr/bin/dwm

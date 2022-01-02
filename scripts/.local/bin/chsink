@@ -1,2 +1,34 @@
 #!/bin/sh
-pactl list sinks short | awk '{print $2}' | cdmenu -l 100 | setsink
+
+setsink() {
+    tgtdevname=$(cat -)
+    if [ -z "$tgtdevname" ]; then
+        echo "No device passed"
+        return
+    fi
+
+    tgtdev=$(pactl list sinks short | grep $tgtdevname)
+    tgtdevid=$(echo $tgtdev | awk '{print $1}')
+    curdevid=$(pactl list sinks short | grep RUNNING | awk '{print $1}')
+
+    echo "Swapping to device $tgtdev"
+    echo "Device ID $tgtdevid"
+    echo "Device name $tgtdevname"
+    echo "Current device ID $curdevid"
+    notify-send "Swapping to $tgtdevname"
+
+    pactl set-default-sink $tgtdevid
+    if [ -n "$curdevid" ]; then
+        pactl suspend-sink $curdevid 1
+    fi
+    pactl suspend-sink $tgtdevid 0
+
+    #move all audio streams to the new sink
+    pactl list short sink-inputs | while read stream; do
+        streamId=$(echo $stream | awk '{print $1}')
+        echo 'Moving stream' $stream 'with id' $streamId
+        pactl move-sink-input "$streamId" "$tgtdevid"
+    done
+}
+
+pactl list sinks short | awk '{print $2}' | cdmenu -l 32 | setsink
