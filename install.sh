@@ -11,6 +11,9 @@ stow $(ls -d */)
 
 ln -sf ~/.local/share/wallpapers/mountains.jpg ~/.local/share/wallpapers/bg
 
+# update nvim plugins
+nvim +'hi NormalFloat guibg=#1e222a' +PackerSync
+
 # yes/no dialog
 # https://gist.github.com/davejamesmiller/1965569
 ask() {
@@ -154,7 +157,7 @@ if [ "$1" = "-i" ]; then
     # office
     sudo apt-get install git unrar unzip p7zip-full zathura zathura-pdf zathura-ps texlive virt-manager gnome-keyring
     # theming
-    sudo apt-get install oxygen-icon-theme sox imagemagick lxappearance xwallpaper fonts-symbola fonts-liberation fonts-font-awesome picom dunst
+    sudo apt-get install oxygen-icon-theme sox imagemagick lxappearance xwallpaper fonts-symbola fonts-liberation fonts-font-awesome compton dunst
     pip3 install pywal
 
 
