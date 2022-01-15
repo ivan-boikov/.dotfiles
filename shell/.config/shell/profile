@@ -81,7 +81,7 @@ export COLOR_XOSD_OUTLINE="#00b1ff"
 
 # nnn things
 export NNN_BMS='v:~/vid;p:~/pix;d:~/dox;M:/mnt;m:/media'
-export NNN_PLUG="t:!st;m:mediainf;d:dragdrop;l:mimelist;p:preview-tabbed;o:organize;r:renamer;c:rsynccp;x:toggleex;u:umounttree;g:getplugs;s:x2sel;f:finder;2:dups;P:preview-tui;n:fixname"
+export NNN_PLUG="t:!st;m:mediainf;d:dragdrop;l:mimelist;p:preview-tabbed;o:organize;r:renamer;c:rsynccp;x:toggleex;u:umounttree;g:getplugs;s:x2sel;f:fzcd;2:dups;P:preview-tui;n:fixname"
 export NNN_TRASH=1
 export NNN_SSHFS="sshfs -o follow_symlinks"
 export NNN_FIFO=/tmp/nnn.fifo
