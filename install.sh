@@ -3,16 +3,16 @@
 SRCDIR="$HOME/.local/src/"
 
 rm ~/.config/mimeapps.list
-rm ~/.local/share/wallpapers/bg
+rm ~/.config/user-dirs.dirs
 mkdir -p "$SRCDIR"
 
-sudo apt-get -y install stow
-stow $(ls -d */)
+if [ -z $(command -v stow) ]; then
+    sudo apt-get -y install stow
+fi
+
+stow -R -v $(ls -d */)
 
 ln -sf ~/.local/share/wallpapers/mountains.jpg ~/.local/share/wallpapers/bg
-
-# update nvim plugins
-nvim +'hi NormalFloat guibg=#1e222a' +PackerSync
 
 # yes/no dialog
 # https://gist.github.com/davejamesmiller/1965569
@@ -165,61 +165,88 @@ if [ "$1" = "-i" ]; then
 
     # required for ly
     sudo apt-get install build-essential libpam0g-dev libxcb-xkb-dev
-    git clone --recurse-submodules https://github.com/nullgemm/ly.git
+    if [ ! -d ly ]; then
+	git clone --recurse-submodules https://github.com/nullgemm/ly.git
+    fi
 
     # required for st, dwm and dwmblocks
     sudo apt-get install libfontconfig-dev libx11-dev libxft-dev
     # required for dwm
     sudo apt-get install libx11-xcb-dev libxcb-res0-dev
-    git clone https://github.com/ivan-boikov/dwm
-    git clone https://github.com/ivan-boikov/dwmblocks
-    git clone https://github.com/lukesmithxyz/st
+    if [ ! dwm ]; then
+    	git clone https://github.com/ivan-boikov/dwm
+    fi
+    if [ ! dwmblocks ]; then
+	git clone https://github.com/ivan-boikov/dwmblocks
+    fi
+    if [ ! st ]; then
+    	git clone https://github.com/lukesmithxyz/st
+    fi
 
     # required for neovim
     sudo apt-get install ninja-build gettext libtool libtool-bin autoconf automake cmake g++ pkg-config unzip curlgit
-    clone https://github.com/neovim/neovim
-    git clone https://github.com/jarun/nnn
+    if [! -d neovim ]; then
+	git clone https://github.com/neovim/neovim
+    fi
+
+    # required for nnn
+    sudo apt-get install pkg-config libncursesw5-dev libreadline-dev
+    if [ ! -d nnn ]; then
+    	git clone https://github.com/jarun/nnn
+    fi
 
     # required for pamixer
     sudo apt-get install meson libboost-dev libpulse0 libpulse-dev
-    git clone https://github.com/cdemoulins/pamixer
+    if [ ! -d pamixer ]; then
+    	git clone https://github.com/cdemoulins/pamixer
+    fi
 
     # required for devour
     sudo apt-get install libx11-dev
     # is it necessary with dwm swallow patch?
-    git clone https://github.com/salman-abedin/devour
+    if [ ! -d devour ]; then
+    	git clone https://github.com/salman-abedin/devour
+    fi
 
     # dragon
     sudo apt-get install libgtk-3-dev
-    git clone https://github.com/mwh/dragon
+    if [ ! -d dragon ]; then
+    	git clone https://github.com/mwh/dragon
+    fi
 
     # digimend drivers
     if ask "Install DIGImend drivers?"; then
-        cd "$SRCDIR"
         sudo apt-get install "linux-headers-$(uname -r)"
-        git clone https://github.com/DIGImend/digimend-kernel-drivers
+	if [ ! -d digimend-kernel-drivers ]; then
+            git clone https://github.com/DIGImend/digimend-kernel-drivers
+	fi
     fi
 
     # xournalpp
     if ask "Install xournalpp?"; then
         sudo apt-get install "linux-headers-$(uname -r)" dkms
         sudo apt-get install cmake libgtk-3-dev libpoppler-glib-dev portaudio19-dev libsndfile-dev libcppunit-dev dvipng texlive libxml2-dev liblua5.3-dev libzip-dev librsvg2-dev gettext lua-lgi
-        cd "$SRCDIR"
-        git clone https://github.com/xournalpp/xournalpp
+	if [ ! -d xournalpp ]; then
+            git clone https://github.com/xournalpp/xournalpp
+	fi
     fi
-
-    # required for nnn
-    sudo apt-get install pkg-config libncursesw5-dev libreadline-dev
 
     # required for oomox
     if ask "Install oomox theming engine?"; then
         sudo apt-get install python3-gi python3-gi-cairo libglib2.0-bin libgdk-pixbuf2.0-dev libxml2-utils x11-xserver-utils gir1.2-gtk-3.0 gir1.2-glib-2.0 gir1.2-pango-1.0 gir1.2-gdkpixbuf-2.0 gtk2-engines gtk2-engines-murrine gtk2-engines-pixbuf bash bc sed grep parallel sassc libsass1 imagemagick optipng librsvg2-bin inkscape python3-pillow python3-pystache python3-yaml make automake libgtk-3-dev
-        cd "$SRCDIR"
-        git clone https://github.com/themix-project/oomox --recursive
+	if [ ! -d oomox ]; then
+             git clone https://github.com/themix-project/oomox --recursive
+	fi
     fi
 
     umi_all
+fi
 
+if [ "$1" = "-u" ]; then
+    umi_all
+fi
+
+if [ "$1" = "-f" ]; then
     # cleaning Firefox, schizo-style
     # https://12bytes.org/articles/tech/firefox/firefoxgecko-configuration-guide-for-privacy-and-performance-buffs/
     if ask "Schizofy firefox?"; then
@@ -242,6 +269,7 @@ if [ "$1" = "-i" ]; then
     fi
 fi
 
-if [ "$1" = "-u" ]; then
-    umi_all
+if [ "$1" = "nvim" ]; then
+    # update nvim plugins
+    nvim +'hi NormalFloat guibg=#1e222a' +PackerSync
 fi

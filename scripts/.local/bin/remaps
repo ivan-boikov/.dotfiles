@@ -32,3 +32,5 @@ xset r rate 200 75
     -option compose:rctrl \
     -option nbsp:level3n \
     -option terminate:ctrl_alt_bkspc
+
+notify-send "Keyboard remapped"

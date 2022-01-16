@@ -14,9 +14,7 @@ else
 	. "$HOME/.xprofile"
 fi
 
-setbg &
-
-picom &
+compton &
 firefox &
 # delay thunderbird to allow protonmail initialize and avoid thunderbirds' "no connection to 127.0.0.1"
 protonmail-bridge --no-window & ( sleep 5 && thunderbird & )
@@ -25,6 +23,8 @@ telegram-desktop &
 redshift -l40:2 &
 syncthing &
 xfce4-power-manager &
+$HOME/.local/bin/remaps &
+setbg &
 
 dwmblocks &
 
