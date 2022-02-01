@@ -15,7 +15,6 @@ else
 fi
 
 compton &
-firefox &
 # delay thunderbird to allow protonmail initialize and avoid thunderbirds' "no connection to 127.0.0.1"
 protonmail-bridge --no-window & ( sleep 5 && thunderbird & )
 signal-desktop &
