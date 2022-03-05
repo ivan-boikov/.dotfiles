@@ -142,7 +142,7 @@ umi_all() { \
 if [ "$1" = "-i" ]; then
     # system
     #dbus-x11 -> dbus-broker
-    sudo apt-get install xserver-xorg dbus-broker lm-sensors xclip python2 python3 python3-pip gdebi virtualenv gawk xdotool zsh libnotify-bin jmtpfs maim xfce4-power-manager redshift i3lock dmenu suckless-tools pass git trash-cli htop network-manager rsync ncdu shellcheck
+    sudo apt-get install xserver-xorg dbus-broker lm-sensors xclip python2 python3 python3-pip gdebi virtualenv gawk xdotool zsh libnotify-bin jmtpfs maim xfce4-power-manager redshift i3lock dmenu suckless-tools pass pass-git-helper git trash-cli htop network-manager rsync ncdu shellcheck
     python3 -m pip install --user --upgrade pynvim
     # media
     sudo apt-get install alsa-tools sxiv mpv ncmpcpp mpd mpv ffmpeg syncthing playerctl fzf
