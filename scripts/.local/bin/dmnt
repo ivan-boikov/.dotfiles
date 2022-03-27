@@ -1,5 +1,6 @@
 #!/bin/sh
 
+#TODO: GET RID OF GLOBAL VARIABLES LIKE chosen
 #shopt -s expand_aliases
 dmenu="cdmenu"
 
@@ -50,7 +51,19 @@ mountandroid() { \
     notify-send "Android mounting" "Android device mounted to $mp."
 }
 
-unmountdev() {
+mountsamba() { \
+    getmount "/mnt -maxdepth 1 -type d"
+    user=$(echo $(whoami) | $dmenu -i -p "Input user name for $1:")
+    pass=$(pass-askpass "Input password for user \"$user\" for share $1")
+    sudo -A mount -t cifs -o user="$user",password="$pass",iocharset=utf8,uid=$(id -u),gid=$(id -g),file_mode=0644,dir_mode=0755 "$1" "$mp"
+    if [ $? -ne 0 ]; then
+        notify-send -u critical "Samba mounting" "Failed to mount $1 to $mp as $user"
+        exit 1
+    fi
+    notify-send "Samba mounting" "$1 mounted to $mp as $user"
+}
+
+unmountdev() { \
     result=$(sudo -A umount "$1" 2>&1)
     if [ -z "$result" ]; then
         notify-send "Unmount device" "$1 unmounted"
@@ -86,6 +99,46 @@ selectusb() { \
     fi
 }
 
+
+selectsamba() { \
+    IP=$(ip addr | grep 'state UP' -A2 | tail -n1 | awk '{print $2}' | cut -f1  -d'/')
+    subnets="$IP\n$(echo $IP | cut -d. -f1-3).1\n$(echo $IP | cut -d. -f1-3).*\n$(echo $IP | cut -d. -f1-2).*.*"
+    #printf "Subnets $subnets"
+    subnet=$(printf "$subnets" | $dmenu -l 64 -p "Input samba scan range")
+    #echo "Subnet $subnet"
+
+    scan() { \
+        nmap $1 -p 445 --open -oG - | grep "Host:" | cut -d " " -f 2 | uniq |  xargs -I '{}' sh -c 'echo "Scan {}";echo "---------";smbclient -L//{} -N'
+    }
+    notify-send "Samba mount" "Scanning network for samba shares..."
+    scanresult=$(scan $subnet)
+    #printf "$scanresult\n"
+
+    IPs=$(echo "$scanresult" | grep Scan | cut -d' ' -f2-)
+    #printf "Server IPs:\n$IPs\n"
+
+    IP=$(printf "$IPs" | $dmenu -l 64 -p "Choose samba server IP")
+    #echo "Selected $IP"
+
+    shares="""$(scan $IP)"""
+    #printf "Shares:\n$shares\n"
+    # smbclient output cleanup:
+    #   cut off static header with tail
+    #   cut off warning about SMB1 with head
+    #   remove leading whitespace with sed
+    shares=$(printf "$shares" | tail -n +6 | head -n -1 | sed -e 's/^[[:space:]]*//')
+    #printf "Filtered shares:\n$shares\n"
+
+    share=$(printf "$shares" | $dmenu -l 64 -p "Which samba share to mount?")
+    #printf "$share\n"
+
+    # leave only share name, assuming no whitespace in share name
+    chosen=$(echo $share | cut -d' ' -f 1)
+    #printf "Chosen: $chosen\n"
+
+    mountsamba "//$IP/$chosen"
+}
+
 selectandroid() { \
     unmounted=$(jmtpfs -l | sed -e '1,2d')
     mounted=$(grep "jmtpfs" "/etc/mtab")
@@ -107,8 +160,9 @@ selectandroid() { \
     esac
 }
 
-choice="$(printf "USB\\nAndroid" | "$dmenu" -i -p "(Un-)mount a USB drive or Android device?")" || exit 1
+choice="$(printf "USB\\nSamba\\nAndroid" | "$dmenu" -i -p "(Un-)mount a USB drive, Samba share or Android device?")" || exit 1
 case $choice in
     USB) selectusb ;;
+    Samba) selectsamba ;;
     Android) selectandroid ;;
 esac

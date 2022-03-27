@@ -61,11 +61,12 @@ umi() { \
     fi
 
     branch=${2:-master}
+    makeargs=${4:-}
     echo "[UPDATE] $1 $branch"
     cd "$SRCDIR/$1"
     git pull
     git checkout "$branch"
-    make -j
+    make "$makeargs" -j
     if [ -z "$3" ]; then
         sudo checkinstall --nodoc -y sudo make install
     else
@@ -129,7 +130,7 @@ umi_all() { \
     umi "dwmblocks"
     umi "st"
     umi "neovim"
-    umi "nnn" "master" "strip"
+    umi "nnn" "master" "strip" "O_CTX8=1"
     umi "devour"
     umi "dragon"
 
@@ -142,10 +143,10 @@ umi_all() { \
 if [ "$1" = "-i" ]; then
     # system
     #dbus-x11 -> dbus-broker
-    sudo apt-get install xserver-xorg dbus-broker lm-sensors xclip python2 python3 python3-pip gdebi virtualenv gawk xdotool zsh libnotify-bin jmtpfs maim xfce4-power-manager redshift i3lock dmenu suckless-tools pass pass-git-helper git trash-cli htop network-manager rsync ncdu shellcheck
+    sudo apt-get install xserver-xorg dbus-broker lm-sensors xclip python2 python3 python3-pip gdebi virtualenv gawk xdotool zsh libnotify-bin jmtpfs maim xfce4-power-manager redshift i3lock dmenu suckless-tools pass pass-git-helper git trash-cli htop network-manager rsync ncdu shellcheck net-tools arp-scan resolvconf
     python3 -m pip install --user --upgrade pynvim
     # media
-    sudo apt-get install alsa-tools sxiv mpv ncmpcpp mpd mpv ffmpeg syncthing playerctl fzf
+    sudo apt-get install alsa-tools sxiv mpv ncmpcpp mpd mpv ffmpeg syncthing playerctl fzf mediainfo samba smbclient
     # TODO migrate to pipewire for good
     sudo apt-get install pulseaudio
     # sudo apt-get install pipewire wireplumber pipewire-pulse

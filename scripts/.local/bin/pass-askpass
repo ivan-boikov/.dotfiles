@@ -1,8 +1,12 @@
 #! /bin/sh
 
+getcolor() {
+    xrdb -query | awk '/*.color'"$1":'/ { print substr($2,2) }'
+}
+
 # shellcheck disable=2046
 caller="$(ps -o comm= -p $(ps -o ppid= -p $$))"
 prompt="${1:-[$caller]}"
-hidden=black
+hidden="#$(getcolor 0)"
 
 cdmenu -p "$prompt" -nf "$hidden" -nb "$hidden"  <&-
