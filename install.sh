@@ -6,6 +6,7 @@ rm ~/.config/mimeapps.list
 rm ~/.config/user-dirs.dirs
 mkdir -p "$SRCDIR"
 
+sudo apt-get update
 if [ -z $(command -v stow) ]; then
     sudo apt-get -y install stow
 fi
@@ -140,54 +141,66 @@ umi_all() { \
     umi_oomox
 }
 
-if [ "$1" = "-i" ]; then
-    # system
+if [ "$1" = "-i" ]
+    sudo apt-get update; then
+    # essentials
+    sudo apt-get install gawk git htop rsync gdebi unrar unzip p7zip-full
+    # system info
+    sudo apt-get install lm-sensors htop ncdu
+    # python bloated, but, unfortunately, necessary garbage
+    sudo apt-get install python2 python3 python3-pip virtualenv
+    # desktop
     #dbus-x11 -> dbus-broker
-    sudo apt-get install xserver-xorg dbus-broker lm-sensors xclip python2 python3 python3-pip gdebi virtualenv gawk xdotool zsh libnotify-bin jmtpfs maim xfce4-power-manager redshift i3lock dmenu suckless-tools pass pass-git-helper git trash-cli htop network-manager rsync ncdu shellcheck net-tools arp-scan resolvconf
-    python3 -m pip install --user --upgrade pynvim
+    sudo apt-get install xserver-xorg dbus-broker xclip xdotool zsh dunst libnotify-bin xfce4-power-manager redshift i3lock dmenu suckless-tools pass pass-git-helper trash-cli maim gnome-keyring virt-manager
+    # networking
+    sudo apt-get install network-manager net-tools arp-scan resolvconf samba smbclient
     # media
-    sudo apt-get install alsa-tools sxiv mpv ncmpcpp mpd mpv ffmpeg syncthing playerctl fzf mediainfo samba smbclient
+    sudo apt-get install alsa-tools sxiv mpv beets mpd ncmpcpp mpc mpv ffmpeg syncthing playerctl fzf mediainfo jmtpfs zathura zathura-pdf zathura-ps
+    # needed for beets
+    pip3 install pylast
     # TODO migrate to pipewire for good
     sudo apt-get install pulseaudio
-    # sudo apt-get install pipewire wireplumber pipewire-pulse
     sudo apt-get install pulseeffects
+    # sudo apt-get install pipewire wireplumber pipewire-pulse
+    # echo "INSTALL EASYEFFECTS YOURSELF -- IT'S A HUGE PAIN TO COMPILE ON DEBIAM"
     # web
     sudo apt-get install firefox
     sudo apt-get install chromium
     sudo apt-get install thunderbird
     # office
-    sudo apt-get install git unrar unzip p7zip-full zathura zathura-pdf zathura-ps texlive latexmk virt-manager gnome-keyring
+    sudo apt-get install texlive latexmk shellcheck
+    python3 -m pip install --user --upgrade pynvim
     # theming
-    sudo apt-get install oxygen-icon-theme sox imagemagick lxappearance xwallpaper fonts-symbola fonts-liberation fonts-font-awesome compton dunst
+    sudo apt-get install oxygen-icon-theme sox imagemagick lxappearance xwallpaper compton
     pip3 install pywal
-
+    # fonts
+    sudo apt-get install fonts-symbola fonts-liberation fonts-font-awesome fonts-takao-mincho fonts-takao
 
     cd "$SRCDIR"
 
     # required for ly
     sudo apt-get install build-essential libpam0g-dev libxcb-xkb-dev
     if [ ! -d ly ]; then
-	git clone --recurse-submodules https://github.com/nullgemm/ly.git
+	    git clone --recurse-submodules https://github.com/nullgemm/ly.git
     fi
-
     # required for st, dwm and dwmblocks
     sudo apt-get install libfontconfig-dev libx11-dev libxft-dev
     # required for dwm
     sudo apt-get install libx11-xcb-dev libxcb-res0-dev
-    if [ ! dwm ]; then
+    if [ ! -d dwm ]; then
     	git clone https://github.com/ivan-boikov/dwm
     fi
-    if [ ! dwmblocks ]; then
-	git clone https://github.com/ivan-boikov/dwmblocks
+    if [ ! -d dwmblocks ]; then
+	    git clone https://github.com/ivan-boikov/dwmblocks
     fi
-    if [ ! st ]; then
+    if [ ! -d st ]; then
     	git clone https://github.com/lukesmithxyz/st
     fi
 
     # required for neovim
     sudo apt-get install ninja-build gettext libtool libtool-bin autoconf automake cmake g++ pkg-config unzip curlgit
     if [! -d neovim ]; then
-	git clone https://github.com/neovim/neovim
+	    git clone https://github.com/neovim/neovim
     fi
 
     # required for nnn
@@ -218,26 +231,26 @@ if [ "$1" = "-i" ]; then
     # digimend drivers
     if ask "Install DIGImend drivers?"; then
         sudo apt-get install "linux-headers-$(uname -r)"
-	if [ ! -d digimend-kernel-drivers ]; then
+        if [ ! -d digimend-kernel-drivers ]; then
             git clone https://github.com/DIGImend/digimend-kernel-drivers
-	fi
+        fi
     fi
 
     # xournalpp
     if ask "Install xournalpp?"; then
         sudo apt-get install "linux-headers-$(uname -r)" dkms
         sudo apt-get install cmake libgtk-3-dev libpoppler-glib-dev portaudio19-dev libsndfile-dev libcppunit-dev dvipng texlive libxml2-dev liblua5.3-dev libzip-dev librsvg2-dev gettext lua-lgi
-	if [ ! -d xournalpp ]; then
+        if [ ! -d xournalpp ]; then
             git clone https://github.com/xournalpp/xournalpp
-	fi
+        fi
     fi
 
-    # required for oomox
+    # oomox
     if ask "Install oomox theming engine?"; then
         sudo apt-get install python3-gi python3-gi-cairo libglib2.0-bin libgdk-pixbuf2.0-dev libxml2-utils x11-xserver-utils gir1.2-gtk-3.0 gir1.2-glib-2.0 gir1.2-pango-1.0 gir1.2-gdkpixbuf-2.0 gtk2-engines gtk2-engines-murrine gtk2-engines-pixbuf bash bc sed grep parallel sassc libsass1 imagemagick optipng librsvg2-bin inkscape python3-pillow python3-pystache python3-yaml make automake libgtk-3-dev
-	if [ ! -d oomox ]; then
-             git clone https://github.com/themix-project/oomox --recursive
-	fi
+        if [ ! -d oomox ]; then
+            git clone https://github.com/themix-project/oomox --recursive
+        fi
     fi
 
     umi_all
