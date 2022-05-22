@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # dmenu theming
-dmenu="cdmenu"
+dmenu="$HOME/.local/bin/cdmenu"
 lines="-l 30"
 
 selected="$(ps -a -u $USER | \

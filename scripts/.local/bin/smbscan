@@ -1,0 +1,60 @@
+#!/bin/sh
+# props to https://andreafortuna.org/2016/08/08/simple-smb-scanner-with-a-single-line-of-shell/
+# plus some tweaks from me
+
+dmenu=cdmenu
+
+subnet=$1
+if [ -z $subnet ]; then
+    echo "No subnet specified, using local..."
+    IP=$(ip addr | grep 'state UP' -A2 | tail -n1 | awk '{print $2}' | cut -f1  -d'/')
+    subnet="$(echo $IP | cut -d. -f1-3).*"
+    echo "Scanning subnet $subnet"
+fi
+
+scan() {
+   nmap $1 -p 445 --open -oG - | grep "Host:" | cut -d " " -f 2 | uniq |  xargs -I '{}' sh -c 'echo "Scan {}";echo "---------";smbclient -L//{} -N'
+}
+#scanresult=$(scan)
+
+scanresult="""Scan 192.168.70.1
+---------
+
+        Sharename       Type      Comment
+        ---------       ----      -------
+        print$          Disk      Printer Drivers
+        public          Disk
+        IPC$            IPC       IPC Service (Samba 4.13.13-Debian)
+SMB1 disabled -- no workgroup available
+Scan 192.168.70.3
+---------
+
+        Sharename       Type      Comment
+        ---------       ----      -------
+        print$          Disk      Printer Drivers
+        IPC$            IPC       IPC Service (Samba 4.13.14-Debian)
+SMB1 disabled -- no workgroup available"""
+
+printf "$scanresult\n"
+
+IPs=$(echo "$scanresult" | grep Scan | cut -d' ' -f2-)
+printf "Server IPs:\n$IPs\n"
+
+IP=$(printf "$IPs" | $dmenu -l 64)
+echo "Selected $IP"
+
+shares="""$(scan $IP)"""
+printf "Shares:\n$shares\n"
+# cut off header from smbclient with tail and warning about SMB1 with head
+shares=$(printf "$shares" | tail -n +6 | head -n -1)
+printf "Filtered shares:\n$shares\n"
+
+share=$(printf "$shares" | $dmenu -l 64 -p "Select share to mount" | tr -s " ")
+printf "$share"
+
+share=$(echo $share | cut -d' ' -f 1)
+echo $share
+
+user=$(: | $dmenu -i -p "Input user name:")
+
+mount -t cifs -o user="$user" //"$IP"/"$share" <MOUNT POINT>

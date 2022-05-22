@@ -1,0 +1,18 @@
+#!/bin/sh
+
+dmenu="$(command -v cdmenu)"
+if [ "$dmenu" == "" ]; then
+    dmenu="dmenu"
+fi
+
+sudo="$(command -v sudo)"
+if [ "$sudo" == "" ]; then
+    sudo="doas"
+fi
+
+profiles="$(cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_available_governors | sed 's/ /\\n/g')"
+
+profile=$(printf $profiles | $dmenu)
+
+notify-send "Set CPU profile: $profile"
+$sudo cpupower frequency-set --governor $profile

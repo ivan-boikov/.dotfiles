@@ -9,7 +9,7 @@
 #addr="$(curl ifconfig.me 2>/dev/null)" || exit
 #grep "flag: " "${XDG_DATA_HOME:-$HOME/.local/share}/larbs/emoji" | grep "$(geoiplookup "$addr" | sed 's/.*, //')" | sed "s/flag: //;s/;.*//"
 
-locaddr=$(hostname -I | awk '{print $1}')
+locaddr=$(hostname -i | awk '{print $1}')
 echo $locaddr
 
 case $BLOCK_BUTTON in

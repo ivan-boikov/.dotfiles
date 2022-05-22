@@ -36,7 +36,7 @@ fi
 if [[ -n $WAYLAND_DISPLAY ]]; then
     dmenu=dmenu-wl
 elif [[ -n $DISPLAY ]]; then
-    dmenu=cdmenu
+    dmenu="$HOME/.local/bin/cdmenu"
 else
     echo "Error: No Wayland or X11 display detected" >&2
     exit 1

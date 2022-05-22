@@ -2,7 +2,7 @@
 
 #TODO: GET RID OF GLOBAL VARIABLES LIKE chosen
 #shopt -s expand_aliases
-dmenu="cdmenu"
+dmenu="$HOME/.local/bin/cdmenu"
 
 getmount() { \
 	[ -z "$chosen" ] && exit 1
@@ -10,8 +10,8 @@ getmount() { \
 	mp="$(find $1 2>/dev/null | "$dmenu" -l 30 -i -p "Type in mount point.")" || exit 1
 	[ "$mp" = "" ] && exit 1
 	if [ ! -d "$mp" ]; then
-		mkdiryn=$(printf "No\\nYes" | "$dmenu" -i -p "$mp does not exist. Create it?") || exit 1
-		[ "$mkdiryn" = "Yes" ] && (mkdir -p "$mp" || sudo -A mkdir -p "$mp")
+		mkdiryn=$(printf "No\nYes" | "$dmenu" -i -p "$mp does not exist. Create it?") || exit 1
+		[ "$mkdiryn" = "Yes" ] && (mkdir -p "$mp" || doas mkdir -p "$mp")
 	fi
 }
 
@@ -21,24 +21,24 @@ mountusb() { \
     #    *crypto_LUKS*)
     #;;
     #esac
-    #sudo -A mount "$1" 2>/dev/null && notify-send "USB mounting" "$1 mounted." && exit 0
-    sudo -A mount "$1" 2>/dev/null && notify-send "$1 mounted" "" && exit 0
+    #doas mount "$1" 2>/dev/null && notify-send "USB mounting" "$1 mounted." && exit 0
+    doas mount "$1" 2>/dev/null && notify-send "$1 mounted" "" && exit 0
     alreadymounted=$(lsblk -nrpo "name,type,mountpoint" | awk '$3!~/\/boot|\/home$|SWAP/&&length($3)>1{printf "-not ( -path *%s -prune ) ",$3}')
     getmount "/mnt /media -maxdepth 1 -type d $alreadymounted"
     partitiontype="$(lsblk -no "fstype" "$1")"
     case "$partitiontype" in
-        "vfat") sudo -A mount -t vfat "$1" "$mp" -o rw,umask=0000;;
-        "exfat") sudo -A mount "$1" "$mp" -o uid="$(id -u)",gid="$(id -g)";;
+        "vfat") doas mount -t vfat "$1" "$mp" -o rw,umask=0000;;
+        "exfat") doas mount "$1" "$mp" -o uid="$(id -u)",gid="$(id -g)";;
         *crypto_LUKS*)
             name="$(LC_ALL=C tr -dc A-Za-z0-9 </dev/urandom | head -c 16)"
             mkfifo fifo
             dpass > fifo &
-            sudo cryptsetup open --type luks "$1" "$name" --key-file fifo
+            doas cryptsetup open --type luks "$1" "$name" --key-file fifo
             rm fifo
             device="/dev/mapper/$name"
-            sudo -A mount "$device" "$mp"
+            doas mount "$device" "$mp"
             ;;
-        *) sudo -A mount "$1" "$mp"; user="$(whoami)"; ug="$(groups | awk '{print $1}')"; sudo -A chown "$user":"$ug" "$mp";;
+        *) doas mount "$1" "$mp"; user="$(whoami)"; ug="$(groups | awk '{print $1}')"; doas chown "$user":"$ug" "$mp";;
     esac
     notify-send "$1 mounted to $mp." ""
 }
@@ -55,7 +55,7 @@ mountsamba() { \
     getmount "/mnt -maxdepth 1 -type d"
     user=$(echo $(whoami) | $dmenu -i -p "Input user name for $1:")
     pass=$(pass-askpass "Input password for user \"$user\" for share $1")
-    sudo -A mount -t cifs -o user="$user",password="$pass",iocharset=utf8,uid=$(id -u),gid=$(id -g),file_mode=0644,dir_mode=0755 "$1" "$mp"
+    doas mount -t cifs -o user="$user",password="$pass",iocharset=utf8,uid=$(id -u),gid=$(id -g),file_mode=0644,dir_mode=0755 "$1" "$mp"
     if [ $? -ne 0 ]; then
         notify-send -u critical "Samba mounting" "Failed to mount $1 to $mp as $user"
         exit 1
@@ -64,7 +64,7 @@ mountsamba() { \
 }
 
 unmountdev() { \
-    result=$(sudo -A umount "$1" 2>&1)
+    result=$(doas umount "$1" 2>&1)
     if [ -z "$result" ]; then
         notify-send "Unmount device" "$1 unmounted"
         return
@@ -89,7 +89,7 @@ selectusb() { \
     chosen=$(lsblk -lpo "vendor,model,name,label,size,mountpoint" | "$dmenu" -l 30 | xargs | cut -d' ' -f 1)
     # if mounted
     if [ ! -z "$(grep $chosen "/etc/mtab")" ] ; then
-        choice=$(echo "No\nYes" | "$dmenu" -l 2 -p "Partition is mounted. Unmount?")
+        choice=$(echo -e "No\nYes" | "$dmenu" -l 2 -p "Partition is mounted. Unmount?")
         case $choice in
             Yes) unmountdev $chosen ;;
             No) exit ;;
