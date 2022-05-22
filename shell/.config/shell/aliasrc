@@ -57,6 +57,8 @@ nsel_internal() {
     }
 alias nsel='nsel_internal | xargs '
 
+alias detach="bg && disown"
+
 # window swallowing, also autoplay gifs in sxiv
 alias sxiv="devour sxiv -a"
 alias mpv="devour mpv"
@@ -66,3 +68,6 @@ alias zathura="devour zathura"
 alias nvidia-settings="nvidia-settings --config="$XDG_CONFIG_HOME"/nvidia/settings"
 alias wget='wget --hsts-file="$XDG_CACHE_HOME/wget-hsts"'
 alias yarn='yarn --use-yarnrc "$XDG_CONFIG_HOME/yarn/config"'
+
+alias monerod="monerod --data-dir "$XDG_DATA_HOME"/bitmonero"
+alias monero-wallet-cli="monero-wallet-cli --wallet-file $XDG_DATA_HOME/bitmonero/monero-wallet"

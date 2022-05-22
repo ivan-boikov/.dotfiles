@@ -9,24 +9,9 @@
 # I source them here with the line below.
 
 if [ -f "${XDG_CONFIG_HOME:-$HOME/.config}/x11/xprofile" ]; then
-	. "${XDG_CONFIG_HOME:-$HOME/.config}/x11/xprofile"
+  . "${XDG_CONFIG_HOME:-$HOME/.config}/x11/xprofile"
 else
-	. "$HOME/.xprofile"
+  . "$HOME/.xprofile"
 fi
-
-compton &
-# delay thunderbird to allow protonmail initialize and avoid thunderbirds' "no connection to 127.0.0.1"
-protonmail-bridge --no-window & ( sleep 5 && thunderbird & )
-signal-desktop &
-telegram-desktop &
-redshift -l40:2 &
-syncthing &
-xfce4-power-manager &
-$HOME/.local/bin/remaps &
-setbg &
-
-dwmblocks &
-
-xrdb -merge ~/.Xresources
 
 ssh-agent /usr/bin/dwm

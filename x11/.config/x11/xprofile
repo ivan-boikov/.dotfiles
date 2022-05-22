@@ -3,16 +3,27 @@
 # This file runs when a DM logs you into a graphical session.
 # If you use startx/xinit like a Chad, this file will also be sourced.
 
-xrandr --dpi 96		# Set DPI. User may want to use a larger number for larger screens.
-setbg &			# set the background with the `setbg` script
-#xrdb ${XDG_CONFIG_HOME:-$HOME/.config}/x11/xresources &	# Uncomment to use Xresources colors/settings on startup
-remaps &		# setting keyboard layout and more; check it for more info
+autostart=(
+  "xrandr --dpi 96"
+  "xrdb ${XDG_CACHE_HOME:-$HOME/.cache}/wal/colors.Xresources"
+  "$HOME/.local/bin/setbg"
+  "$HOME/.local/bin/remaps"
+  "picom"
+  "mpd"
+  "dunst"
+  "unclutter"
+  "dwmblocks"
+  "gentoo-pipewire-launcher"
+  "syncthing --no-browser"
+  "redshift -l40:2")
 
-autostart="mpd dunst unclutter pulseaudio"
+for program in "${autostart[@]}" ; do
+  pidof -s "${program%% *}" || setsid -f $program
+done >$XDG_CACHE_HOME/xprofile.errors 2>&1
 
-for program in $autostart; do
-	pidof -s "$program" || setsid -f "$program"
-done >/dev/null 2>&1
+if [ -x /usr/bin/gpg-agent ]; then
+  eval "$(/usr/bin/gpg-agent --daemon)"
+fi
 
 # Ensure that xrdb has finished running before moving on to start the WM/DE.
 [ -n "$xrdbpid" ] && wait "$xrdbpid"

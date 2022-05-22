@@ -73,7 +73,7 @@ unmountdev() { \
         pids="$(echo "$processes" | awk '{print $2}')"
         #notify-send -u critical "Unmount device" "$result\nPreparing list of processes blocking $1..."
         notify-send -u critical "Unmount $1" "$result\nBlocking processes:\n$processes"
-        action=$(echo "nothing\nterminate\nkill" | $dmenu -p "What to do to processes blocking $1" -l 3)
+        action=$(echo -e "nothing\nterminate\nkill" | $dmenu -p "What to do to processes blocking $1" -l 3)
         case $action in
             terminate) echo "$pids" | while IFS='\n' read -r pid ; do kill $pid; done ;;
             kill) echo "$pids" | while IFS='\n' read -r pid ; do kill -9 $pid; done ;;

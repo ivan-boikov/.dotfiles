@@ -1,40 +1,52 @@
 #!/usr/bin/env bash
 
-icon="$HOME/.local/share/icons/lock.png"
-pngfile='/tmp/screen.png'
-bmpfile='/tmp/screen.bmp'
-glitchedfile="/tmp/sclock_g.bmp"
+icon_file="$HOME/.local/share/icons/lock.png"
+icon_scaled_file='/tmp/lock-icon.png'
+scr_png='/tmp/screen.png'
+scr_bmp='/tmp/screen.bmp'
+scr_gl_bmp="/tmp/sclock_g.bmp"
 
 (( $# )) && { icon=$1; }
 
-# flush keyring passwords
-gnome-keyring-daemon -r -d
+# flush passwords
+if [ -n $(which gnome-keyring-daemon) ]; then
+    gnome-keyring-daemon -r -d
+fi
+ssh-agent -k
+gpgconf --kill gpg-agent
+
 
 # generate fancy lock screen
-rm "$pngfile"
-maim > "$pngfile"
+rm "$scr_png"
+maim > "$scr_png"
 
-# old method
-#convert "$pngfile" -scale 5% -scale 2000% "$pngfile"
+# just pixelate
+convert "$scr_png" -scale 10% -scale 1000% "$scr_png"
 
-# new method with heavy distortion
-convert -rotate -90 $pngfile $bmpfile
-for a in {1,2,4,5,2}
-do
-    # Glitch it with sox FROM: https://maryknize.com/blog/glitch_art_with_sox_imagemagick_and_vim/
-    sox -t ul -c 1 -r 48k $bmpfile -t ul $glitchedfile trim 0 90s : echo 0.2 0.3 $((a*3)) 0.7
-    # Rotate it by 90 degrees
-    convert -scale $((100/(a)))% -scale $((100*(a)))% -rotate 90 $glitchedfile $bmpfile
-done
-convert -gamma 0.1 -gravity center -font "Liberation-Mono" \
-    -pointsize 200 -channel RGBA -fill '#bf616a' \
-    $bmpfile $pngfile
+# add heavy distortion
+#convert "$scr_png" -resize 500x "$scr_png"
+#convert -rotate -90 $scr_png $scr_bmp
+#for a in {1,2,4,5,2}
+#do
+#    # Glitch it with sox FROM: https://maryknize.com/blog/glitch_art_with_sox_imagemagick_and_vim/
+#    sox -t ul -c 1 -r 48k $scr_bmp -t ul $scr_gl_bmp trim 0 90s : echo 0.2 0.3 $((a*3)) 0.7
+#    # Rotate it by 90 degrees
+#    convert -scale $((100/(a)))% -scale $((100*(a)))% -rotate 90 $scr_gl_bmp $scr_bmp
+#done
+#convert -gamma 0.1 -gravity center -font "Liberation-Mono" \
+#    -pointsize 200 -channel RGBA -fill '#bf616a' \
+#    $scr_bmp $scr_png
 
-convert "$pngfile" "$icon" -gravity center -composite -matte "$pngfile"
-
+# add lock icon
+# first, rescale to match half screen height
+resolutiony=$(xrandr | fgrep '*' | cut -d'x' -f2 | awk '{print $1}')
+locksizey=$(echo "$resolutiony / 2" | bc -l)
+convert "$icon_file" -resize x"$locksizey" "$icon_scaled_file"
+# and add icon on top of screenshot
+convert "$scr_png" "$icon_scaled_file" -gravity center -composite -matte "$scr_png"
 
 playerctl pause
 
-#sxiv $pngfile
+#sxiv $scr_png
 
-i3lock -u -i "$pngfile"
+i3lock -u -i "$scr_png"
