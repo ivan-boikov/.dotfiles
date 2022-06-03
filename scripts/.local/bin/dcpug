@@ -16,3 +16,5 @@ profile=$(printf $profiles | $dmenu)
 
 notify-send "Set CPU profile: $profile"
 $sudo cpupower frequency-set --governor $profile
+# repeat, for good measure
+$sudo cpupower frequency-set --governor $profile

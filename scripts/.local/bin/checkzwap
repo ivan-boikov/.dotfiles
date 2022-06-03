@@ -1,1 +1,1 @@
-sudo grep -R . /sys/kernel/debug/zswap
+doas grep -R . /sys/kernel/debug/zswap
