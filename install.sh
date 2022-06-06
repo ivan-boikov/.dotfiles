@@ -2,18 +2,7 @@
 
 SRCDIR="$HOME/.local/src/"
 
-rm ~/.config/mimeapps.list
-rm ~/.config/user-dirs.dirs
 mkdir -p "$SRCDIR"
-
-sudo apt-get update
-if [ -z $(command -v stow) ]; then
-    sudo apt-get -y install stow
-fi
-
-stow -R -v $(ls -d */)
-
-ln -sf ~/.local/share/wallpapers/mountains.jpg ~/.local/share/wallpapers/bg
 
 # yes/no dialog
 # https://gist.github.com/davejamesmiller/1965569
@@ -258,29 +247,6 @@ fi
 
 if [ "$1" = "-u" ]; then
     umi_all
-fi
-
-if [ "$1" = "-f" ]; then
-    # cleaning Firefox, schizo-style
-    # https://12bytes.org/articles/tech/firefox/firefoxgecko-configuration-guide-for-privacy-and-performance-buffs/
-    if ask "Schizofy firefox?"; then
-        sudo cd /usr/lib/firefox/browser/features
-        sudo rm *.xpi
-
-        cp -r ~/.mozilla ~/.mozilla.bak
-
-        cd ~/.mozilla
-        FFPATH=$(dirname $(find ~/.mozilla -wholename "*release/prefs.js"));
-        cd "$FFPATH"
-        rm -f updater.sh prefsCleaner.sh user-overrides.js
-        wget https://raw.githubusercontent.com/arkenfox/user.js/master/updater.sh
-        wget https://raw.githubusercontent.com/arkenfox/user.js/master/prefsCleaner.sh
-        wget https://raw.githubusercontent.com/ivan-boikov/user-overrides.js/master/user-overrides.js
-        chmod +x updater.sh
-        chmod +x prefsCleaner.sh
-        bash updater.sh
-        bash prefsCleaner.sh
-    fi
 fi
 
 if [ "$1" = "nvim" ]; then
