@@ -20,6 +20,9 @@ echo "Input file extension:" $ifext
 echo "Temporary full filename:" $tffname
 echo "Output full filename:" $offname
 
+vsscript="$HOME/.local/share/SVP4/scripts/$(ls $HOME/.local/share/SVP4/scripts)"
+#	--vf=vapoursynth=$(echo $HOME)/.local/share/SVP4/scripts/ffff.py \
+
 mpv \
 	"$iffname" \
 	--o="$tffname" \
@@ -29,7 +32,7 @@ mpv \
 	--input-ipc-server=/tmp/mpvencodesocket \
 	--input-media-keys=no \
 	--no-msg-color \
-	--vf=vapoursynth=$(echo $HOME)/.local/share/SVP4/scripts/ffff.py \
+	--vf=vapoursynth="$vsscript" \
 	--of=matroska \
 	--ovc=libx264 \
 	--ovcopts=crf=$quality,preset=slow,threads=$threads
