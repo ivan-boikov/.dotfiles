@@ -25,5 +25,4 @@ text/csv=libreoffice-calc.desktop;
 application/pdf=org.pwmt.zathura.desktop;
 image/vnd.djvu+multipage=org.pwmt.zathura.desktop;
 
-x-scheme-handler/msteams=teams.desktop;
 x-scheme-handler/tg=telegramdesktop.desktop;

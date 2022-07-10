@@ -2,7 +2,7 @@
 # colored dmenu for use in scripts
 
 getcolor() {
-    xrdb -query | awk '/*.color'"$1":'/ { print substr($2,2) }'
+    xrdb -query | awk '/*.'$1:'/ { print substr($2,2) }'
 }
 # sync that with dwm's config.h!
-dmenu -nb "#$(getcolor 0)" -nf "#$(getcolor 4)" -sb "#$(getcolor 4)" -sf "#$(getcolor 0)" "$@"
+dmenu -nb "#$(getcolor background)" -nf "#$(getcolor foreground)" -sb "#$(getcolor foreground)" -sf "#$(getcolor background)" "$@"

@@ -1,0 +1,50 @@
+#!/bin/sh
+
+# Generates zathura configuration file
+
+cat <<CONF
+set sandbox none
+set statusbar-h-padding 0
+set statusbar-v-padding 0
+set page-padding 1
+set selection-clipboard clipboard
+map u scroll half-up
+map d scroll half-down
+map D toggle_page_mode
+map r reload
+map R rotate
+map K zoom in
+map J zoom out
+map i recolor
+map p print
+
+set completion-bg "$(getxcolor background:)"
+set completion-fg "$(getxcolor foreground:)"
+set completion-group-bg "$(getxcolor background:)"
+set completion-group-fg "$(getxcolor color2:)"
+set completion-highlight-bg "$(getxcolor foreground:)"
+set completion-highlight-fg "$(getxcolor background:)"
+set default-bg "$(getxcolor background:)"
+set default-fg "$(getxcolor foreground:)"
+set inputbar-bg "$(getxcolor background:)"
+set inputbar-fg "$(getxcolor foreground:)"
+set notification-bg "$(getxcolor background:)"
+set notification-fg "$(getxcolor foreground:)"
+set notification-error-bg "$(getxcolor color1:)"
+set notification-error-fg "$(getxcolor foreground:)"
+set notification-warning-bg "$(getxcolor color1:)"
+set notification-warning-fg "$(getxcolor foreground:)"
+set statusbar-bg "$(getxcolor background:)"
+set statusbar-fg "$(getxcolor foreground:)"
+set index-bg "$(getxcolor background:)"
+set index-fg "$(getxcolor foreground:)"
+set index-active-bg "$(getxcolor foreground:)"
+set index-active-fg "$(getxcolor background:)"
+set render-loading-bg "$(getxcolor background:)"
+set render-loading-fg "$(getxcolor foreground:)"
+
+set smooth-scroll true
+set window-title-home-tilde true
+set statusbar-basename true
+set selection-clipboard clipboard
+CONF

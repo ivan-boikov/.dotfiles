@@ -1,4 +1,4 @@
 #!/bin/bash
 notify-send 'Tablet: osu!'
-#tabletscale 1280 718 4 87 54 0 10
-tabletscale 1366 768 4 100 50 0 0
+#$HOME/.local/bin/tablet/scale 1366 768 4 100 50 0 0
+$HOME/.local/bin/tablet/scale 1920 1080 4 100 50 0 0

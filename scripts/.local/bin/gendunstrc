@@ -1,0 +1,35 @@
+#!/bin/sh
+
+# Generates dunst configuration file
+
+cat <<CONF
+[global]
+    monitor = 0
+    follow = keyboard
+    origin = bottom-right
+    offset = 0x0
+    padding = 10
+    transparency = 0
+    font = Liberation Mono 10
+    format = "<b>%s</b>\n%b"
+    frame_width=5
+    corner_radius=0
+
+[urgency_low]
+    background = "$(getxcolor background:)"
+    foreground = "$(getxcolor foreground:)" # color7
+    frame_color = "$(getxcolor foreground:)" # color7
+    timeout = 3
+
+[urgency_normal]
+    background = "$(getxcolor background:)" # color0
+    foreground = "$(getxcolor foreground:)" # color4
+    frame_color = "$(getxcolor foreground:)" # color4
+    timeout = 5
+
+[urgency_critical]
+    background = "$(getxcolor background:)" # color4
+    foreground = "$(getxcolor color1:)" # color0
+    frame_color = "$(getxcolor color1:)" # color4
+    timeout = 20
+CONF
