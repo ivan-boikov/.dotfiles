@@ -21,6 +21,7 @@ vim.cmd("autocmd VimLeave *.tex !texclear %")
 vim.cmd("autocmd BufRead,BufNewFile /tmp/calcurse*,~/.calcurse/notes/* set filetype=markdown")
 vim.cmd("autocmd BufRead,BufNewFile *.ms,*.me,*.mom,*.man set filetype=groff")
 vim.cmd("autocmd BufRead,BufNewFile *.tex set filetype=texclear")
+vim.cmd("autocmd BufRead,BufNewFile *.jl set filetype=julia")
 
 -- save file as sudo on files that require root permission
 vim.cmd("cnoremap w!! execute 'silent! write !sudo tee % >/dev/null' <bar> edit!")
