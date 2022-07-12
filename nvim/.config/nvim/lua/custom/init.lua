@@ -1,11 +1,3 @@
--- This is an example init file , its supposed to be placed in /lua/custom/
-
--- This is where your custom modules and plugins go.
--- Please check NvChad docs if you're totally new to nvchad + dont know lua!!
-
---print("custom/init.lua")
---print("custom/init.lua")
-
 local opt = vim.opt
 
 -- Indenting
@@ -20,7 +12,7 @@ vim.cmd("autocmd VimLeave *.tex !texclear %")
 -- Ensure files are read as what I want:
 vim.cmd("autocmd BufRead,BufNewFile /tmp/calcurse*,~/.calcurse/notes/* set filetype=markdown")
 vim.cmd("autocmd BufRead,BufNewFile *.ms,*.me,*.mom,*.man set filetype=groff")
-vim.cmd("autocmd BufRead,BufNewFile *.tex set filetype=texclear")
+vim.cmd("autocmd BufRead,BufNewFile *.tex set filetype=tex")
 vim.cmd("autocmd BufRead,BufNewFile *.jl set filetype=julia")
 
 -- save file as sudo on files that require root permission
@@ -50,8 +42,5 @@ if &diff
 endif
 ]])
 
--- -- autocompile dwmblocks
+-- autocompile dwmblocks
 -- vim.cmd("autocmd BufWritePost ~/.local/src/dwmblocks/config.h !cd ~/.local/src/dwmblocks/; sudo make install && { killall -q dwmblocks;setsid dwmblocks & "})
-
--- must be here and not in lazy loader parameters
-vim.g.livepreview_previewer = "zathura"

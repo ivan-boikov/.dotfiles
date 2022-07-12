@@ -20,8 +20,24 @@ M.general = {
 
 M.vim_latex_live_preview = {
     n = {
-        ["<F5>"] = {"<cmd> LLPStartPreview <CR>", ""},
+        ["<F5>"] = {":LLPStartPreview<CR>", ""},
     },
+}
+
+M.vim_slime = {
+	v = {
+		["<C-c><C-c>"] = {"<Plug>SlimeRegionSend", ""},
+	},
+	n = {
+		["<C-c><C-c>"] = {"<Plug>SlimeParagraphSend", ""},
+		["<C-c>v"] = {"<Plug>SlimeConfig", ""},
+	}
+}
+
+M.vim_tmux_navigator = {
+	n = {
+		["<C-l>"] = {":TmuxNavigateRight<CR>", ""},
+	},
 }
 
 --M.vimwiki = {
