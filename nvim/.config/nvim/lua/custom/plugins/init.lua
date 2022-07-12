@@ -7,7 +7,7 @@ return {
 			vim.g.slime_target = "tmux"
 			vim.g.slime_default_config = { socket_name = "default", target_pane = "{last}" }
 			vim.g.slime_cell_delimiter = "\n"
-			require("custom.mappings").vim_slime()
+			--require("custom.mappings").vim_slime()
 		end,
 	},
 
@@ -24,13 +24,13 @@ return {
 		end,
 	},
 
-	["lervag/vimtex"] = {
-		ft = {"tex"},
-		setup = function()
-			-- possibly move out of lazy load
-			vim.g.vimtex_view_method = "zathura"
-		end,
-	},
+	--["lervag/vimtex"] = {
+	--	ft = {"tex"},
+	--	setup = function()
+	--		-- possibly move out of lazy load
+	--		vim.g.vimtex_view_method = "zathura"
+	--	end,
+	--},
 
 	["xuhdev/vim-latex-live-preview"] = {
 		ft = {"tex"},
@@ -39,7 +39,7 @@ return {
 			vim.g.livepreview_use_biber = 1
 			vim.g.livepreview_cursorhold_recompile = 1
 			vim.opt.updatetime = 1000
-			require("custom.mappings").vim_latex_live_preview()
+			--require("custom.mappings").vim_latex_live_preview()
 		end,
 	},
 
