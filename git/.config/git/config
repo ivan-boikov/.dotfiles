@@ -3,5 +3,3 @@
 	email = ik.boikov.public@protonmail.com
 [credential]
 	helper = /usr/bin/pass-git-helper
-[http]
-	sslCAInfo = /home/ivan/sync/cert/gitea.pem
