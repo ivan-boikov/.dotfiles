@@ -65,8 +65,9 @@ export USERXSESSION="$XDG_CONFIG_HOME/x11/xsession"
 export USERXSESSIONRC="$XDG_CONFIG_HOME/x11/xsessionrc"
 export ALTUSERXSESSION="$XDG_CONFIG_HOME/x11/Xsession"
 export ERRFILE="$XDG_CACHE_HOME/x11/xsession-errors"
+# it is more trouble than it's worth
 #export XAUTHORITY="$XDG_RUNTIME_DIR"/Xauthority
-export XAUTHORITY="$XDG_CACHE_HOME"/Xauthority
+#export XAUTHORITY="$XDG_CACHE_HOME"/Xauthority
 # libx11
 export XCOMPOSEFILE="$XDG_CONFIG_HOME/x11/xcompose"
 export XCOMPOSECACHE="$XDG_CACHE_HOME/x11/xcompose"
