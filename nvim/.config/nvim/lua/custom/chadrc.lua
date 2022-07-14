@@ -7,23 +7,28 @@ local userPlugins = require "custom.plugins"
 
 M.plugins = {
 
-   options = {
-      lspconfig = {
-         setup_lspconf = "custom.plugins.lspconfig",
-      },
+	options = {
+		lspconfig = {
+			setup_lspconf = "custom.plugins.lspconfig",
+		},
 
-      statusline = {
-         separator_style = "round",
-      },
-   },
+		statusline = {
+			separator_style = "round",
+		},
+	},
 
-   override = {
-      ["kyazdani42/nvim-tree.lua"] = override.nvimtree,
-      ["nvim-treesitter/nvim-treesitter"] = override.treesitter,
-      ["nvim-telescope/telescope.nvim"] = override.telescope,
-   },
+	override = {
+		["kyazdani42/nvim-tree.lua"] = override.nvimtree,
+		["nvim-treesitter/nvim-treesitter"] = override.treesitter,
+		["nvim-telescope/telescope.nvim"] = override.telescope,
+	},
 
-   user = userPlugins,
+	-- I forked this repo for my own snippets
+	remove = {
+		"rafamadriz/friendly-snippets",
+	},
+
+	user = userPlugins,
 }
 
 
@@ -31,9 +36,8 @@ M.plugins = {
 -- example of changing theme:
 
 M.ui = {
-   theme = "onedark",
+	theme = "onedark",
 }
-
 
 M.mappings = require "custom.mappings"
 

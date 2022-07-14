@@ -17,6 +17,9 @@ M.treesitter = {
 	  "julia",
 	  "latex",
    },
+   highlight = {
+	   enable = true
+   }
 }
 
 M.nvimtree = {
@@ -33,5 +36,7 @@ M.telescope = {
       },
    },
 }
+
+
 
 return M

@@ -11,7 +11,7 @@ getmount() { \
 	[ "$mp" = "" ] && exit 1
 	if [ ! -d "$mp" ]; then
 		mkdiryn=$(printf "No\nYes" | "$dmenu" -i -p "$mp does not exist. Create it?") || exit 1
-		[ "$mkdiryn" = "Yes" ] && (mkdir -p "$mp" || doas mkdir -p "$mp")
+		[ "$mkdiryn" = "Yes" ] && (mkdir -p "$mp" || sudo mkdir -p "$mp")
 	fi
 }
 
@@ -21,24 +21,24 @@ mountusb() { \
     #    *crypto_LUKS*)
     #;;
     #esac
-    #doas mount "$1" 2>/dev/null && notify-send "USB mounting" "$1 mounted." && exit 0
-    doas mount "$1" 2>/dev/null && notify-send "$1 mounted" "" && exit 0
+    #sudo mount "$1" 2>/dev/null && notify-send "USB mounting" "$1 mounted." && exit 0
+    sudo mount "$1" 2>/dev/null && notify-send "$1 mounted" "" && exit 0
     alreadymounted=$(lsblk -nrpo "name,type,mountpoint" | awk '$3!~/\/boot|\/home$|SWAP/&&length($3)>1{printf "-not ( -path *%s -prune ) ",$3}')
     getmount "/mnt /media -maxdepth 1 -type d $alreadymounted"
     partitiontype="$(lsblk -no "fstype" "$1")"
     case "$partitiontype" in
-        "vfat") doas mount -t vfat "$1" "$mp" -o rw,umask=0000;;
-        "exfat") doas mount "$1" "$mp" -o uid="$(id -u)",gid="$(id -g)";;
+        "vfat") sudo mount -t vfat "$1" "$mp" -o rw,umask=0000;;
+        "exfat") sudo mount "$1" "$mp" -o uid="$(id -u)",gid="$(id -g)";;
         *crypto_LUKS*)
             name="$(LC_ALL=C tr -dc A-Za-z0-9 </dev/urandom | head -c 16)"
             mkfifo fifo
             dpass > fifo &
-            doas cryptsetup open --type luks "$1" "$name" --key-file fifo
+            sudo cryptsetup open --type luks "$1" "$name" --key-file fifo
             rm fifo
             device="/dev/mapper/$name"
-            doas mount "$device" "$mp"
+            sudo mount "$device" "$mp"
             ;;
-        *) doas mount "$1" "$mp"; user="$(whoami)"; ug="$(groups | awk '{print $1}')"; doas chown "$user":"$ug" "$mp";;
+        *) sudo mount "$1" "$mp"; user="$(whoami)"; ug="$(groups | awk '{print $1}')"; sudo chown "$user":"$ug" "$mp";;
     esac
     notify-send "$1 mounted to $mp." ""
 }
@@ -55,7 +55,7 @@ mountsamba() { \
     getmount "/mnt -maxdepth 1 -type d"
     user=$(echo $(whoami) | $dmenu -i -p "Input user name for $1:")
     pass=$(pass-askpass "Input password for user \"$user\" for share $1")
-    doas mount -t cifs -o user="$user",password="$pass",iocharset=utf8,uid=$(id -u),gid=$(id -g),file_mode=0644,dir_mode=0755 "$1" "$mp"
+    sudo mount -t cifs -o user="$user",password="$pass",iocharset=utf8,uid=$(id -u),gid=$(id -g),file_mode=0644,dir_mode=0755 "$1" "$mp"
     if [ $? -ne 0 ]; then
         notify-send -u critical "Samba mounting" "Failed to mount $1 to $mp as $user"
         exit 1
@@ -64,7 +64,7 @@ mountsamba() { \
 }
 
 unmountdev() { \
-    result=$(doas umount "$1" 2>&1)
+    result=$(sudo umount "$1" 2>&1)
     if [ -z "$result" ]; then
         notify-send "Unmount device" "$1 unmounted"
         return

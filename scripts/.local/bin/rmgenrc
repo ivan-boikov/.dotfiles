@@ -1,0 +1,5 @@
+#!/bin/sh
+
+rm -rv "$HOME/.config/zathura"
+rm -rv "$HOME/.config/dunst"
+rm -rv "$HOME/.Xresources"

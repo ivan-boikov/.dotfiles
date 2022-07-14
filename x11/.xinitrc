@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 # xinitrc runs automatically when you run startx.
 
@@ -9,9 +9,9 @@
 # I source them here with the line below.
 
 if [ -f "${XDG_CONFIG_HOME:-$HOME/.config}/x11/xprofile" ]; then
-  . "${XDG_CONFIG_HOME:-$HOME/.config}/x11/xprofile"
+	. "${XDG_CONFIG_HOME:-$HOME/.config}/x11/xprofile"
 else
-  . "$HOME/.xprofile"
+	. "$HOME/.xprofile"
 fi
 
 ssh-agent "$(which dwm)"

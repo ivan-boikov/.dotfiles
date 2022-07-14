@@ -2,8 +2,6 @@
 
 args=("$@")
 
-#echo Number of arguments: $#
-
 tablet=$(xsetwacom list | grep stylus | cut -f 1 | xargs)
 
 Wx=${args[0]}
@@ -38,4 +36,3 @@ dy=$((($resY-$Wy)/2 + $skewY))
 xsetwacom --set "${tablet}" Area $((($Nx-$Nxx)/2)) 0 $((($Nx+$Nxx)/2)) $Nyy
 #xsetwacom --set "${tablet}" Area 0 $(($Ny-$Nyy)) $Nxx $Ny
 xsetwacom --set "${tablet}" MapToOutput ${Wx}x${Wy}+$dx+$dy
-

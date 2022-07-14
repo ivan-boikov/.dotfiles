@@ -14,7 +14,12 @@ return {
 	["JuliaEditorSupport/julia-vim"] = {
 		-- lazy load does not work
 		-- https://github.com/JuliaEditorSupport/julia-vim/issues/269
-		-- ft = {"jl"},
+		--ft = {"jl"},
+		config = function()
+			vim.g.latex_to_unicode_auto = 1
+			-- just in case to avoid interference with tab-completion
+			vim.g.latex_to_unicode_tab = "off"
+		end,
 	},
 
 	["christoomey/vim-tmux-navigator"] = {
@@ -53,4 +58,9 @@ return {
 			vim.g.vimwiki_list = {{ path = HOME .. '/sync/vimwiki', syntax = 'markdown', ext = '.md' }}
 		end,
 	},
+
+	["ivan-boikov/friendly-snippets"] = {
+		module = "cmp_nvim_lsp",
+		event = "InsertEnter",
+	}
 }

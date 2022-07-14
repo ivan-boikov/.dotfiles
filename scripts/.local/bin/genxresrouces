@@ -1,3 +1,13 @@
+#!/bin/sh
+
+# Generates .Xresources
+
+dpi="92"
+if [ $(xdpyinfo | awk '/dimensions/ {print $2}') == '3840x2160' ]; then
+	dpi="192"
+fi
+
+cat <<CONF
 ! special
 *.foreground:   #e1a15b
 *.background:   #0e0a05
@@ -34,3 +44,11 @@
 ! white
 *.color7:       #d2d2d2
 *.color15:      #787878
+
+Xft.dpi: $dpi
+Xft.autohint: 0
+Xft.lcdfilter: lcddefault
+Xft.hinting: 1
+Xft.antialias: 1
+Xft.rgba: rgb
+CONF

@@ -1,33 +1,37 @@
-#!/bin/sh
+#!/bin/bash
 
 # This file runs when a DM logs you into a graphical session.
 # If you use startx/xinit like a Chad, this file will also be sourced.
-  "xrdb ${XDG_CACHE_HOME:-$HOME/.cache}/wal/colors.Xresources"
 
 autostart=(
-  "xrandr --dpi 96"
-  "xrdb $HOME/.Xresources"
-  "$HOME/.local/bin/setbg"
-  "$HOME/.local/bin/remaps"
-  "picom"
-  "mpd"
-  "dunst"
-  "unclutter"
-  "dwmblocks"
-  "gentoo-pipewire-launcher"
-  "syncthing --no-browser"
-  "redshift -l40:2")
+	"xrdb $HOME/.Xresources"
+	"$HOME/.local/bin/setbg"
+	"$HOME/.local/bin/remaps"
+	"xcompmgr"
+	"mpd"
+	"dunst"
+	"unclutter"
+	"gentoo-pipewire-launcher"
+	"syncthing --no-browser"
+	"dwmblocks"
+	"redshift -l40:2")
 
-for program in "${autostart[@]}" ; do
-  pidof -s "${program%% *}" || setsid -f $program
-done >$XDG_CACHE_HOME/xprofile.errors 2>&1
+	for program in "${autostart[@]}" ; do
+		pidof -s "${program%% *}" || setsid -f $program
+	done >$XDG_CACHE_HOME/xprofile.errors 2>&1
 
-if [ -x /usr/bin/gpg-agent ]; then
-  eval "$(/usr/bin/gpg-agent --daemon)"
-fi
+	if [ -x /usr/bin/gpg-agent ]; then
+		eval "$(/usr/bin/gpg-agent --daemon)"
+	fi
+
+# generate .Xresources
+$HOME/.local/bin/genxresources > $HOME/.Xresources
 
 # generate zathura config with colors from .Xresources
 mkdir -pv $HOME/.config/zathura && $HOME/.local/bin/genzathurarc > $HOME/.config/zathura/zathurarc
+
+# and dunst too
+mkdir -pv $HOME/.config/dunst && $HOME/.local/bin/gendunstrc > $HOME/.config/dunst/dunstrc
 
 # Ensure that xrdb has finished running before moving on to start the WM/DE.
 [ -n "$xrdbpid" ] && wait "$xrdbpid"
