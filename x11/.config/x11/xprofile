@@ -4,19 +4,18 @@
 # If you use startx/xinit like a Chad, this file will also be sourced.
 
 
-# generate .Xresources
 xrdb $HOME/.Xresources
-
-dpi="96"
-if [ $(xdpyinfo | awk '/dimensions/ {print $2}') == '3840x2160' ]; then
-	dpi="192"
-fi
-xrdb -merge <<< "Xft.dpi: ${dpi}"
 xrdbpid=$!
 
-
-# Ensure that xrdb has finished running before using xrdb and moving on to WM/DE
+# Ensure that xrdb has finished running
 [ -n "$xrdbpid" ] && wait "$xrdbpid"
+
+if [ $(xdpyinfo | awk '/dimensions/ {print $2}') == '3840x2160' ]; then
+	xrdb -merge <<< "Xft.dpi: 192"
+	xrdb -merge <<< "*.font: monospace:size=12"
+fi
+
+
 
 # generate zathura config with colors from .Xresources
 mkdir -pv $HOME/.config/zathura && $HOME/.local/bin/genzathurarc > $HOME/.config/zathura/zathurarc
@@ -42,7 +41,7 @@ for program in "${autostart[@]}" ; do
 	pidof -s "${program%% *}" || setsid -f $program
 done >$XDG_CACHE_HOME/xprofile.errors 2>&1
 
-# not sure why it does not work reliably
+# not sure why it does not work reliably inside autostart
 dwmblocks &
 
 if [ -x /usr/bin/gpg-agent ]; then
