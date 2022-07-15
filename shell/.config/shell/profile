@@ -31,15 +31,33 @@ export READER="zathura"
 #export XDG_CACHE_HOME="$HOME/.cache"
 # EXPERIMENTAL
 export XDG_CACHE_HOME="$XDG_RUNTIME_DIR/.cache"
+mkdir -p $XDG_CACHE_HOME
 export XDG_CONFIG_HOME="$HOME/.config"
 export XDG_DATA_HOME="$HOME/.local/share"
+export XDG_STATE_HOME="$HOME/.local/state"
+
+
+# Eternal bash history.
+# ---------------------
+# Undocumented feature which sets the size to "unlimited".
+# http://stackoverflow.com/questions/9457233/unlimited-bash-history
+export HISTFILESIZE=
+export HISTSIZE=
+export HISTTIMEFORMAT="[%F %T] "
+# Change the file location because certain bash sessions truncate .bash_history file upon close.
+# http://superuser.com/questions/575479/bash-history-truncated-to-500-lines-on-each-login
+#export HISTFILE=~/.bash_eternal_history
+export HISTFILE="${XDG_STATE_HOME:-$HOME/.local/state}/bash_history"
+# Force prompt to write history after every command.
+# http://superuser.com/questions/20900/bash-history-loss
+PROMPT_COMMAND="history -a; $PROMPT_COMMAND"
+
 
 # cleaning up
 export GTK2_RC_FILES="${XDG_CONFIG_HOME:-$HOME/.config}/gtk-2.0/gtkrc-2.0"
 export ZDOTDIR="${XDG_CONFIG_HOME:-$HOME/.config}/zsh"
 export GNUPGHOME="${XDG_DATA_HOME:-$HOME/.local/share}/gnupg"
 export WINEPREFIX="${XDG_DATA_HOME:-$HOME/.local/share}/wineprefixes/default"
-export HISTFILE="${XDG_DATA_HOME:-$HOME/.local/share}/history"
 export TEXMFHOME=$XDG_DATA_HOME/texmf
 export TEXMFVAR=$XDG_CACHE_HOME/texlive/texmf-var
 export TEXMFCONFIG=$XDG_CONFIG_HOME/texlive/texmf-config
@@ -58,7 +76,7 @@ export XSERVERRC="$XDG_CONFIG_HOME/x11/xserverrc"
 export USERXSESSION="$XDG_CONFIG_HOME/x11/xsession"
 export USERXSESSIONRC="$XDG_CONFIG_HOME/x11/xsessionrc"
 export ALTUSERXSESSION="$XDG_CONFIG_HOME/x11/Xsession"
-export ERRFILE="$XDG_CACHE_HOME/x11/xsession-errors"
+export ERRFILE="$XDG_STATE_HOME/x11/xsession-errors"
 # it is more trouble than it's worth
 #export XAUTHORITY="$XDG_CACHE_HOME"/Xauthority
 # libx11
