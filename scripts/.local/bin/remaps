@@ -33,4 +33,5 @@ xset r rate 200 75
     -option nbsp:level3n #\
 #    -option terminate:ctrl_alt_bkspc
 
-notify-send "Keyboard remapped"
+# this causes lag on ubuntu laptop upon X startup
+#notify-send "Keyboard remapped"
