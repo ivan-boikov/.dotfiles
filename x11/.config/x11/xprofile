@@ -5,9 +5,17 @@
 
 
 # generate .Xresources
-$HOME/.local/bin/genxresources > $HOME/.Xresources
+#$HOME/.local/bin/genxresources > $HOME/.Xresources
 xrdb $HOME/.Xresources
+
+dpi="92"
+if [ $(xdpyinfo | awk '/dimensions/ {print $2}') == '3840x2160' ]; then
+	dpi="192"
+fi
+notify-send "Setting DPI $dpi"
+xrdb -merge <<< "Xft.dpi: ${dpi}"
 xrdbpid=$!
+
 
 # Ensure that xrdb has finished running before using xrdb and moving on to WM/DE
 [ -n "$xrdbpid" ] && wait "$xrdbpid"
