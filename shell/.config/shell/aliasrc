@@ -11,6 +11,10 @@ done; unset command
 # allow calls of aliases by xargs
 alias xargs='xargs '
 
+# workaround sudo's PATH change
+# https://stackoverflow.com/questions/257616/why-does-sudo-change-the-path
+alias sudo='sudo env PATH=$PATH'
+
 # Verbosity and settings that you pretty much just always are going to want.
 alias \
         cp='cp -iv' \

@@ -7,6 +7,10 @@
 # generate .Xresources
 $HOME/.local/bin/genxresources > $HOME/.Xresources
 xrdb $HOME/.Xresources
+xrdbpid=$!
+
+# Ensure that xrdb has finished running before using xrdb and moving on to WM/DE
+[ -n "$xrdbpid" ] && wait "$xrdbpid"
 
 # generate zathura config with colors from .Xresources
 mkdir -pv $HOME/.config/zathura && $HOME/.local/bin/genzathurarc > $HOME/.config/zathura/zathurarc
@@ -15,6 +19,7 @@ mkdir -pv $HOME/.config/zathura && $HOME/.local/bin/genzathurarc > $HOME/.config
 mkdir -pv $HOME/.config/dunst && $HOME/.local/bin/gendunstrc > $HOME/.config/dunst/dunstrc
 
 $HOME/.local/bin/setbg
+
 $HOME/.local/bin/remaps
 
 autostart=(
@@ -35,7 +40,3 @@ done >$XDG_CACHE_HOME/xprofile.errors 2>&1
 if [ -x /usr/bin/gpg-agent ]; then
 	eval "$(/usr/bin/gpg-agent --daemon)"
 fi
-
-
-# Ensure that xrdb has finished running before moving on to start the WM/DE.
-[ -n "$xrdbpid" ] && wait "$xrdbpid"

@@ -10,20 +10,12 @@
 # for ssh logins, install and configure the libpam-umask package.
 #umask 022
 
-# if running bash
-#if [ -n "$BASH_VERSION" ]; then
-#    # include .bashrc if it exists
-#    if [ -f "$HOME/.bashrc" ]; then
-#	. "$HOME/.bashrc"
-#    fi
-#fi
 
 [ -f "${XDG_CONFIG_HOME:-$HOME/.config}/shell/shortcutrc" ] && source "${XDG_CONFIG_HOME:-$HOME/.config}/shell/shortcutrc"
 [ -f "${XDG_CONFIG_HOME:-$HOME/.config}/shell/aliasrc" ] && source "${XDG_CONFIG_HOME:-$HOME/.config}/shell/aliasrc"
 [ -f "${XDG_CONFIG_HOME:-$HOME/.config}/shell/zshnameddirrc" ] && source "${XDG_CONFIG_HOME:-$HOME/.config}/shell/zshnameddirrc"
 
 export PATH="$PATH:$(du -L "$HOME/.local/bin" | cut -f2 | paste -sd ':')"
-#export PATH="$PATH:$HOME/.local/bin"
 
 # automatically logout after some time
 #export TMOUT=300
@@ -36,7 +28,9 @@ export TERMINAL="st"
 export BROWSER="firefox"
 export READER="zathura"
 
-export XDG_CACHE_HOME="$HOME/.cache"
+#export XDG_CACHE_HOME="$HOME/.cache"
+# EXPERIMENTAL
+export XDG_CACHE_HOME="$XDG_RUNTIME_DIR/.cache"
 export XDG_CONFIG_HOME="$HOME/.config"
 export XDG_DATA_HOME="$HOME/.local/share"
 
@@ -66,7 +60,6 @@ export USERXSESSIONRC="$XDG_CONFIG_HOME/x11/xsessionrc"
 export ALTUSERXSESSION="$XDG_CONFIG_HOME/x11/Xsession"
 export ERRFILE="$XDG_CACHE_HOME/x11/xsession-errors"
 # it is more trouble than it's worth
-#export XAUTHORITY="$XDG_RUNTIME_DIR"/Xauthority
 #export XAUTHORITY="$XDG_CACHE_HOME"/Xauthority
 # libx11
 export XCOMPOSEFILE="$XDG_CONFIG_HOME/x11/xcompose"
@@ -75,22 +68,31 @@ export XCOMPOSECACHE="$XDG_CACHE_HOME/x11/xcompose"
 export NPM_CONFIG_USERCONFIG=$XDG_CONFIG_HOME/npm/npmrc
 export MBSYNCRC="${XDG_CONFIG_HOME:-$HOME/.config}/mbsync/config"
 export NOTMUCH_CONFIG="${XDG_CONFIG_HOME:-$HOME/.config}/notmuch-config"
-#export TMUX_TMPDIR="$XDG_RUNTIME_DIR"
 export TMUX_TMPDIR="$XDG_CACHE_DIR"
 export CARGO_HOME="${XDG_DATA_HOME:-$HOME/.local/share}/cargo"
 export GOPATH="${XDG_DATA_HOME:-$HOME/.local/share}/go"
 
 # I don't need history from less
 export LESSHISTFILE="-"
+# retain color (maybe useless, most commands remove color when outputting to pipe, which is reasonable)
 export LESS=-R
-export LESS_TERMCAP_mb="$(printf '%b' '[1;31m')"
-export LESS_TERMCAP_md="$(printf '%b' '[1;36m')"
-export LESS_TERMCAP_me="$(printf '%b' '[0m')"
-export LESS_TERMCAP_so="$(printf '%b' '[01;44;33m')"
-export LESS_TERMCAP_se="$(printf '%b' '[0m')"
-export LESS_TERMCAP_us="$(printf '%b' '[1;32m')"
-export LESS_TERMCAP_ue="$(printf '%b' '[0m')"
+# but we can counter that with highlight
 export LESSOPEN="| /usr/bin/highlight -O ansi %s 2>/dev/null"
+# colorize special text:
+# begin blinking
+export LESS_TERMCAP_mb="$(printf '%b' '[1;31m')"
+# begin bold
+export LESS_TERMCAP_md="$(printf '%b' '[1;36m')"
+# end mode
+export LESS_TERMCAP_me="$(printf '%b' '[0m')"
+# begin standout-mode
+export LESS_TERMCAP_so="$(printf '%b' '[01;44;33m')"
+# end standout-mode
+export LESS_TERMCAP_se="$(printf '%b' '[0m')"
+# begin underline
+export LESS_TERMCAP_us="$(printf '%b' '[1;32m')"
+# end underline
+export LESS_TERMCAP_ue="$(printf '%b' '[0m')"
 
 # Have QT use gtk2 theme.
 export QT_QPA_PLATFORMTHEME="gtk2"
@@ -106,22 +108,22 @@ export NNN_TRASH=1
 export NNN_SSHFS="sshfs -o follow_symlinks"
 export NNN_FIFO=/tmp/nnn.fifo
 export NNN_ARCHIVE="\\.(7z|a|ace|alz|arc|arj|bz|bz2|cab|cpio|deb|gz|jar|lha|lz|lzh|lzma|lzo|rar|rpm|rz|t7z|tar|tbz|tbz2|tgz|tlz|txz|tZ|tzo|war|xpi|xz|Z|zip)$"
-
-
+# for nnn's fzf plugin
 export FZF_DEFAULT_OPTS="--layout=reverse --height 40%"
-
 
 # fix for Java applications in dwm
 export _JAVA_AWT_WM_NONREPARENTING=1
 
-# fixing VapourSynth problem
+# fixing SVP won't picking up vapoursynth library
 # TODO change 3.9 to whatever may be later
 export PYTHONPATH=/usr/local/lib/python3.9/site-packages
 
+# possibly Android stuff? why can't they honor XDG??
 if [ -d "$HOME/platform-tools" ] ; then
     export PATH="$HOME/platform-tools:$PATH"
 fi
 
+# variable for vim's quick access to bibliography
 export BIB="$HOME/dox/phd/bibliography.bib"
 
 # Changing pinentry for SSH logins
@@ -133,9 +135,4 @@ fi
 # start graphical server on user's current tty if not already running.
 #[ "$(tty)" = "/dev/tty1" ] && ! pidof -s Xorg >/dev/null 2>&1 && exec startx "$XINITRC"
 
-
 source "${XDG_CONFIG_HOME:-$HOME/.config}/shell/pass-completion"
-
-# workaround sudo's PATH change
-# https://stackoverflow.com/questions/257616/why-does-sudo-change-the-path
-alias sudo='sudo env PATH=$PATH'
