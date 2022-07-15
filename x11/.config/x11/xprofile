@@ -5,14 +5,12 @@
 
 
 # generate .Xresources
-#$HOME/.local/bin/genxresources > $HOME/.Xresources
 xrdb $HOME/.Xresources
 
-dpi="92"
+dpi="96"
 if [ $(xdpyinfo | awk '/dimensions/ {print $2}') == '3840x2160' ]; then
 	dpi="192"
 fi
-notify-send "Setting DPI $dpi"
 xrdb -merge <<< "Xft.dpi: ${dpi}"
 xrdbpid=$!
 
@@ -37,13 +35,15 @@ autostart=(
 	"unclutter"
 	"gentoo-pipewire-launcher"
 	"syncthing --no-browser"
-	"dwmblocks"
 	"redshift -l40:2"
 )
 
 for program in "${autostart[@]}" ; do
 	pidof -s "${program%% *}" || setsid -f $program
 done >$XDG_CACHE_HOME/xprofile.errors 2>&1
+
+# not sure why it does not work reliably
+dwmblocks &
 
 if [ -x /usr/bin/gpg-agent ]; then
 	eval "$(/usr/bin/gpg-agent --daemon)"
