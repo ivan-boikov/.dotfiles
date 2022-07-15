@@ -7,6 +7,3 @@ rm ~/.config/user-dirs.dirs
 
 echo "Stowing configs"
 stow -R $(ls -d */)
-
-echo "Installing ProtonMail Bridge OpenRC service file"
-sudo ln -s "$HOME/.local/bin/protonmail-bridge" "/etc/init.d/protonmail-bridge"
