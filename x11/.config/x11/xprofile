@@ -6,6 +6,7 @@
 
 # generate .Xresources
 $HOME/.local/bin/genxresources > $HOME/.Xresources
+xrdb $HOME/.Xresources
 
 # generate zathura config with colors from .Xresources
 mkdir -pv $HOME/.config/zathura && $HOME/.local/bin/genzathurarc > $HOME/.config/zathura/zathurarc
@@ -13,11 +14,10 @@ mkdir -pv $HOME/.config/zathura && $HOME/.local/bin/genzathurarc > $HOME/.config
 # and dunst too
 mkdir -pv $HOME/.config/dunst && $HOME/.local/bin/gendunstrc > $HOME/.config/dunst/dunstrc
 
+$HOME/.local/bin/setbg
+$HOME/.local/bin/remaps
 
 autostart=(
-	"xrdb $HOME/.Xresources"
-	"$HOME/.local/bin/setbg"
-	"$HOME/.local/bin/remaps"
 	"xcompmgr"
 	"mpd"
 	"dunst"
