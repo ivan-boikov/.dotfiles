@@ -15,8 +15,6 @@ if [ $(xdpyinfo | awk '/dimensions/ {print $2}') == '3840x2160' ]; then
 	xrdb -merge <<< "*.font: monospace:size=12"
 fi
 
-
-
 # generate zathura config with colors from .Xresources
 mkdir -pv $HOME/.config/zathura && $HOME/.local/bin/genzathurarc > $HOME/.config/zathura/zathurarc
 
@@ -43,6 +41,8 @@ done >$XDG_CACHE_HOME/xprofile.errors 2>&1
 
 # not sure why it does not work reliably inside autostart
 dwmblocks &
+
+xautolock -time 1 -notify 10 -locker ilock -notifier notify-send -secure -corners "+-+-" -cornerdelay 2 -detectsleep &
 
 if [ -x /usr/bin/gpg-agent ]; then
 	eval "$(/usr/bin/gpg-agent --daemon)"
