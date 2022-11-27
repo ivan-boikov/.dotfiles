@@ -3,17 +3,16 @@
 
 KEYDIR="/etc/efikeys/"
 KERNEL_NAME="vmlinuz-latest-gentoo"
+THREADS="$(grep -c ^processor /proc/cpuinfo)"
 
 if [[ $(hostname) = "pc" ]]; then
 	ROOT_DEVICE="/dev/nvme0n1p3"
 	MICROCODE="amd"
 	KERNEL_DIR="/boot/efi/gentoo"
-	THREADS=12
 else
 	ROOT_DEVICE="/dev/sda3"
 	MICROCODE="intel"
 	KERNEL_DIR="/boot/efi/EFI/gentoo"
-	THREADS=4
 fi
 
 ROOT="/dev/mapper/root"
@@ -36,12 +35,12 @@ if [ "$answer" != "${answer#[Nn]}" ] ;then
 	exit 1
 fi
 
-echo "Starting compilation. Asking for root permissions."
+echo "Starting compilation"
 #exit 1
 
 cd /usr/src/linux
 
-# inject $BOOT_PARAMS into kernel
+# inject $BOOT_PARAMS into kernel config
 sed -i "s|^\(CONFIG_CMDLINE=\).*|\1\"$BOOT_PARAMS\"|" .config
 
 genkernel --no-clean --no-mrproper --no-save-config \
@@ -56,7 +55,7 @@ genkernel --no-clean --no-mrproper --no-save-config \
 	all
 	#--virtio \
 
-echo "Signing image"
+echo "Signing kernel image"
 sbsign --key "$KEYDIR/db.key" --cert "$KEYDIR/db.crt" -o "$KERNEL_DIR/$KERNEL_NAME.efi" "/boot/$KERNEL_NAME"
 
 cd -
