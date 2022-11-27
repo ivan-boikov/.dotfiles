@@ -1,53 +1,62 @@
 #!/bin/sh
 
+
 KEYDIR="/etc/efikeys/"
-KKERNEL_NAME="vmlinuz-latest-gentoo"
+KERNEL_NAME="vmlinuz-latest-gentoo"
 
 if [[ $(hostname) = "pc" ]]; then
 	ROOT_DEVICE="/dev/nvme0n1p3"
 	MICROCODE="amd"
+	KERNEL_DIR="/boot/efi/gentoo"
+	THREADS=12
 else
 	ROOT_DEVICE="/dev/sda3"
 	MICROCODE="intel"
+	KERNEL_DIR="/boot/efi/EFI/gentoo"
+	THREADS=4
 fi
 
 ROOT="/dev/mapper/root"
 CRYPT_ROOT="$(blkid -s UUID | grep $ROOT_DEVICE | cut -d' ' -f2 | sed 's/"//g')"
 BOOT_PARAMS="ro crypt_root=$CRYPT_ROOT root=$ROOT rootfsype=btrfs rootflags=subvol=@ root_trim=yes lsm=selinux"
 
+echo -e "Boot parameters:\n$BOOT_PARAMS\n"
+echo -e "\"lsblk -f\" output:\n$(lsblk -f)\n"
+echo -e "Kernel image will compiled with $THREADS threads and be installed to $KERNEL_DIR\n"
 
-echo -e "Boot parameters:\n$BOOT_PARAMS\n\nblkid output:\n$(blkid)\n\nProceed with kernel compiling?[Y/N]"
+if [[ $(/usr/bin/id -u) -ne 0 ]]; then
+	echo "Cannot proceed, need root permissions"
+	exit 1
+fi
+
+echo "Proceed with kernel compiling?[Y/N]"
 read answer
 if [ "$answer" != "${answer#[Nn]}" ] ;then
-    echo "Aborted"
+	echo "Aborted"
 	exit 1
 fi
 
 echo "Starting compilation. Asking for root permissions."
-exit 1
+#exit 1
 
 cd /usr/src/linux
 
 # inject $BOOT_PARAMS into kernel
-sudo sed -i "s|^\(CONFIG_CMDLINE=\).*|\1\"$BOOT_PARAMS\"|" .config
+sed -i "s|^\(CONFIG_CMDLINE=\).*|\1\"$BOOT_PARAMS\"|" .config
 
-sudo genkernel --no-clean --no-mrproper --no-save-config \
+genkernel --no-clean --no-mrproper --no-save-config \
 	--microcode="$MICROCODE" \
 	--integrated-initramfs --compress-initramfs --compress-initramfs-type=lz4 \
 	--luks --no-zfs \
 	--btrfs \
 	--kernel-config=/usr/src/linux/.config \
 	--kernel-filename="$KERNEL_NAME" \
-	--makeopts=-j \
-	--loglevel=2 \
+	--makeopts="-j$THREADS" \
+	--loglevel=3 \
 	all
-#--virtio \
+	#--virtio \
 
-if [[ $(hostname) = "pc" ]]; then
-	# UEFI does not find images besides bootx64
-	sudo cp -v "/boot/$KERNEL_NAME" "/boot/efi/boot/bootx64.efi"
-else
-	sudo sbsign --key "$KEYDIR/db.key" --cert "$KEYDIR/db.crt" -o "/boot/efi/EFI/gentoo/$KERNEL_NAME.efi" "/boot/$KERNEL_NAME"
-fi
+echo "Signing image"
+sbsign --key "$KEYDIR/db.key" --cert "$KEYDIR/db.crt" -o "$KERNEL_DIR/$KERNEL_NAME.efi" "/boot/$KERNEL_NAME"
 
 cd -
