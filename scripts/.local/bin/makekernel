@@ -1,6 +1,7 @@
 #!/bin/sh
 
-KERNEL_NAME="vmlinuz-latest-gentoo"
+KEYDIR="/etc/efikeys/"
+KKERNEL_NAME="vmlinuz-latest-gentoo"
 
 if [[ $(hostname) = "pc" ]]; then
 	ROOT_DEVICE="/dev/nvme0n1p3"
@@ -12,17 +13,25 @@ fi
 
 ROOT="/dev/mapper/root"
 CRYPT_ROOT="$(blkid -s UUID | grep $ROOT_DEVICE | cut -d' ' -f2 | sed 's/"//g')"
-BOOT_PARAMS="crypt_root=$CRYPT_ROOT root=$ROOT rootfsype=btrfs rootflags=subvol=@ root_trim=yes lsm=selinux"
-echo $BOOT_PARAMS
+BOOT_PARAMS="ro crypt_root=$CRYPT_ROOT root=$ROOT rootfsype=btrfs rootflags=subvol=@ root_trim=yes lsm=selinux"
 
+
+echo -e "Boot parameters:\n$BOOT_PARAMS\n\nblkid output:\n$(blkid)\n\nProceed with kernel compiling?[Y/N]"
+read answer
+if [ "$answer" != "${answer#[Nn]}" ] ;then
+    echo "Aborted"
+	exit 1
+fi
+
+echo "Starting compilation. Asking for root permissions."
 exit 1
 
 cd /usr/src/linux
 
 # inject $BOOT_PARAMS into kernel
-sed -i "s|^\(CONFIG_CMDLINE=\).*|\1\"$BOOT_PARAMS\"|" .config
+sudo sed -i "s|^\(CONFIG_CMDLINE=\).*|\1\"$BOOT_PARAMS\"|" .config
 
-genkernel --no-clean --no-mrproper --no-save-config \
+sudo genkernel --no-clean --no-mrproper --no-save-config \
 	--microcode="$MICROCODE" \
 	--integrated-initramfs --compress-initramfs --compress-initramfs-type=lz4 \
 	--luks --no-zfs \
@@ -34,10 +43,11 @@ genkernel --no-clean --no-mrproper --no-save-config \
 	all
 #--virtio \
 
-
-# UEFI does not find images besides bootx64
 if [[ $(hostname) = "pc" ]]; then
-	cp -v "/boot/$KERNEL_NAME" "/boot/efi/boot/bootx64.efi"
+	# UEFI does not find images besides bootx64
+	sudo cp -v "/boot/$KERNEL_NAME" "/boot/efi/boot/bootx64.efi"
+else
+	sudo sbsign --key "$KEYDIR/db.key" --cert "$KEYDIR/db.crt" -o "/boot/efi/EFI/gentoo/$KERNEL_NAME.efi" "/boot/$KERNEL_NAME"
 fi
 
 cd -
