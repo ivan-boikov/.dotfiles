@@ -1,0 +1,43 @@
+#!/bin/sh
+
+KERNEL_NAME="vmlinuz-latest-gentoo"
+
+if [[ $(hostname) = "pc" ]]; then
+	ROOT_DEVICE="/dev/nvme0n1p3"
+	MICROCODE="amd"
+else
+	ROOT_DEVICE="/dev/sda3"
+	MICROCODE="intel"
+fi
+
+ROOT="/dev/mapper/root"
+CRYPT_ROOT="$(blkid -s UUID | grep $ROOT_DEVICE | cut -d' ' -f2 | sed 's/"//g')"
+BOOT_PARAMS="crypt_root=$CRYPT_ROOT root=$ROOT rootfsype=btrfs rootflags=subvol=@ root_trim=yes lsm=selinux"
+echo $BOOT_PARAMS
+
+exit 1
+
+cd /usr/src/linux
+
+# inject $BOOT_PARAMS into kernel
+sed -i "s|^\(CONFIG_CMDLINE=\).*|\1\"$BOOT_PARAMS\"|" .config
+
+genkernel --no-clean --no-mrproper --no-save-config \
+	--microcode="$MICROCODE" \
+	--integrated-initramfs --compress-initramfs --compress-initramfs-type=lz4 \
+	--luks --no-zfs \
+	--btrfs \
+	--kernel-config=/usr/src/linux/.config \
+	--kernel-filename="$KERNEL_NAME" \
+	--makeopts=-j \
+	--loglevel=2 \
+	all
+#--virtio \
+
+
+# UEFI does not find images besides bootx64
+if [[ $(hostname) = "pc" ]]; then
+	cp -v "/boot/$KERNEL_NAME" "/boot/efi/boot/bootx64.efi"
+fi
+
+cd -

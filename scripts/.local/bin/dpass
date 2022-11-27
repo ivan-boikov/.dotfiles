@@ -49,6 +49,10 @@ password_files=( "${password_files[@]%.gpg}" )
 
 password_file=$(printf '%s\n' "${password_files[@]}" | "$dmenu" -l 30 "$@")
 
+if [[ -z "$password_file" ]]; then
+    exit 1
+fi
+
 if [[ ! " ${password_files[*]} " =~ " ${password_file} " ]]; then
     notify-send -u critical "No entry \"$password_file\" in the password store"
     exit 1
