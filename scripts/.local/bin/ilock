@@ -1,29 +1,42 @@
 #!/usr/bin/env bash
 
-icon_file="$HOME/.local/share/icons/lock.png"
-icon_scaled_file='/tmp/lock-icon.png'
-scr_png='/tmp/screen.png'
-scr_bmp='/tmp/screen.bmp'
-scr_gl_bmp="/tmp/sclock_g.bmp"
-
-(( $# )) && { icon=$1; }
-
 # flush passwords
 if [ -n $(which gnome-keyring-daemon) ]; then
-    gnome-keyring-daemon -r -d
+    gnome-keyring-daemon -r -d >/dev/null
 fi
-ssh-agent -k
-gpgconf --kill gpg-agent
+if [ -n $(which ssh-agent) ]; then
+    ssh-agent -k >/dev/null
+fi
+if [ -n $(which gpgconf) ]; then
+    gpgconf --kill gpg-agent >/dev/null
+fi
+
+# stop sounds
+if [ -n $(which playerctl) ]; then
+    playerctl -a pause >/dev/null
+fi
+if [ -n $(which mpc) ]; then
+    mpc pause >/dev/null
+fi
 
 
 # generate fancy lock screen
-rm "$scr_png"
-maim > "$scr_png"
 
-# just pixelate
-convert "$scr_png" -scale 10% -scale 1000% "$scr_png"
+#icon_file="$HOME/.local/share/icons/lock.png"
+#icon_scaled_file='/tmp/lock-icon.png'
+#scr_png='/tmp/screen.png'
+#scr_bmp='/tmp/screen.bmp'
+#scr_gl_bmp="/tmp/sclock_g.bmp"
+#
+#(( $# )) && { icon=$1; }
 
-# add heavy distortion
+#rm "$scr_png"
+#maim > "$scr_png"
+
+# pixelate
+#convert "$scr_png" -scale 10% -scale 1000% "$scr_png"
+
+# heavy distortion
 #convert "$scr_png" -resize 500x "$scr_png"
 #convert -rotate -90 $scr_png $scr_bmp
 #for a in {1,2,4,5,2}
@@ -39,14 +52,12 @@ convert "$scr_png" -scale 10% -scale 1000% "$scr_png"
 
 # add lock icon
 # first, rescale to match half screen height
-resolutiony=$(xrandr | fgrep '*' | cut -d'x' -f2 | awk '{print $1}')
-locksizey=$(echo "$resolutiony / 2" | bc -l)
-convert "$icon_file" -resize x"$locksizey" "$icon_scaled_file"
+#resolutiony=$(xrandr | fgrep '*' | cut -d'x' -f2 | awk '{print $1}')
+#locksizey=$(echo "$resolutiony / 2" | bc -l)
+#convert "$icon_file" -resize x"$locksizey" "$icon_scaled_file"
 # and add icon on top of screenshot
-convert "$scr_png" "$icon_scaled_file" -gravity center -composite -matte "$scr_png"
+#convert "$scr_png" "$icon_scaled_file" -gravity center -composite -matte "$scr_png"
 
-playerctl pause
+#i3lock --nofork -u -i "$scr_png"
 
-#sxiv $scr_png
-
-i3lock -u -i "$scr_png"
+slock

@@ -150,7 +150,7 @@ if [[ -n "$SSH_CONNECTION" ]] ;then
     export PINENTRY_USER_DATA="USE_CURSES=1"
 fi
 
-# start graphical server on user's current tty if not already running.
-#[ "$(tty)" = "/dev/tty1" ] && ! pidof -s Xorg >/dev/null 2>&1 && exec startx "$XINITRC"
-
 source "${XDG_CONFIG_HOME:-$HOME/.config}/shell/pass-completion"
+
+# start graphical server on user's current tty if not already running.
+[ "$(tty)" = "/dev/tty1" ] && ! pidof -s Xorg >/dev/null 2>&1 && exec startx "$XINITRC"

@@ -1,5 +1,5 @@
 directory: ~/audio/music
-library: ~/.local/share/beet/beets.db
+library: ~/audio/beets.db
 
 import:
   move: yes
@@ -8,11 +8,30 @@ import:
   log: ~/.cache/beet/beets.log
   resume: ask
 
-
-plugins: fetchart lastgenre
+plugins: fetchart lastgenre ftintitle convert lyrics replaygain albumtypes embedart
 
 paths:
   default: $albumartist/$album-$format/$disc-$track-$title
   singleton: singletons/$artist-$title
-  comp: various-artists/$album%aunique{}/$disc-$track-$title
-  albumtype:soundtrack: soundtracks/$album/$disc-$track-$title
+  comp: various-artists/$album%aunique{}-$format/$disc-$track-$title
+  albumtype:soundtrack: soundtracks/$album-$format/$disc-$track-$title
+
+convert:
+  dest: ~/audio/music-phone
+  copy_album_art: yes
+  never_convert_lossy_files: yes
+  embed: no
+  max_bitrate: 1
+  format: flac
+  formats:
+    flac:
+      command: /home/ivan/audio/music-phone/convert-to-opus-if-not-blacklisted.sh $source $dest
+      extension: opus
+
+replaygain:
+  auto: no
+  backend: ffmpeg
+
+embedart:
+  auto: no
+  remove_art_file: no
