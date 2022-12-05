@@ -42,8 +42,7 @@ done >$XDG_CACHE_HOME/xprofile.errors 2>&1
 # not sure why it does not work reliably inside autostart
 dwmblocks &
 
-# xautolock -time 1 -notify 5 -locker ilock -notifier 'notify-send "Screen will lock in 5s"' -secure -corners "+-+-" -cornerdelay 5 -detectsleep &
-startxautolock
+$HOME/.local/bin/startxautolock
 
 if [ -x /usr/bin/gpg-agent ]; then
 	eval "$(/usr/bin/gpg-agent --daemon)"

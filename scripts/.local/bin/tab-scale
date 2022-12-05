@@ -2,7 +2,8 @@
 
 args=("$@")
 
-tablet=$(xsetwacom list | grep stylus | cut -f 1 | xargs)
+stylus=$(xsetwacom list | grep stylus | cut -f 1 | xargs)
+
 
 Wx=${args[0]}
 Wy=${args[1]}
@@ -12,9 +13,9 @@ Sy=${args[4]}
 skewX=${args[5]}
 skewY=${args[6]}
 
-xsetwacom --set "$tablet" ResetArea
-Nx=$(xsetwacom get "$tablet" Area | cut -f 3 -d ' ')
-Ny=$(xsetwacom get "$tablet" Area | cut -f 4 -d ' ')
+xsetwacom --set "$stylus" ResetArea
+Nx=$(xsetwacom get "$stylus" Area | cut -f 3 -d ' ')
+Ny=$(xsetwacom get "$stylus" Area | cut -f 4 -d ' ')
 
 resX=$(xdpyinfo | awk '/dimensions/{print $2}' | cut -f 1 -d 'x')
 resY=$(xdpyinfo | awk '/dimensions/{print $2}' | cut -f 2 -d 'x')
@@ -28,11 +29,33 @@ Nyy=$(($Sx*$Ny*$Wy/$alpha/$Sy/$Wx))
 dx=$((($resX-$Wx)/2 + $skewX))
 dy=$((($resY-$Wy)/2 + $skewY))
 
-#echo $tablet
+#echo $stylus
 #echo Area 0 0 $Nxx $Nyy
 #echo MapToOutput ${Wx} ${Wy} ${dx} ${dy}
 
-#xsetwacom --set "${tablet}" Area 0 0 $Nxx $Nyy
-xsetwacom --set "${tablet}" Area $((($Nx-$Nxx)/2)) 0 $((($Nx+$Nxx)/2)) $Nyy
-#xsetwacom --set "${tablet}" Area 0 $(($Ny-$Nyy)) $Nxx $Ny
-xsetwacom --set "${tablet}" MapToOutput ${Wx}x${Wy}+$dx+$dy
+#xsetwacom --set "${stylus}" Area 0 0 $Nxx $Nyy
+xsetwacom --set "${stylus}" Area $((($Nx-$Nxx)/2)) 0 $((($Nx+$Nxx)/2)) $Nyy
+#xsetwacom --set "${stylus}" Area 0 $(($Ny-$Nyy)) $Nxx $Ny
+xsetwacom --set "${stylus}" MapToOutput ${Wx}x${Wy}+$dx+$dy
+
+
+# map stylus buttons
+# stylus touch to mouse left click
+xsetwacom --set "${stylus}" button 1 1
+# stylus low button press to mouse left click
+xsetwacom --set "${stylus}" button 2 1
+# stylus high button press to mouse right click
+xsetwacom --set "${stylus}" button 3 3
+
+
+# map tablet buttons
+pad=$(xsetwacom list | grep pad | cut -f 1 | xargs)
+
+xsetwacom --set "$pad" Button 1 "key +shift +alt p -alt -shift"
+xsetwacom --set "$pad" Button 2 "key +shift +alt a -alt -shift"
+xsetwacom --set "$pad" Button 3 12
+xsetwacom --set "$pad" Button 8 13
+xsetwacom --set "$pad" Button 9 14
+xsetwacom --set "$pad" Button 10 "key +shift +alt l -alt -shift"
+xsetwacom --set "$pad" Button 11 "key +shift +alt s -alt -shift"
+xsetwacom --set "$pad" Button 12 "key +ctrl z -ctrl"

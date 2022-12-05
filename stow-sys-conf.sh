@@ -1,4 +1,4 @@
 #!/bin/sh
 
-echo "Installing ProtonMail Bridge OpenRC service file"
+# protonmail bridge service
 ln -s "$HOME/.local/bin/protonmail-bridge" "/etc/init.d/protonmail-bridge"

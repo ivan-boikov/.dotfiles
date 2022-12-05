@@ -38,7 +38,7 @@ call minpac#add('itchyny/lightline.vim')
 
 " dev
 call minpac#add('jpalardy/vim-slime')
-call minpac#add('JuliaEditorSupport/julia-vim')
+call minpac#add('JuliaEditorSupport/julia-vim', {'type': 'opt'})
 call minpac#add('christoomey/vim-tmux-navigator')
 call minpac#add('neovim/nvim-lspconfig')
 call minpac#add('nvim-treesitter/nvim-treesitter')
@@ -67,7 +67,7 @@ call minpac#add('vimwiki/vimwiki')
 "call minpac#add('')
 
 if empty(glob("~/.config/nvim/pack/minpac/start/friendly-snippets"))
-    call minpac#update() 
+    call minpac#update()
     echo "Wait for packages to install, then restart nvim one last time"
     finish
 endif
@@ -172,7 +172,7 @@ nmap <F7> :make<CR>
 
 vmap <C-c><C-c> :SlimeRegionSend
 nmap <C-c><C-c> :SlimeParagraphSend
-let g:slime_paste_file = $XDG_CACHE_HOME + "/slime_paste"
+let g:slime_paste_file = $XDG_CACHE_HOME . "/slime_paste"
 let g:slime_target = "tmux"
 let g:slime_default_config = { "socket_name" : "default", "target_pane" : "{last}" }
 let g:slime_cell_delimiter = "\n"

@@ -1,6 +1,6 @@
 ! special
 *.foreground:   #e1a15b
-*.background:   #0e0a05
+*.background:   #222222
 *.cursorColor:  #e1a15b
 
 ! black
@@ -32,7 +32,7 @@
 *.color14:      #007e7e
 
 ! white
-*.color7:       #d2d2d2
+*.color7:       #c0c0c0
 *.color15:      #787878
 
 Xft.autohint: 0
