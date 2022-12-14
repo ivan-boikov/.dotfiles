@@ -98,6 +98,10 @@ set shiftwidth=4
 set tabstop=4
 set smartindent
 
+" line numbers
+set number
+set relativenumber
+
 nmap <Ctrl-Tab> :bnext<CR>
 
 
@@ -166,7 +170,7 @@ nmap <leader>r :vsp<space>$REFER<CR>
 " open corresponding .pdf/.html or preview
 "nmap <leader>lp :!opout <c-r>%<CR>
 " C/C++ dev
-nmap <F5> :make run<CR>
+nmap <F5> :!make run<CR>
 nmap <F7> :make<CR>
 
 

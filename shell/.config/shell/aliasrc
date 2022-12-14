@@ -75,3 +75,5 @@ alias yarn='yarn --use-yarnrc "$XDG_CONFIG_HOME/yarn/config"'
 
 alias monerod="monerod --data-dir "$XDG_DATA_HOME"/bitmonero"
 alias monero-wallet-cli="monero-wallet-cli --wallet-file $XDG_DATA_HOME/bitmonero/monero-wallet"
+
+alias wttr="curl https://wttr.in/paris-france"

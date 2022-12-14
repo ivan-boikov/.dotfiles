@@ -4,5 +4,4 @@
 getcolor() {
     xrdb -query | awk '/*.'$1:'/ { print substr($2,2) }'
 }
-# sync that with dwm's config.h!
 dmenu -nb "#$(getcolor background)" -nf "#$(getcolor foreground)" -sb "#$(getcolor foreground)" -sf "#$(getcolor background)" "$@"

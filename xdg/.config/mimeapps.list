@@ -1,12 +1,12 @@
 [Default Applications]
-image/svg+xml=gimp.desktop;
+image/svg+xml=inkscape.desktop;
 image/bmp=sxiv.desktop;
 image/jpg=sxiv.desktop;
 image/jpeg=sxiv.desktop;
 image/gif=sxiv.desktop;
 image/png=sxiv.desktop;
 
-audio/x-vorbis+ogg=vlc.desktop;
+audio/x-vorbis+ogg=mpv.desktop;
 audio/ogg=mpv.desktop;
 audio/mpeg=mpv.desktop;
 
@@ -21,6 +21,24 @@ video/webm=mpv.desktop;
 video/flv=mpv.desktop;
 
 text/csv=libreoffice-calc.desktop;
+
+text/x-log=nvim.desktop;
+text/calendar=nvim.desktop;
+text/css=nvim.desktop;
+text/html=nvim.desktop;
+text/javascript=nvim.desktop;
+text/markdown=nvim.desktop;
+text/plain=nvim.desktop;
+text/x-asm=nvim.desktop;
+text/x-c=nvim.desktop;
+text/x-fortran=nvim.desktop;
+text/x-java-source=nvim.desktop;
+text/x-pascal=nvim.desktop;
+text/x-python=nvim.desktop;
+text/x-vcalendar=nvim.desktop;
+text/x-vcard=nvim.desktop;
+
+application/octet-stream=nvim.desktop
 
 application/pdf=org.pwmt.zathura.desktop;
 image/vnd.djvu+multipage=org.pwmt.zathura.desktop;

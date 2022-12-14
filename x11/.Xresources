@@ -1,39 +1,39 @@
 ! special
-*.foreground:   #e1a15b
-*.background:   #222222
-*.cursorColor:  #e1a15b
+*.foreground:   #d19a66
+*.background:   #0a0a0a
+*.cursorColor:  #d19a66
 
 ! black
-*.color0:       #222222
-*.color8:       #000000
+*.color0:       #0a0a0a
+*.color8:       #5c6370
 
 ! red
-*.color1:       #e75c58
-*.color9:       #b22b31
+*.color1:       #e06c75
+*.color9:       #e06c75
 
 ! green
-*.color2:       #00b800
-*.color10:      #008100
+*.color2:       #98c379
+*.color10:      #98c379
 
 ! yellow
-*.color3:       #ebeb00
-*.color11:      #d3d300
+*.color3:       #d19a66
+*.color11:      #d19a66
 
 ! blue
-*.color4:       #0082ff
-*.color12:      #0061c3
+*.color4:       #61afef
+*.color12:      #61afef
 
 ! magenta
-*.color5:       #d160c4
-*.color13:      #a03196
+*.color5:       #c678dd
+*.color13:      #c678dd
 
 ! cyan
-*.color6:       #009393
-*.color14:      #007e7e
+*.color6:       #56b6c2
+*.color14:      #56b6c2
 
 ! white
-*.color7:       #c0c0c0
-*.color15:      #787878
+*.color7:       #abb2bf
+*.color15:      #ffffff
 
 Xft.autohint: 0
 Xft.lcdfilter: lcddefault
