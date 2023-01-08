@@ -114,6 +114,7 @@ export LESS_TERMCAP_ue="$(printf '%b' '[0m')"
 
 # Have QT use gtk2 theme.
 export QT_QPA_PLATFORMTHEME="gtk2"
+export QT_STYLE_OVERRIDE="gtk2"
 
 # don't start GTK3 garbage
 export NO_AT_BRIDGE=1
