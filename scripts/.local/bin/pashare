@@ -1,0 +1,17 @@
+#!/bin/sh
+dmenu="cdmenu"
+case "$1" in
+  start)
+    $0 stop
+	source="$(pactl list sinks | grep Name | cut -d' ' -f2- | $dmenu -p "Source to stream:" -l 16).monitor"
+	port=$(echo 12345 | $dmenu -p "Port:")
+    pactl load-module module-simple-protocol-tcp channels=2 source="$source" record=true port="$port"
+    ;;
+  stop)
+    #pactl unload-module `pactl list | grep tcp -B1 | grep M | sed 's/[^0-9]//g'`
+	pactl unload-module module-simple-protocol-tcp
+    ;;
+  *)
+    echo "Usage: $0 start|stop" >&2
+    ;;
+esac

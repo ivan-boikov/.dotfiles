@@ -1,44 +1,44 @@
 #!/bin/sh
 
-
+KERNEL_SRC_DIR="/usr/src/linux"
 KEYDIR="/etc/efikeys/"
 KERNEL_NAME="vmlinuz-latest-gentoo"
 THREADS="$(grep -c ^processor /proc/cpuinfo)"
 
-if [[ $(hostname) = "pc" ]]; then
+if [ "$(hostname)" = "pc" ]; then
 	ROOT_DEVICE="/dev/nvme0n1p3"
 	MICROCODE="amd"
 	KERNEL_DIR="/boot/efi/gentoo"
-else
+elif [ "$(hostname)" = "laptop" ]; then
 	ROOT_DEVICE="/dev/sda3"
 	MICROCODE="intel"
 	KERNEL_DIR="/boot/efi/EFI/gentoo"
+else
+	echo "Unknown device $(hostname), cannot choose kernel parameters"
+	exit 1
 fi
 
 ROOT="/dev/mapper/root"
 CRYPT_ROOT="$(blkid -s UUID | grep $ROOT_DEVICE | cut -d' ' -f2 | sed 's/"//g')"
 BOOT_PARAMS="ro crypt_root=$CRYPT_ROOT root=$ROOT rootfsype=btrfs rootflags=subvol=@ root_trim=yes lsm=selinux"
 
-echo -e "Boot parameters:\n$BOOT_PARAMS\n"
-echo -e "\"lsblk -f\" output:\n$(lsblk -f)\n"
-echo -e "Kernel image will compiled with $THREADS threads and be installed to $KERNEL_DIR\n"
+printf 'Boot parameters:\n%s\n' "$BOOT_PARAMS"
+printf '\"lsblk -f\" output:\n%s\n' "$(lsblk -f)"
+printf 'Kernel image will compiled with %s threads and be installed to %s' "$THREADS" "$KERNEL_DIR"
 
-if [[ $(/usr/bin/id -u) -ne 0 ]]; then
+if [ "$(/usr/bin/id -u)" -ne 0 ]; then
 	echo "Cannot proceed, need root permissions"
 	exit 1
 fi
 
-echo "Proceed with kernel compiling?[Y/N]"
-read answer
+echo "Proceed with kernel compiling? [Y/N]"
+read -r answer
 if [ "$answer" != "${answer#[Nn]}" ] ;then
 	echo "Aborted"
 	exit 1
 fi
 
-echo "Starting compilation"
-#exit 1
-
-cd /usr/src/linux
+cd "$KERNEL_SRC_DIR" || exit 1
 
 # inject $BOOT_PARAMS into kernel config
 sed -i "s|^\(CONFIG_CMDLINE=\).*|\1\"$BOOT_PARAMS\"|" .config
@@ -46,9 +46,8 @@ sed -i "s|^\(CONFIG_CMDLINE=\).*|\1\"$BOOT_PARAMS\"|" .config
 genkernel --no-clean --no-mrproper --no-save-config \
 	--microcode="$MICROCODE" \
 	--integrated-initramfs --compress-initramfs --compress-initramfs-type=lz4 \
-	--luks --no-zfs \
-	--btrfs \
-	--kernel-config=/usr/src/linux/.config \
+	--luks --no-zfs --btrfs \
+	--kernel-config="$KERNEL_SRC_DIR/.config" \
 	--kernel-filename="$KERNEL_NAME" \
 	--makeopts="-j$THREADS" \
 	--loglevel=3 \
@@ -58,4 +57,4 @@ genkernel --no-clean --no-mrproper --no-save-config \
 echo "Signing kernel image"
 sbsign --key "$KEYDIR/db.key" --cert "$KEYDIR/db.crt" -o "$KERNEL_DIR/$KERNEL_NAME.efi" "/boot/$KERNEL_NAME"
 
-cd -
+cd - || exit 1

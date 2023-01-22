@@ -34,7 +34,7 @@ fi
 #echo ${output_method[@]}
 
 if [[ -n $WAYLAND_DISPLAY ]]; then
-    dmenu=dmenu-wl
+    dmenu="dmenu-wl"
 elif [[ -n $DISPLAY ]]; then
     dmenu="$HOME/.local/bin/cdmenu"
 else
@@ -53,7 +53,7 @@ if [[ -z "$password_file" ]]; then
     exit 1
 fi
 
-if [[ ! " ${password_files[*]} " =~ " ${password_file} " ]]; then
+if [[ ! ${password_files[*]} =~ "${password_file}" ]]; then
     notify-send -u critical "No entry \"$password_file\" in the password store"
     exit 1
 fi
@@ -61,39 +61,39 @@ fi
 action=$(printf "password\nlogin\ninfo" | "$dmenu" -l 3)
 case $action in
     login)
-        login=$(pass show $password_file | sed -n -e '/^login:/p' | awk '{print $2}')
+        login=$(pass show "$password_file" | sed -n -e '/^login:/p' | awk '{print $2}')
         if [[ -z $login ]]; then
             notify-send -u critical "No login for \"$password_file\" was found"
             exit 1
         fi
-        echo "$login" | ${output_method[@]}
+        echo "$login" | "${output_method[@]}"
         if [[ -n $action_descr ]]; then
             notify-send "Login for \"$password_file\" was $action_descr"
         fi
         ;;
     password)
-        pass show "$password_file" | head -n 1 | ${output_method[@]}
+        pass show "$password_file" | head -n 1 | "${output_method[@]}"
         #pass show -c "$password" 2>/dev/null
         if [[ -n $action_descr ]]; then
             notify-send "Password for \"$password_file\" was $action_descr"
         fi
         ;;
     info)
-        data=$(pass show $password_file | tail -n +2 | sed '/login\:/d')
+        data="$(pass show "$password_file" | tail -n +2 | sed '/login\:/d')"
         if [[ -z $data ]]; then
             notify-send -u critical "No additional info for \"$password_file\" was found"
             exit 1
         fi
-        data=$(echo $data | "$dmenu" -l 30)
+        data="$(echo "$data" | "$dmenu" -l 30)"
         if [[ -z "$data"  ]]; then
             notify-send "No info for $password_file was selected"
             exit 1
         fi
-        do_trim=$(printf 'Yes\nNo' | "$dmenu" -p "Trim \"$(echo $data | awk '{print $1}')\" in front?" -l 2)
+        do_trim=$(printf 'Yes\nNo' | "$dmenu" -p "Trim \"$(echo "$data" | awk '{print $1}')\" in front?" -l 2)
         if [[ $do_trim == "Yes" ]]; then
             data=$(echo "$data" | cut -f 2- -d ' ')
         fi
-        echo $data | ${output_method[@]}
+        echo "$data" | "${output_method[@]}"
         if [[ -n $action_descr ]]; then
             notify-send "Data for $password_file was $action_descr"
         fi

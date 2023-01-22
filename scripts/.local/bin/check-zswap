@@ -2,14 +2,15 @@
 
 # https://gist.github.com/phizev/31185a30e7d4984724f1fbbf9c2afe19
 
-ENABLED=$(cat /sys/module/zswap/parameters/enabled)
-COMPRESSOR=$(cat /sys/module/zswap/parameters/compressor)
-ZPOOL=$(cat /sys/module/zswap/parameters/zpool)
+echo "Need to read files in /sys/modules/zswap, need root permissions"
+ENABLED=$(sudo -A cat /sys/module/zswap/parameters/enabled)
+COMPRESSOR=$(sudo -A cat /sys/module/zswap/parameters/compressor)
+ZPOOL=$(sudo -A cat /sys/module/zswap/parameters/zpool)
 PAGE_SIZE=$(getconf PAGE_SIZE)
-STORED_PAGES=$(cat /sys/kernel/debug/zswap/stored_pages)
-POOL_TOTAL_SIZE=$(cat /sys/kernel/debug/zswap/pool_total_size)
+STORED_PAGES=$(sudo -A cat /sys/kernel/debug/zswap/stored_pages)
+POOL_TOTAL_SIZE=$(sudo -A cat /sys/kernel/debug/zswap/pool_total_size)
 
-POOL_SIZE=$(numfmt --to=iec-i $POOL_TOTAL_SIZE)
+POOL_SIZE=$(numfmt --to=iec-i "$POOL_TOTAL_SIZE")
 
 if [ "$POOL_TOTAL_SIZE" = "0" ]
 then

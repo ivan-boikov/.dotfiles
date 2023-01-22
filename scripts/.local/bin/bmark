@@ -1,0 +1,35 @@
+#!/bin/sh
+
+BOOKMARK_FILE="$HOME/sync/bookmarks.dat"
+
+DMENU="$(command -v cdmenu)"
+if [ -z "$DMENU" ]; then
+    DMENU="$(command -v dmenu)"
+fi
+ask(){ $DMENU -i -fn 'Monospace' -l 30; }
+
+if [ -z "$1" ]; then
+    link=$(grep -v "^$" "$BOOKMARK_FILE" | ask | cut -d' ' -f1)
+
+    if [ -n "$WAYLAND_DISPLAY" ]; then
+        ydotool type --clearmodifiers "$link"
+    elif [ -n "$DISPLAY" ]; then
+        xdotool type --clearmodifiers "$link"
+    else
+        echo "Error: No Wayland or X11 display detected" >&2
+        exit 1
+    fi
+
+    exit 0
+fi
+
+if [ "$1" = "add" ] && [ -n "$2" ]; then
+    if grep -q "$2" "$BOOKMARK_FILE"
+    then
+        notify-send "Bookmark already saved" "$2"
+    else
+        echo "$2 ; ; unsorted" >> "$BOOKMARK_FILE"
+        notify-send "Bookmark added" "$2"
+    fi
+    exit 0
+fi

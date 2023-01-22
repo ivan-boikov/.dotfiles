@@ -1,4 +1,4 @@
-#! /bin/sh
+#!/bin/sh
 
 getcolor() {
     xrdb -query | awk '/*.color'"$1":'/ { print substr($2,2) }'

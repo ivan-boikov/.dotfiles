@@ -9,7 +9,7 @@ case "$(readlink -f /sbin/init)" in
 esac
 
 if [ -z "$1" ]; then
-    cmd=$(printf "lock\nleave dwm\nrenew dwm\nhibernate\nsleep\nreboot\nshutdown\ndisplay off" | $dmenu -i -p 'Action: ')
+    cmd=$(printf 'lock\nleave dwm\nrenew dwm\nhibernate\nsleep\nreboot\nshutdown\ndisplay off' | $dmenu -i -p 'Action: ')
 else
     cmd=$1
 fi

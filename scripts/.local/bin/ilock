@@ -1,21 +1,21 @@
-#!/usr/bin/env bash
+#!/bin/sh
 
 # flush passwords
-if [ -n $(which gnome-keyring-daemon) ]; then
+if [ -n "$(which gnome-keyring-daemon)" ]; then
     gnome-keyring-daemon -r -d >/dev/null
 fi
-if [ -n $(which ssh-agent) ]; then
+if [ -n "$(which ssh-agent)" ]; then
     ssh-agent -k >/dev/null
 fi
-if [ -n $(which gpgconf) ]; then
+if [ -n "$(which gpgconf)" ]; then
     gpgconf --kill gpg-agent >/dev/null
 fi
 
 # stop sounds
-if [ -n $(which playerctl) ]; then
+if [ -n "$(which playerctl)" ]; then
     playerctl -a pause >/dev/null
 fi
-if [ -n $(which mpc) ]; then
+if [ -n "$(which mpc)" ]; then
     mpc pause >/dev/null
 fi
 

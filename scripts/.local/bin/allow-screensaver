@@ -1,0 +1,6 @@
+#!/bin/sh
+export DISPLAY=:0.0
+xset s on
+xset s blank
+xset +dpms
+notify-send "Screensaver ON"

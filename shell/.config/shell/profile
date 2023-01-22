@@ -128,7 +128,7 @@ export NNN_BMS='v:~/vid;p:~/pix;d:~/dox;M:/mnt;m:/media'
 export NNN_PLUG="t:!st;m:mediainf;d:dragdrop;l:mimelist;p:preview-tabbed;o:organize;r:renamer;c:rsynccp;x:toggleex;u:umounttree;g:getplugs;s:x2sel;f:fzcd;2:dups;P:preview-tui;n:nmount,N:fixname;a:musicadd;z:musicrm"
 export NNN_TRASH=1
 export NNN_SSHFS="sshfs -o follow_symlinks"
-export NNN_FIFO=/tmp/nnn.fifo
+export NNN_FIFO="/tmp/nnn.fifo.$(whoami)"
 export NNN_ARCHIVE="\\.(7z|a|ace|alz|arc|arj|bz|bz2|cab|cpio|deb|gz|jar|lha|lz|lzh|lzma|lzo|rar|rpm|rz|t7z|tar|tbz|tbz2|tgz|tlz|txz|tZ|tzo|war|xpi|xz|Z|zip)$"
 # for nnn's fzf plugin
 export FZF_DEFAULT_OPTS="--layout=reverse --height 40%"

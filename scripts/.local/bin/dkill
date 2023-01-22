@@ -1,23 +1,17 @@
-#!/usr/bin/env bash
+#!/bin/sh
 
 # dmenu theming
 dmenu="$HOME/.local/bin/cdmenu"
-lines="-l 30"
 
-selected="$(ps -a -u $USER | \
-            "$dmenu" -i -p "Select process to kill" \
-            $lines | \
-            awk '{print $1" "$4}')";
+selected="$(ps -a -u "$USER" | "$dmenu" -l 16 -i -p "Select process to kill"  | awk '{print $1" "$4}')";
 
-if [[ ! -z $selected ]]; then
+if [ -n "$selected" ]; then
 
-    answer="$(echo -e "Yes\nNo" | \
-            "$dmenu" -i -p "$selected will be killed, are you sure?" \
-            $lines )"
+    answer="$(printf 'Yes\nNo' | "$dmenu" -i -p "$selected will be killed, are you sure?")"
 
-    if [[ $answer == "Yes" ]]; then
-        selpid="$(awk '{print $1}' <<< $selected)";
-        kill -9 $selpid
+    if [ "$answer" = "Yes" ]; then
+        selpid="$(echo "$selected" | awk '{print $1}')";
+        kill -9 "$selpid"
     fi
 fi
 

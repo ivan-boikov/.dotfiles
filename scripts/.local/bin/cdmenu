@@ -1,7 +1,7 @@
-#! /bin/bash
+#!/bin/sh
 # colored dmenu for use in scripts
 
 getcolor() {
-    xrdb -query | awk '/*.'$1:'/ { print substr($2,2) }'
+    xrdb -query | awk '/*.'"$1":'/ { print substr($2,2) }'
 }
 dmenu -nb "#$(getcolor background)" -nf "#$(getcolor foreground)" -sb "#$(getcolor foreground)" -sf "#$(getcolor background)" "$@"

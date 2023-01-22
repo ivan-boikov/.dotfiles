@@ -4,8 +4,6 @@
 # choose the kind of screenshot to take, including copying the image or even
 # highlighting an area to copy. scrotcucks on suicidewatch right now.
 
-dmenu=cdmenu
-
 case "$(printf "a selected area\\ncurrent window\\nfull screen\\na selected area (copy)\\ncurrent window (copy)\\nfull screen (copy)" | cdmenu -l 6 -i -p "Screenshot which area?")" in
 	"a selected area") maim -s pic-selected-"$(date '+%y%m%d-%H%M-%S').png" ;;
 	"current window") maim -i "$(xdotool getactivewindow)" pic-window-"$(date '+%y%m%d-%H%M-%S').png" ;;
