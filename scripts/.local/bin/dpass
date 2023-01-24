@@ -66,13 +66,13 @@ case $action in
             notify-send -u critical "No login for \"$password_file\" was found"
             exit 1
         fi
-        echo "$login" | "${output_method[@]}"
+        echo "$login" | $output_method
         if [[ -n $action_descr ]]; then
             notify-send "Login for \"$password_file\" was $action_descr"
         fi
         ;;
     password)
-        pass show "$password_file" | head -n 1 | "${output_method[@]}"
+        pass show "$password_file" | head -n 1 | $output_method
         #pass show -c "$password" 2>/dev/null
         if [[ -n $action_descr ]]; then
             notify-send "Password for \"$password_file\" was $action_descr"
@@ -93,7 +93,7 @@ case $action in
         if [[ $do_trim == "Yes" ]]; then
             data=$(echo "$data" | cut -f 2- -d ' ')
         fi
-        echo "$data" | "${output_method[@]}"
+        echo "$data" | $output_method
         if [[ -n $action_descr ]]; then
             notify-send "Data for $password_file was $action_descr"
         fi
