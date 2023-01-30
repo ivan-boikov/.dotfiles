@@ -38,7 +38,7 @@ call minpac#add('itchyny/lightline.vim')
 
 " dev
 call minpac#add('jpalardy/vim-slime')
-call minpac#add('JuliaEditorSupport/julia-vim', {'type': 'opt'})
+call minpac#add('JuliaEditorSupport/julia-vim')
 call minpac#add('christoomey/vim-tmux-navigator')
 call minpac#add('neovim/nvim-lspconfig')
 call minpac#add('nvim-treesitter/nvim-treesitter')
@@ -102,7 +102,9 @@ set smartindent
 set number
 set relativenumber
 
-nmap <Ctrl-Tab> :bnext<CR>
+nmap <M-Tab> :bnext<CR>
+nmap <M-w> :bd<CR>
+nmap <S-Tab> :bprev<CR>
 
 
 

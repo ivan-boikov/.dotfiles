@@ -18,15 +18,15 @@ fi
 
 if [[ $1 == "--type" ]]; then
     if [[ -n $WAYLAND_DISPLAY ]]; then
-        xdotool="ydotool type --file -"
+        xdotool=("ydotool" "type" "--file" "-")
     elif [[ -n $DISPLAY ]]; then
-        xdotool="xdotool type --clearmodifiers --file -"
+        xdotool=("xdotool" "type" "--clearmodifiers" "--file" "-")
     else
         echo "Error: No Wayland or X11 display detected" >&2
         exit 1
     fi
     #output_method=("{ IFS= read -r pass; printf %s $pass; } | $xdotool")
-    output_method=("$xdotool")
+    output_method=("${xdotool[@]}")
     action_descr="typed"
     shift
 fi
@@ -58,7 +58,7 @@ if [[ ! ${password_files[*]} =~ "${password_file}" ]]; then
     exit 1
 fi
 
-action=$(printf "password\nlogin\ninfo" | "$dmenu" -l 3)
+action=$(printf "password\nlogin\nOTP\ninfo" | "$dmenu" -l 4)
 case $action in
     login)
         login=$(pass show "$password_file" | sed -n -e '/^login:/p' | awk '{print $2}')
@@ -66,16 +66,31 @@ case $action in
             notify-send -u critical "No login for \"$password_file\" was found"
             exit 1
         fi
-        echo "$login" | $output_method
+        printf "%s" "$login" | "${output_method[@]}"
         if [[ -n $action_descr ]]; then
             notify-send "Login for \"$password_file\" was $action_descr"
         fi
         ;;
     password)
-        pass show "$password_file" | head -n 1 | $output_method
-        #pass show -c "$password" 2>/dev/null
+        password=$(pass show "$password_file" | head -n 1)
+        if [[ -z $password ]]; then
+            notify-send -u critical "No password for \"$password_file\" was found"
+            exit 1
+        fi
+        printf "%s" "$password" | "${output_method[@]}"
         if [[ -n $action_descr ]]; then
             notify-send "Password for \"$password_file\" was $action_descr"
+        fi
+        ;;
+    OTP)
+        otp=$(pass otp "$password_file")
+        if [[ -z $otp ]]; then
+            notify-send -u critical "No OTP for \"$password_file\" was found"
+            exit 1
+        fi
+        printf "%s" "$otp" | "${output_method[@]}"
+        if [[ -n $action_descr ]]; then
+            notify-send "OTP for \"$password_file\" was $action_descr"
         fi
         ;;
     info)
@@ -93,7 +108,7 @@ case $action in
         if [[ $do_trim == "Yes" ]]; then
             data=$(echo "$data" | cut -f 2- -d ' ')
         fi
-        echo "$data" | $output_method
+        printf "%s" "$data" | "${output_method[@]}"
         if [[ -n $action_descr ]]; then
             notify-send "Data for $password_file was $action_descr"
         fi

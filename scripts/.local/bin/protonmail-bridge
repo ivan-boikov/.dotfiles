@@ -5,8 +5,7 @@
 
 name="protonmail-bridge daemon"
 description=""
-#command=/usr/bin/protonmail-bridge
-command=/home/protonmail/proton-bridge
+command=/usr/bin/proton-mail-bridge
 #command_args="${protonmail-bridge_args}"
 command_args="--no-window --noninteractive"
 command_user="protonmail:protonmail"
