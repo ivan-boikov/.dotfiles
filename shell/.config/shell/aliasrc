@@ -4,8 +4,8 @@
 [ -x "$(command -v nvim)" ] && alias vim='nvim' vimdiff='nvim -d'
 
 # sudo not required for some system commands
-for command in mount umount sv su ; do
-    alias $command="sudo $command"
+for command in su ; do
+    alias $command='sudo $command'
 done; unset command
 
 # allow calls of aliases by xargs
@@ -48,32 +48,36 @@ alias \
         z='zathura'
 
 # spawn detached terminal
-alias dst="$TERMINAL </dev/null &>/dev/null & disown ;"
+alias dst='$TERMINAL\" </dev/null &>/dev/null & disown ;'
 
 # run mpv with SVP, if SVP not active, works as usual mpv
-alias mpv60="if [ -n $(pidof SVPManager) ]; then $HOME/.local/bin/svpman & fi ; mpv --input-ipc-server=/tmp/mpvsocket --hwdec=auto-copy"
+alias mpv60='if [ -n $(pidof SVPManager) ]; then $HOME/.local/bin/svpman & fi ; mpv --input-ipc-server=/tmp/mpvsocket --hwdec=auto-copy'
 
 # pass files selected in nnn to a program
 # e.g. "nsel mpv60" to play multiple videos one after another
 nsel_internal() {
-    cat ${NNN_SEL:-${XDG_CONFIG_HOME:-$HOME/.config}/nnn/.selection} | \
+    cat "${NNN_SEL:-${XDG_CONFIG_HOME:-$HOME/.config}/nnn/.selection}" | \
     tr '\0' '\n' | awk 'NF { print "\""$0"\""}' | tr '\n' ' '
-    }
+}
 alias nsel='nsel_internal | xargs '
 
-alias detach="bg && disown"
+alias detach='bg && disown'
 
 # window swallowing, also autoplay gifs in sxiv
-alias sxiv="devour sxiv -a"
-alias mpv="devour mpv"
-alias zathura="devour zathura"
+alias sxiv='devour sxiv -a'
+alias mpv='devour mpv'
+alias zathura='devour zathura'
 
 # required for $HOME cleanup
-alias nvidia-settings="nvidia-settings --config="$XDG_CONFIG_HOME"/nvidia/settings"
-alias wget='wget --hsts-file="$XDG_CACHE_HOME/wget-hsts"'
-alias yarn='yarn --use-yarnrc "$XDG_CONFIG_HOME/yarn/config"'
+alias nvidia-settings='nvidia-settings --config=$XDG_CONFIG_HOME/nvidia/settings'
+alias wget='wget --hsts-file=$XDG_CACHE_HOME/wget-hsts'
+alias yarn='yarn --use-yarnrc $XDG_CONFIG_HOME/yarn/config'
 
-alias monerod="monerod --data-dir "$XDG_DATA_HOME"/bitmonero"
-alias monero-wallet-cli="monero-wallet-cli --wallet-file $XDG_DATA_HOME/bitmonero/monero-wallet"
+alias monerod='monerod --data-dir $XDG_DATA_HOME/bitmonero'
+alias monero-wallet-cli='monero-wallet-cli --wallet-file $XDG_DATA_HOME/bitmonero/monero-wallet'
 
-alias wttr="curl https://wttr.in/paris-france"
+alias wttr='curl https://wttr.in/paris-france'
+
+mkdir -p "$XDG_CONFIG_HOME/abook/"
+mkdir -p "$XDG_DATA_HOME/abook/"
+alias abook='abook --config $XDG_CONFIG_HOME/abook/abookrc --datafile $XDG_DATA_HOME/abook/addressbook'

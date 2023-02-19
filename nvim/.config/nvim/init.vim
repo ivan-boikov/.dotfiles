@@ -184,7 +184,15 @@ let g:slime_default_config = { "socket_name" : "default", "target_pane" : "{last
 let g:slime_cell_delimiter = "\n"
 
 
-nmap <C-l> :TmuxNavigateRight<CR>
+" disable automatic mappings
+let g:tmux_navigator_no_mappings = 1
+" remaping default things to free keys
+"nnoremap <C-j> <C-d>
+"nnoremap <C-K> <C-U>
+" I only use two vertical panels, for more - I have DWM
+nnoremap <C-j> :TmuxNavigateLeft<CR>
+nnoremap <C-k> :TmuxNavigateRight<CR>
+
 
 
 lua << EOF
