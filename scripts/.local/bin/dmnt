@@ -1,191 +1,102 @@
-#!/bin/sh
+#!/bin/bash
 
-#shopt -s expand_aliases
-dmenu="$(command -v cdmenu)"
+# Mounts Android Phones and USB drives (encrypted or not). This script will
+# replace the older `dmenumount` which had extra steps and couldn't handle
+# encrypted drives.
+# TODO: Remove already mounted Android phones from prompt.
+# TODO: Try decrypt for drives in crtypttab
+# TODO: Add some support for connecting iPhones (although they are annoying).
 
-getmount() { \
-    [ -z "$chosen" ] && exit 1
-    # shellcheck disable=SC2086
-    mp="$(find $1 2>/dev/null | "$dmenu" -l 16 -i -p "Type in mount point.")" || exit 1
-    [ "$mp" = "" ] && exit 1
-    if [ ! -d "$mp" ]; then
-        mkdiryn=$(printf "No\nYes" | "$dmenu" -i -p "$mp does not exist. Create it?") || exit 1
-        [ "$mkdiryn" = "Yes" ] && (mkdir -p "$mp" || sudo -A mkdir -p "$mp")
-    fi
+
+DMENU="$(command -v cdmenu)"
+set -e
+
+# Check for phones.
+phones="$(simple-mtpfs -l 2>/dev/null | sed "s/^/📱/")"
+# Check for drives.
+lsblkoutput="$(lsblk -rpo "uuid,name,type,size,label,mountpoint,fstype")"
+# Get all LUKS drives
+allluks="$(echo "$lsblkoutput" | grep crypto_LUKS)" || true
+# Get a list of the LUKS drive UUIDs already decrypted.
+decrypted="$(find /dev/disk/by-id/dm-uuid-CRYPT-LUKS2-* | sed "s|.*LUKS2-||;s|-.*||")" || true
+# Functioning for formatting drives correctly for dmenu:
+filter() { sed "s/ /:/g" | awk -F':' '$7==""{printf "%s%s (%s) %s\n",$1,$3,$5,$6}' ; }
+
+# Get only LUKS drives that are not decrypted.
+IFS='
+'
+unopenedluks="$(for drive in $allluks; do
+	uuid="${drive%% *}"
+	uuid="${uuid//-}"	# This is a bashism.
+	for open in $decrypted; do
+		[ "$uuid" = "$open" ] && break 1
+	done && continue 1
+	echo "🔒 $drive"
+done | filter)"
+
+# Get all normal, non-encrypted or decrypted partitions that are not mounted.
+normalparts="$(echo "$lsblkoutput"| grep -v crypto_LUKS | grep 'part\|rom\|crypt' | sed "s/^/💾 /" | filter )"
+
+# Add all to one variable. If no mountable drives found, exit.
+alldrives="$(echo "$phones
+$unopenedluks
+$normalparts" | sed "/^$/d;s/ *$//")"
+test -n "$alldrives"
+
+# Feed all found drives to dmenu and get user choice.
+chosen="$(echo "$alldrives" | $DMENU -l 16 -p "Mount which drive?" -i)"
+
+# Function for prompting user for a mountpoint.
+getmount(){
+	mp="$(find /mnt /media /mount /home -maxdepth 1 -type d 2>/dev/null | $DMENU -i -p "Mount this drive where?")"
+	test -n "$mp"
+	if [ ! -d "$mp" ]; then
+		mkdiryn=$(printf "No\\nYes" | $DMENU -i -p "$mp does not exist. Create it?")
+		[ "$mkdiryn" = "Yes" ] && (mkdir -p "$mp" || sudo -A mkdir -p "$mp")
+	fi
 }
 
-mountusb() { \
-    # try to mount based on fstab, hoping "user" option is there
-    mount "$1" 2>/dev/null && notify-send "$1 mounted" "" && exit 0
-    # if no "user" option - retry with sudo
-    sudo -A mount "$1" 2>/dev/null && notify-send "$1 mounted" "" && exit 0
-    # if failed - ask for a dir to mount to
-    # this creates argument for "find"
-    alreadymounted=$(lsblk -nrpo "name,type,mountpoint" | awk '$3!~/\/boot|\/home$|SWAP/&&length($3)>1{printf "-not ( -path *%s -prune ) ",$3}')
-
-    getmount "/mnt /media -maxdepth 1 -type d $alreadymounted"
-    partitiontype="$(lsblk -no "fstype" "$1")"
-    case "$partitiontype" in
-        "vfat") sudo -A mount -t vfat "$1" "$mp" -o rw,umask=0000;;
-        "exfat") sudo -A mount "$1" "$mp" -o uid="$(id -u)",gid="$(id -g)";;
-        *crypto_LUKS*)
-            name="$(LC_ALL=C tr -dc A-Za-z0-9 </dev/urandom | head -c 16)"
-            mkfifo fifo
-            dpass > fifo &
-            sudo -A cryptsetup open --type luks "$1" "$name" --key-file fifo
-            rm fifo
-            device="/dev/mapper/$name"
-            sudo -A mount "$device" "$mp"
-            ;;
-        *) sudo -A mount "$1" "$mp"; user="$(whoami)"; ug="$(groups | awk '{print $1}')"; sudo chown "$user":"$ug" "$mp";;
-    esac
-    notify-send "$1 mounted to $mp" ""
+attemptmount(){
+		# Attempt to mount without a mountpoint, to see if drive is in fstab.
+		sudo -A mount "$1" || return 1
+		notify-send "💾Drive Mounted." "$chosen mounted."
+		exit
 }
 
-mountandroid() { \
-    getmount "/mnt -maxdepth 1 -type d"
-    jmtpfs -device="$1" "$mp"
-    #echo "OK" | "$dmenu" -i -p "Tap Allow on your phone if it asks for permission and then press enter" || exit 1
-    #jmtpfs -device="$1" "$mp"
-    notify-send "Android mounted to $mp" ""
-}
+case "$chosen" in
+	💾*)
+		chosen="${chosen%% *}"
+		chosen="${chosen:1}"	# This is a bashism.
+		attemptmount "$chosen" || getmount
+		sudo -A mount "$chosen" "$mp" -o uid="$(id -u)",gid="$(id -g)"
+		notify-send "💾Drive Mounted." "$chosen mounted to $mp."
+		;;
 
+	🔒*)
+		chosen="${chosen%% *}"
+		chosen="${chosen:1}"	# This is a bashism.
+		# Number the drive.
+		while true; do
+			[ -f "/dev/mapper/usb$num" ] || break
+			num="$(printf "%02d" "$((num +1))")"
+		done
 
-unmountdev() { \
-    result="$(sudo umount "$1" 2>&1)"
-    if [ -z "$result" ]; then
-        notify-send "$1 unmounted" ""
-        return
-    else
-        processes=$(lsof "$1" | tail -n +2 | awk '{print $1 " " $2}' | uniq)
-        pids="$(echo "$processes" | awk '{print $2}')"
-        #notify-send -u critical "Unmount device" "$result\nPreparing list of processes blocking $1..."
-        notify-send "Unmount $1" "$result\nBlocking processes:\n$processes"
-        action=$(printf 'nothing\nterminate\nkill' | "$dmenu" -i -p "What to do to processes blocking $1" -l 3)
-        case $action in
-            terminate) echo "$pids" | while IFS="$(printf '\n')" read -r pid ; do kill "$pid"; done ;;
-            kill) echo "$pids" | while IFS="$(printf '\n')" read -r pid ; do kill -9 "$pid"; done ;;
-            nothing)
-                notify-send "Unmount of $1 aborted" ""
-                return ;;
-        esac
-        unmountdev "$1"
-    fi
-}
+		# Decrypt in a terminal window
+		${TERMINAL:-st} -n floatterm -g 60x1 -e sudo cryptsetup open "$chosen" "usb$num"
+		# Check if now decrypted.
+		test -b "/dev/mapper/usb$num"
 
-selectusb() { \
-    chosen=$(lsblk -lpo "vendor,model,name,label,size,mountpoint" | "$dmenu" -i -l 16 | xargs | cut -d' ' -f 1)
-    # if mounted
-    if grep -q "$chosen" "/etc/mtab" ; then
-        choice=$(printf 'No\nYes' | "$dmenu" -i -l 2 -p "Partition is mounted. Unmount?")
-        case $choice in
-            Yes) unmountdev "$chosen" ;;
-            No) exit ;;
-        esac
-    else
-        mountusb "$chosen"
-    fi
-}
+		attemptmount "/dev/mapper/usb$num" || getmount
+		sudo -A mount "/dev/mapper/usb$num" "$mp" -o uid="$(id -u)",gid="$(id -g)"
+		notify-send "🔓Decrypted drive Mounted." "$chosen decrypted and mounted to $mp."
+		;;
 
-
-mountsamba() { \
-
-    mounted=$(mount -t cifs)
-    if [ -z "$mounted" ]; then
-        actions="mount\nunmount"
-        action=$(printf '%s' "$actions" | "$dmenu" -i -p "Samba action:")
-
-        if [ "$action" = "unmount" ]; then
-            mount=$(printf '%s' "$mounted" | "$dmenu" -i -p "Share to unmount:")
-            printf 'Selected: %s\n' "$mount"
-            mount_dir=$(printf '%s' "$mount" | cut -d' ' -f 3)
-            printf '%s\n' "$mount_dir"
-            sudo -A umount "$mount_dir"
-            exit 0
-        fi
-        # proceed to mounting
-    fi
-
-    # get IP of this device
-    IP=$(ip addr | grep 'state UP' -A2 | tail -n1 | awk '{print $2}' | cut -f1  -d'/')
-    echo "IP: $IP"
-    # prepare subnet choices: choose IP or run a scan if a wildcard specified
-    subnets="$IP\n$(echo "$IP" | cut -d. -f1-3).1\n$(echo "$IP" | cut -d. -f1-3).*\n$(echo "$IP" | cut -d. -f1-2).*.*"
-    printf 'Subnets available:\n%s\n' "$subnets"
-    subnet=$(printf '%s' "$subnets" | "$dmenu" -i -l 16 -p "Input samba scan range")
-    printf 'Subnet chosen: %s' "$subnet"
-
-    # if there's a * in subnet
-    if [ "${subnet#*\*}" != "$subnet" ]; then
-        notify-send "Scanning network for samba shares..." ""
-        servers="$(nmap "$subnet" -p 445 --open -oG -)"
-        echo "$servers"
-
-        IPs=$(echo "$servers" | grep Scan | cut -d' ' -f2-)
-        printf 'Server IPs:\n%s\n' "$IPs"
-
-        IP=$(printf '%s' "$IPs" | "$dmenu" -i -l 16 -p "Choose samba server IP")
-        echo "Selected IP: $IP"
-    else
-        IP="$subnet"
-    fi
-
-    user=$(printf '%s\nanonymous' "$(whoami)" | "$dmenu" -p "Samba username:")
-    echo "$user"
-    if [ "$user" != "anonymous" ]; then
-        password=$(pass-askpass "$user's password ")
-        shares="""$(smbclient -L "$IP" --user "$user" --password "$password")"""
-    else
-        notify-send "Attempting anonymous login..." ""
-        shares="""$(smbclient -L "$IP" -N)"""
-    fi
-    printf 'Raw shares:\n%s\n' "$shares"
-
-    #shares=$(printf "$shares" | sed -e 's/^[[:space:]]*//')
-    #printf "Cleaned shares:\n$shares\n"
-
-    share=$(printf '%s' "$shares" | "$dmenu" -i -l 16 -p "Which samba share to mount?")
-    echo "$share"
-
-    # leave only the share name, assuming no whitespace in share name
-    chosen=$(printf '%s' "$share" | cut -d' ' -f 1)
-    echo "Chosen: $chosen"
-
-    share="//$IP/$chosen"
-
-    getmount "/mnt -maxdepth 1 -type d"
-
-    if ! sudo -A mount -t cifs -o user="$user",password="$password",iocharset=utf8,uid="$(id -u)",gid="$(id -g)",file_mode=0644,dir_mode=0755 "$share" "$mp"; then
-        notify-send "Samba mount failed" "$subnet to $mp as $user"
-        exit 1
-    fi
-    notify-send "Samba share succeeded" "$subnet mounted to $mp as $user"
-}
-
-selectandroid() { \
-    unmounted=$(jmtpfs -l | sed -e '1,2d')
-    mounted=$(grep "jmtpfs" "/etc/mtab")
-
-    list="Mounted:\n"
-    if [ -n "$mounted" ]; then
-        list="$list$mounted"
-    fi
-    list="$list\nUnmounted:\n"
-    if [ -n "$unmounted" ]; then
-        list="$list$unmounted"
-    fi
-
-    chosen=$(echo "$list" "$mounted" | "$dmenu" -i -l 16)
-    #echo "CHOSEN" $chosen
-    case $chosen in
-        *jmtpfs*) unmountdev "$(echo "$chosen" | cut -d' ' -f 2)" ;;
-        *) mountandroid "$(echo "$chosen" | awk '{print $1 $2}' | cut -d, -f1-2)" ;;
-    esac
-}
-
-choice="$(printf 'drive\nSamba\nAndroid' | "$dmenu" -i -p "(Un-)mount a")" || exit 1
-case $choice in
-    drive) selectusb ;;
-    Samba) mountsamba ;;
-    Android) selectandroid ;;
+	📱*)
+		notify-send "❗Note" "Remember to allow file access on your phone now."
+		getmount
+		chosen="${chosen%%:*}"
+		chosen="${chosen:1}"	# This is a bashism.
+		sudo -A simple-mtpfs -o allow_other --device "$chosen" "$mp"
+		notify-send "🤖 Android Mounted." "Android device mounted to $mp."
+		;;
 esac

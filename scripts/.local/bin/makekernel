@@ -9,10 +9,12 @@ if [ "$(hostname)" = "pc" ]; then
 	ROOT_DEVICE="/dev/nvme0n1p3"
 	MICROCODE="amd"
 	KERNEL_DIR="/boot/efi/gentoo"
+	BOOT_PARAMS="nvidia-drm.modeset=1" # preventing screen tearing on NVIDIA GPU
 elif [ "$(hostname)" = "laptop" ]; then
 	ROOT_DEVICE="/dev/sda3"
 	MICROCODE="intel"
 	KERNEL_DIR="/boot/efi/EFI/gentoo"
+	BOOT_PARAMS=""
 else
 	echo "Unknown device $(hostname), cannot choose kernel parameters"
 	exit 1
@@ -20,11 +22,11 @@ fi
 
 ROOT="/dev/mapper/root"
 CRYPT_ROOT="$(blkid -s UUID | grep $ROOT_DEVICE | cut -d' ' -f2 | sed 's/"//g')"
-BOOT_PARAMS="ro crypt_root=$CRYPT_ROOT root=$ROOT rootfsype=btrfs rootflags=subvol=@ root_trim=yes lsm=selinux"
+BOOT_PARAMS="ro crypt_root=$CRYPT_ROOT root=$ROOT rootfsype=btrfs rootflags=subvol=@ root_trim=yes lsm=selinux $BOOT_PARAMS"
 
 printf 'Boot parameters:\n%s\n' "$BOOT_PARAMS"
 printf '\"lsblk -f\" output:\n%s\n' "$(lsblk -f)"
-printf 'Kernel image will compiled with %s threads and be installed to %s' "$THREADS" "$KERNEL_DIR"
+printf 'Kernel image will compiled with %s threads and be installed to %s\n' "$THREADS" "$KERNEL_DIR"
 
 if [ "$(/usr/bin/id -u)" -ne 0 ]; then
 	echo "Cannot proceed, need root permissions"
@@ -52,7 +54,6 @@ genkernel --no-clean --no-mrproper --no-save-config \
 	--makeopts="-j$THREADS" \
 	--loglevel=3 \
 	all
-	#--virtio \
 
 echo "Signing kernel image"
 sbsign --key "$KEYDIR/db.key" --cert "$KEYDIR/db.crt" -o "$KERNEL_DIR/$KERNEL_NAME.efi" "/boot/$KERNEL_NAME"

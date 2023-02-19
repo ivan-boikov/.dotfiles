@@ -1,0 +1,45 @@
+#!/bin/sh
+
+# Unmount USB drives or Android phones. Replaces the older `dmenuumount`. Fewer
+# prompt and also de-decrypts LUKS drives that are unmounted.
+
+DMENU="$(command -v cdmenu)"
+set -e
+
+mounteddroids="$(grep simple-mtpfs /etc/mtab | awk '{print "📱" $2}')"
+lsblkoutput="$(lsblk -nrpo "name,type,size,mountpoint")"
+mounteddrives="$(echo "$lsblkoutput" | awk '($2=="part"||$2="crypt")&&$4!~/\/boot|\/home$|SWAP/&&length($4)>1{printf "💾%s (%s)\n",$4,$3}')"
+
+allunmountable="$(echo "$mounteddroids
+$mounteddrives" | sed "/^$/d;s/ *$//")"
+test -n "$allunmountable"
+
+chosen="$(echo "$allunmountable" | $DMENU -l 16 -i -p "Unmount which drive?")"
+chosen="${chosen%% *}"
+test -n "$chosen"
+
+# check for blocking processes
+bprocs=$(lsof "/${chosen#*/}" | tail -n +2 | awk '{print $1 " " $2}' | uniq)
+if [ -n "$bprocs" ]; then
+    bPIDs="$(echo "$bprocs" | awk '{print $2}')"
+    notify-send "Unmount $chosen" "Blocking processes:\n$bprocs"
+    action=$(printf 'nothing\nlazy\nterminate\nkill' | "$DMENU" -i -p "$chosen is busy: (abort), (lazy) unmount or (terminate)/(kill) blocking processes")
+    case $action in
+        nothing)
+            notify-send "Unmount of $chosen aborted" ""
+            exit 1;;
+        lazy)       sudo -A umount -l "/${chosen#*/}";;
+        terminate)  echo "$bPIDs" | while IFS="$(printf '\n')" read -r pid ; do kill "$pid"; done ;;
+        kill)       echo "$bPIDs" | while IFS="$(printf '\n')" read -r pid ; do kill -9 "$pid"; done ;;
+    esac
+fi
+
+sudo -A umount "/${chosen#*/}"
+notify-send "Device unmounted." "$chosen has been unmounted."
+
+# Close the chosen drive if decrypted.
+cryptid="$(echo "$lsblkoutput" | grep "/${chosen#*/}$")"
+cryptid="${cryptid%% *}"
+test -b /dev/mapper/"${cryptid##*/}"
+sudo -A cryptsetup close "$cryptid"
+notify-send "🔒Device dencryption closed." "Drive is now securely locked again."

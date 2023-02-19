@@ -9,7 +9,7 @@
 PDFSETTINGS="/printer"
 image_resolution="300"
 
-basename=$(echo "$1" | cut -f 1 -d '.')
+basename="$(echo "$1" | cut -f 1 -d '.')"
 
 # full list of parameters
 # https://ghostscript.com/docs/9.54.0/VectorDevices.htm
