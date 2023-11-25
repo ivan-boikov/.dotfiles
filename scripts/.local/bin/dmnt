@@ -90,8 +90,22 @@ case "$chosen" in
 		echo "$mp"
 
 		attemptmount "/dev/mapper/usb$num" || getmount
-		sudo -A mount -o uid="$(id -u)",gid="$(id -g)" "/dev/mapper/usb$num" "$mp"
+
+		if [ "$(lsblk -n -ofstype /dev/mapper/usb$num)" == "btrfs" ]; then
+			# BTRFS can't list subvolumes of unmounted partitions
+			sudo -A mount -o ro "/dev/mapper/usb$num" "$mp"
+			subvol="$(sudo btrfs subvolume list $mp | cut -d' ' -f9 | $DMENU -i -p 'Which subvolume to mount')"
+			# "mount -o remount,rw" does not change the subvolume, so remount ourselves
+			sudo umount "$mp"
+			# default zstd:3 is fast enough even for solid-state drives and compression is OK
+			# autodefrag is broken in 5.16 kernel
+			sudo -A mount -o compress-force=zstd,autodefrag,subvol="$subvol" "/dev/mapper/usb$num" "$mp"
+		else
+			sudo -A mount -o uid="$(id -u)",gid="$(id -g)" "/dev/mapper/usb$num" "$mp"
+		fi
+
 		notify-send "🔓Decrypted drive Mounted." "$chosen decrypted and mounted to $mp."
+
 		;;
 
 	📱*)

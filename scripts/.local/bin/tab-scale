@@ -49,7 +49,7 @@ xsetwacom --set "${stylus}" button 3 3
 
 
 # map tablet buttons
-pad=$(xsetwacom list | grep pad | cut -f 1 | xargs)
+pad=$(xsetwacom list | grep 'Pad pad' | cut -f 1 | xargs)
 
 xsetwacom --set "$pad" Button 1 "key +shift +alt p -alt -shift"
 xsetwacom --set "$pad" Button 2 "key +shift +alt a -alt -shift"

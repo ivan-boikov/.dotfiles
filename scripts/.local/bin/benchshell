@@ -1,0 +1,10 @@
+#!/bin/bash 
+
+shell=${1:-sh}
+steps=${2:-10000}
+
+echo "Starting '$shell' $steps times"
+
+# there's an external 'time' program and there's one in bash 
+# I won't pull a dep just for that, hence bash in shebang
+time for i in $(seq 1 $steps); do $shell -c true; done

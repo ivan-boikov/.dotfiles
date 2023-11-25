@@ -1,63 +1,46 @@
 #!/bin/sh
 
-# flush passwords
-if [ -n "$(which gnome-keyring-daemon)" ]; then
-    gnome-keyring-daemon -r -d >/dev/null
-fi
-if [ -n "$(which ssh-agent)" ]; then
-    ssh-agent -k >/dev/null
-fi
-if [ -n "$(which gpgconf)" ]; then
-    gpgconf --kill gpg-agent >/dev/null
-fi
+# assumption: the user is not an ADHD-riddled zoomer and does not use >1 mpv instance
+
+# flush secrets
+gnome-keyring-daemon -r -d
+ssh-agent -k
+gpgconf --kill gpg-agent
+
 
 # stop sounds
-if [ -n "$(which playerctl)" ]; then
-    playerctl -a pause >/dev/null
-fi
-if [ -n "$(which mpc)" ]; then
-    mpc pause >/dev/null
-fi
+playerctl_get_playing() {
+    for player in $(playerctl -l)
+    do
+        if [ "$(playerctl -p "$player" status)" = "Playing" ]; then
+            echo "$player"
+        fi
+    done
+}
+playerctl_playing="$(playerctl_get_playing)"
+for player in $playerctl_playing; do
+    playerctl -p "$player" pause >/dev/null && echo "playerctl: pause" "$player"
+done
+
+# playerctl for mpd requires mpd-mpris running = BLOAT
+mpc_on="$(mpc | grep '\[playing\]')"
+mpc pause >/dev/null && echo "mpc: pause"
+
+ismuted="$(pamixer --get-mute)"
+pamixer --mute && echo "Sound server: mute"
 
 
-# generate fancy lock screen
-
-#icon_file="$HOME/.local/share/icons/lock.png"
-#icon_scaled_file='/tmp/lock-icon.png'
-#scr_png='/tmp/screen.png'
-#scr_bmp='/tmp/screen.bmp'
-#scr_gl_bmp="/tmp/sclock_g.bmp"
-#
-#(( $# )) && { icon=$1; }
-
-#rm "$scr_png"
-#maim > "$scr_png"
-
-# pixelate
-#convert "$scr_png" -scale 10% -scale 1000% "$scr_png"
-
-# heavy distortion
-#convert "$scr_png" -resize 500x "$scr_png"
-#convert -rotate -90 $scr_png $scr_bmp
-#for a in {1,2,4,5,2}
-#do
-#    # Glitch it with sox FROM: https://maryknize.com/blog/glitch_art_with_sox_imagemagick_and_vim/
-#    sox -t ul -c 1 -r 48k $scr_bmp -t ul $scr_gl_bmp trim 0 90s : echo 0.2 0.3 $((a*3)) 0.7
-#    # Rotate it by 90 degrees
-#    convert -scale $((100/(a)))% -scale $((100*(a)))% -rotate 90 $scr_gl_bmp $scr_bmp
-#done
-#convert -gamma 0.1 -gravity center -font "Liberation-Mono" \
-#    -pointsize 200 -channel RGBA -fill '#bf616a' \
-#    $scr_bmp $scr_png
-
-# add lock icon
-# first, rescale to match half screen height
-#resolutiony=$(xrandr | fgrep '*' | cut -d'x' -f2 | awk '{print $1}')
-#locksizey=$(echo "$resolutiony / 2" | bc -l)
-#convert "$icon_file" -resize x"$locksizey" "$icon_scaled_file"
-# and add icon on top of screenshot
-#convert "$scr_png" "$icon_scaled_file" -gravity center -composite -matte "$scr_png"
-
-#i3lock --nofork -u -i "$scr_png"
-
+echo "Locking..."
 slock
+
+
+# continue if something was playing
+for player in $playerctl_playing; do
+    playerctl -p "$player" play >/dev/null && echo "playerctl: play" "$player"
+done
+if [ -n "$mpc_on" ]; then
+    mpc play >/dev/null && echo "mpc: play"
+fi
+if [ "$ismuted" = "false" ]; then
+    pamixer --unmute && echo "Sound server: unmute"
+fi

@@ -1,12 +1,7 @@
 #!/bin/sh
 
-# Module showing CPU load as a changing bars.
-# Just like in polybar.
-# Each bar represents amount of load on one core since
-# last run.
-
 # Cache in tmpfs to improve speed and reduce SSD load
-cache=/tmp/cpubarscache
+cache="$XDG_CACHE_HOME/cpubarscache"
 
 # id total idle
 stats=$(awk '/cpu[0-9]+/ {printf "%d %d %d\n", substr($1,4), ($2 + $3 + $4 + $5), $5 }' /proc/stat)

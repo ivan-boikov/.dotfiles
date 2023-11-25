@@ -1,0 +1,13 @@
+#!/bin/sh
+
+MBSYNC=$(pgrep mbsync)
+
+if [ -n "$MBSYNC" ]; then
+    echo "Already running one instance of mbsync or notmuch. Exiting..."
+    exit 0
+fi
+
+mbsync -c "$XDG_CONFIG_HOME/mbsync/config" -a
+
+printf "%s " "Press enter to continue"
+read
