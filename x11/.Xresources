@@ -35,6 +35,9 @@
 *.color7:       #abb2bf
 *.color15:      #ffffff
 
+*.alpha: 0.9
+*.font:	Liberation Mono:pixelsize=12:antialias=true:autohint=true;
+
 Xft.autohint: 0
 Xft.lcdfilter: lcddefault
 Xft.hinting: 1

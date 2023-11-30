@@ -1,2 +1,2 @@
 #!/bin/sh
-xautolock -time 1 -notify 5 -locker ilock -notifier 'notify-send "Screen will lock in 5s"' -secure -corners "+-+-" -cornerdelay 5 -detectsleep &
+xautolock -time 1 -notify 5 -locker ilock -notifier 'notify-send "Screen will lock in 5s"' -secure -corners "0-+0" -cornerdelay 5 -detectsleep &

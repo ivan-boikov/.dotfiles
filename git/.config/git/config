@@ -2,4 +2,5 @@
 	name = ivan-boikov
 	email = ik.boikov.public@protonmail.com
 [credential]
-	helper = /home/ivan/.local/bin/pass-git-helper
+	helper = cache
+	helper = !type pass-git-helper >/dev/null && pass-git-helper $@

@@ -14,4 +14,4 @@ else
 	. "$HOME/.xprofile"
 fi
 
-ssh-agent "$(which dwm)"
+exec ssh-agent "$(which dwm)"

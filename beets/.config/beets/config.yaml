@@ -5,28 +5,29 @@ import:
   move: yes
   copy: no
   write: yes
-  log: ~/.cache/beet/beets.log
+  log: ~/.cache/beets.log
   resume: ask
 
-plugins: fetchart lastgenre ftintitle convert lyrics replaygain albumtypes embedart
+plugins: fetchart lastgenre ftintitle convert lyrics replaygain albumtypes embedart mbsync missing edit ftintitle unimported VGMplug
 
 paths:
-  default: $albumartist/$album-$format/$disc-$track-$title
+  default: $albumartist/$album%aunique{}-$format/$disc-$track-$title
   singleton: singletons/$artist-$title
   comp: various-artists/$album%aunique{}-$format/$disc-$track-$title
-  albumtype:soundtrack: soundtracks/$album-$format/$disc-$track-$title
+  albumtype:soundtrack: soundtracks/$album%aunique{}-$format/$disc-$track-$title
 
 convert:
-  dest: ~/audio/music-phone
+  dest: /media/wdblue/audio/music-phone
   copy_album_art: yes
-  never_convert_lossy_files: yes
+    #  never_convert_lossy_files: yes
   embed: no
   max_bitrate: 1
-  format: flac
+  format: opus
+  quiet: true
   formats:
-    flac:
-      command: /home/ivan/audio/music-phone/convert-to-opus-if-not-blacklisted.sh $source $dest
-      extension: opus
+    opus:
+      command: /media/wdblue/audio/music-phone/convert-to-opus-if-not-blacklisted.sh "$source" "$dest"
+        #extension: opus
 
 replaygain:
   auto: no

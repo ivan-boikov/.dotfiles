@@ -74,14 +74,6 @@ endif
 
 
 
-lua << EOF
-  require("which-key").setup {
-    -- your configuration comes here
-    -- or leave it empty to use the default settings
-    -- refer to the configuration section below
-  }
-EOF
-
 map <silent> <C-b> :call BufferList()<CR>
 
 
@@ -93,14 +85,49 @@ let g:lightline = {
   \ }
 
 " Indenting
-set expandtab
-set shiftwidth=4
-set tabstop=4
-set smartindent
+set tabstop=4       " The width of a TAB is set to 4.
+                    " Still it is a \t. It is just that
+                    " Vim will interpret it to be having
+                    " a width of 4.
+set shiftwidth=4    " Indents will have a width of 4
+set softtabstop=4   " Sets the number of columns for a TAB
+set noexpandtab       " Expand TABs to spaces
+set shiftround  " Round indent to multiple of 'shiftwidth'
+set smartindent " Do smart indenting when starting a new line
+set autoindent  " Copy indent from current line, over to the new line
+
+" This is necessary for VimTeX to load properly. The "indent" is optional.
+" Note that most plugin managers will do this automatically.
+filetype plugin indent on
+" This enables Vim's and neovim's syntax-related features. Without this, some
+" VimTeX features will not work (see ":help vimtex-requirements" for more
+" info).
+syntax enable
+
+let g:sleuth_tex_defaults = 'tabstop=4'
+
+" search
+set ignorecase " obligatory before smartcase
+set smartcase
+
+set undofile
+set undodir=~/.local/state/nvim
 
 " line numbers
 set number
 set relativenumber
+
+" soft-wrap text (only visually) at the edge of the window:
+" optional - will help to visually verify that it's working
+set number
+set textwidth=0
+set wrapmargin=0
+set wrap
+" optional - breaks by word rather than character
+set linebreak
+set formatoptions-=t
+
+
 
 nmap <M-Tab> :bnext<CR>
 nmap <M-w> :bd<CR>
@@ -111,7 +138,7 @@ nmap <S-Tab> :bprev<CR>
 
 let g:latex_to_unicode_keymap = 1
 "let g:latex_to_unicode_tab=1
-let g:latex_to_unicode_file_types = ".*"
+let g:latex_to_unicode_file_types = ".jl"
 
 " runs a script that cleans out tex build files whenever I close out of a .tex file.
 autocmd VimLeave *.tex !texclear %
@@ -200,7 +227,7 @@ require'nvim-treesitter.configs'.setup {
     -- A list of parser names, or "all"
     ensure_installed = {{
         "c", "lua", "cpp", "bash", "python",
-        "git_rebase", "gitattributes", "gitcommit", --"gitignore",
+        "git_rebase", "gitattributes", "gitcommit", "gitignore", "git_config",
         "make", "regex", "vim",
         "html", "css", "javascript", "json", "yaml", "markdown"}},
 
@@ -228,19 +255,19 @@ require'nvim-treesitter.configs'.setup {
         disable = { "latex", "julia" },
         -- Or use a function for more flexibility, e.g. to disable slow treesitter highlight for large files
         disable = function(lang, buf)
-        local max_filesize = 100 * 1024 -- 100 KB
+        local max_filesize = 16 * 1024 -- 16 KB
         local ok, stats = pcall(vim.loop.fs_stat, vim.api.nvim_buf_get_name(buf))
-        if ok and stats and stats.size > max_filesize then
-            return true
-            end
+            if ok and stats and stats.size > max_filesize then
+                return true
+                end
             end,
 
-            -- Setting this to true will run `:h syntax` and tree-sitter at the same time.
-            -- Set this to `true` if you depend on 'syntax' being enabled (like for indentation).
-            -- Using this option may slow down your editor, and you may see some duplicate highlights.
-            -- Instead of true it can also be a list of languages
-            additional_vim_regex_highlighting = false,
-    },
+        -- Setting this to true will run `:h syntax` and tree-sitter at the same time.
+        -- Set this to `true` if you depend on 'syntax' being enabled (like for indentation).
+        -- Using this option may slow down your editor, and you may see some duplicate highlights.
+        -- Instead of true it can also be a list of languages
+        additional_vim_regex_highlighting = false
+        },
 }
 EOF
 
@@ -254,12 +281,32 @@ nmap <leader>ll :lua vim.lsp.util.show_line_diagnostics()<CR>
 nmap <leader>lk :lua vim.lsp.buf.signature_help()<CR>
 nmap <leader>lr :lua vim.lsp.buf.references()<CR>
 
-let g:latex_to_unicode_auto = 1
+"let g:latex_to_unicode_auto = 1
 " just in case to avoid interference with tab-completion
-let g:latex_to_unicode_tab = "off"
+"let g:latex_to_unicode_tab = "off"
 
 let g:vimtex_view_method = "zathura"
 let g:vimtex_compiler_method = 'latexmk'
+
+"let g:vimtex_compiler_latexmk = {
+"            \ 'hooks' : [],
+"            \ 'executable' : 'latexmk',
+"            \ 'callback' : 1,
+"            \ 'continuous' : 1,
+"            \ 'options' : [
+"            \ '-shell-escape',
+"            \ 'interaction=nonstopmode',
+"            \ '-file-line-error'
+"            \ ],
+"            \ }
+
+let g:vimtex_compiler_latexmk = {
+            \ 'options' : [
+            \ '-shell-escape',
+            \ '-synctex=1',
+            \ '-interaction=nonstopmode',
+            \ ],
+            \ }
 
 let g:vimwiki_ext2syntax = { '.Rmd': 'markdown', '.rmd': 'markdown', '.md': 'markdown', '.markdown': 'markdown', '.mdown': 'markdown' }
 " require("custom.plugins.mappings").vimwiki()
@@ -412,17 +459,9 @@ let g:julia_indent_align_import = 0
 let g:julia_indent_align_brackets = 0
 let g:julia_indent_align_funcargs = 0
 let g:julia_set_indentation = 0
+let g:latex_to_unicode_file_types = ".jl"
 
 hi link juliaComma Comment
 hi link juliaParDelim Comment
 hi link juliaSemicolon Comment
 hi link juliaFunctionCall Function
-
-
-lua << EOF
-require("trouble").setup {
-    -- your configuration comes here
-    -- or leave it empty to use the default settings
-    -- refer to the configuration section below
-}
-EOF

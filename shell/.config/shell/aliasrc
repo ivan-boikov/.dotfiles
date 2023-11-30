@@ -24,7 +24,7 @@ alias \
         yt='youtube-dl --add-metadata -i' \
         yta='yt -x -f bestaudio/best' \
         ffmpeg='ffmpeg -hide_banner' \
-    	nnn='nnn -de'
+    	nnn='nnn -deARU'
 
 # Colorize commands when possible.
 alias \
@@ -48,7 +48,7 @@ alias \
         z='zathura'
 
 # spawn detached terminal
-alias dst='$TERMINAL\" </dev/null &>/dev/null & disown ;'
+alias dst='"$TERMINAL" </dev/null &>/dev/null & disown ;'
 
 # run mpv with SVP, if SVP not active, works as usual mpv
 alias mpv60='if [ -n $(pidof SVPManager) ]; then $HOME/.local/bin/svpman & fi ; mpv --input-ipc-server=/tmp/mpvsocket --hwdec=auto-copy'
@@ -73,11 +73,11 @@ alias nvidia-settings='nvidia-settings --config=$XDG_CONFIG_HOME/nvidia/settings
 alias wget='wget --hsts-file=$XDG_CACHE_HOME/wget-hsts'
 alias yarn='yarn --use-yarnrc $XDG_CONFIG_HOME/yarn/config'
 
-alias monerod='monerod --data-dir $XDG_DATA_HOME/bitmonero'
-alias monero-wallet-cli='monero-wallet-cli --wallet-file $XDG_DATA_HOME/bitmonero/monero-wallet'
+#alias monerod='monerod --data-dir $XDG_DATA_HOME/bitmonero'
+#alias monero-wallet-cli='monero-wallet-cli --wallet-file $XDG_DATA_HOME/bitmonero/monero-wallet'
 
 alias wttr='curl https://wttr.in/paris-france'
 
-mkdir -p "$XDG_CONFIG_HOME/abook/"
-mkdir -p "$XDG_DATA_HOME/abook/"
+[ -d "$XDG_CONFIG_HOME/abook/" ] || mkdir -p "$XDG_CONFIG_HOME/abook/"
+[ -d "$XDG_DATA_HOME/abook/" ] || mkdir -p "$XDG_DATA_HOME/abook/"
 alias abook='abook --config $XDG_CONFIG_HOME/abook/abookrc --datafile $XDG_DATA_HOME/abook/addressbook'

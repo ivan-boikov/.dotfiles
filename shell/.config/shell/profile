@@ -25,7 +25,13 @@ export PATH="$PATH:$(du -L "$HOME/.local/bin" | cut -f2 | paste -sd ':')"
 export PAGER="less"
 export EDITOR="nvim"
 export TERMINAL="st"
+
 export BROWSER="firefox"
+if command -v firefox-bin &> /dev/null
+then
+    export BROWSER="firefox-bin"
+fi
+
 export READER="zathura"
 
 #export XDG_CACHE_HOME="$HOME/.cache"
@@ -69,6 +75,7 @@ export WGETRC="$XDG_CONFIG_HOME/wgetrc"
 export PASSWORD_STORE_DIR="${XDG_DATA_HOME:-$HOME/.local/share}/password-store"
 export SUDO_ASKPASS="$HOME/.local/bin/pass-askpass"
 export JULIA_DEPOT_PATH="$XDG_DATA_HOME/julia:$JULIA_DEPOT_PATH"
+export W3M_DIR="$XDG_STATE_HOME/w3m"
 # xinit
 #export XINITRC="$XDG_CONFIG_HOME/x11/xinitrc"
 export XSERVERRC="$XDG_CONFIG_HOME/x11/xserverrc"
@@ -83,6 +90,16 @@ export ERRFILE="$XDG_STATE_HOME/x11/xsession-errors"
 export XCOMPOSEFILE="$XDG_CONFIG_HOME/x11/xcompose"
 export XCOMPOSECACHE="$XDG_CACHE_HOME/x11/xcompose"
 
+# POSIX standard says: send read local mail to ~/mbox, an mbox database
+# gentoo uses maildir by default, it is also recommended over mbox
+# setting $MBOX to maildir/cur will treat it as a file, which does not help
+# so override standard to avoid a mess
+export MAIL="$XDG_DATA_HOME/mail/$USER@localhost/INBOX"
+# also override mailutils's mail as it will create it's own mail directory 
+alias mail='mutt -f $MAIL'
+# bash will also detect new mail in $MAIL every $MAILCHECK seconds (60 by default)
+export MAILCLIENT="mutts"
+
 export NPM_CONFIG_USERCONFIG=$XDG_CONFIG_HOME/npm/npmrc
 export MBSYNCRC="${XDG_CONFIG_HOME:-$HOME/.config}/mbsync/config"
 export NOTMUCH_CONFIG="${XDG_CONFIG_HOME:-$HOME/.config}/notmuch-config"
@@ -90,7 +107,7 @@ export TMUX_TMPDIR="$XDG_CACHE_DIR"
 export CARGO_HOME="${XDG_DATA_HOME:-$HOME/.local/share}/cargo"
 export GOPATH="${XDG_DATA_HOME:-$HOME/.local/share}/go"
 
-# I don't need history from less
+# who needs history from less? no one
 export LESSHISTFILE="-"
 # retain color (maybe useless, most commands remove color when outputting to pipe, which is reasonable)
 export LESS=-R

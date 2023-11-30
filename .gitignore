@@ -3,3 +3,5 @@
 *.log
 *.selection
 *.zcompdump
+gtk-2.0/.config/gtk-2.0/gtkfilechooser.ini
+gtk-3.0/.config/gtk-3.0/bookmarks
