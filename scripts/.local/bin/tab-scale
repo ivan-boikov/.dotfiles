@@ -42,8 +42,8 @@ xsetwacom --set "${stylus}" MapToOutput ${Wx}x${Wy}+$dx+$dy
 # map stylus buttons
 # stylus touch to mouse left click
 xsetwacom --set "${stylus}" button 1 1
-# stylus low button press to mouse left click
-xsetwacom --set "${stylus}" button 2 1
+# stylus low button press to mouse middle click
+xsetwacom --set "${stylus}" button 2 2
 # stylus high button press to mouse right click
 xsetwacom --set "${stylus}" button 3 3
 

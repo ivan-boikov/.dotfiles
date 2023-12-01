@@ -81,3 +81,18 @@ alias wttr='curl https://wttr.in/paris-france'
 [ -d "$XDG_CONFIG_HOME/abook/" ] || mkdir -p "$XDG_CONFIG_HOME/abook/"
 [ -d "$XDG_DATA_HOME/abook/" ] || mkdir -p "$XDG_DATA_HOME/abook/"
 alias abook='abook --config $XDG_CONFIG_HOME/abook/abookrc --datafile $XDG_DATA_HOME/abook/addressbook'
+
+alias beet='$XDG_DATA_HOME/venv/beets/bin/beet'
+
+# https://unix.stackexchange.com/questions/224227/how-do-you-make-an-alias-or-function-that-retains-tab-completion
+# First find out which complete-function is used for the systemctl command:
+#   complete | grep " systemctl$"
+# The output looks like this:
+#   complete -F _functionname systemctl
+# Then use:
+#   complete -F _functionname sctl
+# To register the function for the completion of your alias.
+
+# beet completion is lazy and will only load after <Tab>ing the actual command
+# load manually then
+# source /usr/share/bash-completion/completions/<whatever>
