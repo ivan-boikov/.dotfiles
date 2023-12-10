@@ -1,0 +1,3 @@
+#!/bin/sh
+
+sed 's/^/push a"/g; s/\x0/"<enter>\npush a"/g; s/$/"<enter>/g' "$XDG_CONFIG_HOME/nnn/.selection" > "$XDG_CACHE_HOME/.muttselection"

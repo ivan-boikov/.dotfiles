@@ -1,0 +1,57 @@
+# vim: filetype=muttrc
+
+# account is supposed to be sourced already
+
+set realname = "Ivan Boikov"
+set folder = "$XDG_DATA_HOME/mail/$my_email"
+set from = $my_email 
+
+set spoolfile = "+INBOX"
+# save drafts on the server
+set postponed = "+Drafts"
+# move deleted emails to trash instead of deleting completely
+set trash = "+Trash"
+# save sent on the server
+set record = "+Sent"
+
+# unbind everything.. the defaults suck balls and do crazy things
+source "$XDG_CONFIG_HOME/mutt/unbind-all"
+# and add sensible binds
+source "$XDG_CONFIG_HOME/mutt/binds"
+
+set wait_key = no
+
+source $XDG_CONFIG_HOME/mutt/themes/xresources
+#source $XDG_CONFIG_HOME/mutt/themes/vombatidae
+
+#set strict_threads = yes
+set sort = threads 
+set sort_thread_groups = reverse-date
+
+
+set header_cache = "$XDG_CACHE_HOME/mail-headers"
+set message_cachedir = "$XDG_CACHE_HOME/mail-messages"
+
+
+# don't show tags from email body
+ignore *
+unignore from date subject to cc
+unignore organization organisation x-mailer: x-newsreader: x-mailing-list: posted-to: reply-to:
+
+auto_view text/html
+alternative_order text/plain text/html
+macro attach B "<pipe-entry>iconv -c --to-code=UTF8 > $XDG_CACHE_HOME/mail.html<enter><shell-escape>$BROWSER --new-tab --kiosk $XDG_CACHE_HOME/mail.html<enter>"
+
+# only have "new" and "read" mails
+set mark_old=no
+
+# strftime
+#set date_format="!%a, %b %d, %Y at %I:%M:%S%p %Z"
+set date_format="!%d/%m/%y %a %H:%M"
+
+#set index_format="%4C %Z %{%b %d} %-15.15L (%?l?%4l&%4c?) %s"
+set index_format="%4C %Z  %s %*   %-30.30F %d"
+
+
+set query_command = "abook --mutt-query '%s'"
+

@@ -1,0 +1,4 @@
+#!/bin/sh
+
+loc="${1:-paris-france}"
+curl "https://wttr.in/$loc"

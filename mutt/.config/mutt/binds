@@ -1,0 +1,189 @@
+# vim: syntax=muttrc
+
+# Jump to the beginning/end
+bind  generic,index 0 first-entry
+bind  generic,index $ last-entry
+
+# Set 'q' to let us exit from anywhere
+bind  generic,index,pager,index Q exit
+macro generic,index,pager q "QQQ"
+
+# Default Left/Right to go backwards/forward
+bind generic,index <Return> select-entry
+bind generic,index <Right>  select-entry
+bind generic,index l  select-entry
+
+# Make up/down do the logical thing
+bind generic,index <Up>   previous-entry
+bind generic,index <Down> next-entry
+bind generic,index k previous-entry
+bind generic,index j next-entry
+bind generic,index,pager <PageUp> previous-page
+bind generic,index,pager <PageDown> next-page
+
+
+# Other odds and ends
+bind generic,index,pager / search
+bind generic,index,pager : enter-command
+
+### Browser bindings ###
+## Browser is used when viewing the list of mailboxes
+bind browser <Space>  check-new
+bind browser N        select-new
+
+### Index bindings ###
+## Index is used when viewing the list of emails in a mailbox
+
+# Changing folders
+bind  index c change-folder
+macro index <Left> "c?\t" "go to list of mailboxes"
+macro index h "<change-folder>?" "go to list of mailboxes"
+
+# Setting/clearing flags
+bind  index W clear-flag
+bind  index w set-flag
+macro index ! wN "Mark email as unread"
+bind  index P previous-new-then-unread
+bind  index N next-new-then-unread
+#macro index R WN<down>n   "Mark as read, then go to next"
+#bind  index t read-thread
+macro index T tn
+
+# Reply/forward/etc.
+bind index m mail
+bind index r reply
+bind index R group-reply # Control-r
+#bind index R list-reply
+bind index b bounce-message
+bind index f forward-message
+
+# Delete / junk
+bind  index d delete-message
+bind  index D delete-thread
+
+#macro index j s=Trash\n   "Move to trash"
+
+bind index tc collapse-thread
+
+bind index,pager H display-toggle-weed
+
+macro index <Space> "<tag-entry>"
+
+bind browser h exit
+
+bind index <F5> sync-mailbox
+macro index o "<sync-mailbox><shell-escape>mbsync -c $XDG_CONFIG_HOME/mbsync/config $my_email:INBOX<enter>" "Sync inbox"
+macro index O "<sync-mailbox><shell-escape>mbsync -c $XDG_CONFIG_HOME/mbsync/config -a<enter>"              "Sync all"
+
+
+
+# Odds and ends
+bind  index <Return> display-message # TODO: This might not be needed
+bind  index <Right> display-message
+macro index <Left> "c?\t"
+bind  index l display-message
+bind  index @ display-address
+#bind  index x toggle-read
+#bind  index a create-alias
+bind  index / limit
+#bind  index o sort-mailbox
+bind  index p print-message
+bind  index s save-message
+bind  index | pipe-message
+bind  index u undelete-message
+#bind  index n next-unread
+
+bind pager n search-next
+bind pager N search-opposite
+
+
+### Pager bindings ###
+## Pager is used on the 'help' screen, as well as when reading emails
+bind pager <Up>   previous-line
+bind pager <Down> next-line
+bind pager k previous-line
+bind pager j next-line
+
+# Reply/forward/etc.
+bind pager m mail
+bind pager \Cr reply
+bind pager <Esc>r group-reply # Control-r
+bind pager R list-reply
+bind pager b bounce-message
+bind pager f forward-message
+
+# Delete / junk
+#bind  pager d delete-message
+#macro pager j s=INBOX.junk\n   "Move to junk"
+
+# Odds and ends
+bind pager @       display-address
+bind pager a       create-alias
+#bind pager o       sort-mailbox
+bind pager p       print-message
+bind pager s       save-message
+bind pager |       pipe-message
+bind pager <Right> view-attachments
+bind pager <Left>  exit
+bind pager l  view-attachments
+#bind pager n       next-entry
+#bind pager N       next-unread
+#bind pager h       display-toggle-weed
+
+### Attach is on the attachments list
+bind attach <Left> exit
+bind attach <Right> view-text
+
+macro index,pager Si "<save-message>=INBOX<enter>" "save message to Inbox"
+macro index,pager Sa "<save-message>=Archive<enter>" "save message to Archive"
+macro index,pager St "<save-message>=Trash<enter>" "save message to Trash"
+macro index,pager Ss "<save-message>=$my_spam<enter>" "save message to Spam"
+
+# attach nnn selection
+macro compose A "<shell-escape>$XDG_CONFIG_HOME/mutt/nnn-attach<enter><enter-command>source $XDG_CACHE_HOME/.muttselection<enter>" "Attach nnn selection"
+# moving attachments
+bind compose Mu move-up
+bind compose Md move-down
+bind compose l view-attach
+
+bind generic,compose,pager,attach h exit
+
+
+#set my_abook = "abook"
+#macro index,pager a "<enter-command>set my_pipe_decode=\$pipe_decode pipe_decode<return><pipe-message>abook --add-email<return><enter-command>set pipe_decode=\$my_pipe_decode; unset my_pipe_decode<return>" "add the sender to abook"
+
+#macro index a ":set confirmappend=no delete=yes\n<save-message>=Archive\n<sync-mailbox>:set confirmappend=yes delete=ask-yes\n"
+
+
+# go to mailbox
+macro index,pager gi "<change-folder>=INBOX<enter>"      "go to Inbox"
+macro index,pager ga "<change-folder>=Archive<enter>"    "go to Archive"
+macro index,pager gd "<change-folder>=Drafts<enter>"     "go to Drafts"
+macro index,pager gs "<change-folder>=Sent<enter>"       "go to Sent"
+macro index,pager gt "<change-folder>=Trash<enter>"      "go to Trash"
+macro index,pager gS "<change-folder>=$my_spam<enter>"   "go to Spam"
+macro index,pager gf "<change-folder>?"                  "go to mailbox..."
+
+
+macro index,pager A "<enter-command>set my_pipe_decode=\$pipe_decode pipe_decode<return><pipe-message>abook --add-email<return><enter-command>set pipe_decode=\$my_pipe_decode; unset my_pipe_decode<return>" "add the sender address to abook"
+
+
+bind editor <Tab> complete-query
+
+bind editor <Left> backward-char
+bind editor <Right> forward-char 
+bind editor <C-Left> backward-word
+bind editor <C-Right> forward-word
+
+bind editor <BackSpace> backspace 
+bind editor <Delete> delete-char 
+
+bind editor <Home> bol
+bind editor <End> eol
+
+# disable buffy-cycle
+bind editor <space> noop
+bind editor ^@ buffy-cycle # ctrl-space
+
+
+
