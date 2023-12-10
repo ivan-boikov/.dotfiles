@@ -127,6 +127,9 @@ set wrap
 set linebreak
 set formatoptions-=t
 
+" show tabs
+set list
+set listchars=tab:>-
 
 
 nmap <M-Tab> :bnext<CR>
@@ -136,9 +139,7 @@ nmap <S-Tab> :bprev<CR>
 
 
 
-let g:latex_to_unicode_keymap = 1
-"let g:latex_to_unicode_tab=1
-let g:latex_to_unicode_file_types = ".jl"
+
 
 " runs a script that cleans out tex build files whenever I close out of a .tex file.
 autocmd VimLeave *.tex !texclear %
@@ -280,10 +281,6 @@ nmap <leader><leader> :lua vim.lsp.buf.hover()<CR>
 nmap <leader>ll :lua vim.lsp.util.show_line_diagnostics()<CR>
 nmap <leader>lk :lua vim.lsp.buf.signature_help()<CR>
 nmap <leader>lr :lua vim.lsp.buf.references()<CR>
-
-"let g:latex_to_unicode_auto = 1
-" just in case to avoid interference with tab-completion
-"let g:latex_to_unicode_tab = "off"
 
 let g:vimtex_view_method = "zathura"
 let g:vimtex_compiler_method = 'latexmk'
@@ -458,7 +455,11 @@ let g:julia_indent_align_import = 0
 let g:julia_indent_align_brackets = 0
 let g:julia_indent_align_funcargs = 0
 let g:julia_set_indentation = 0
-let g:latex_to_unicode_file_types = ".jl"
+
+let g:latex_to_unicode_tab = "insert"
+let g:latex_to_unicode_keymap = 0
+let g:latex_to_unicode_auto = 0
+"let g:latex_to_unicode_file_types = ".jl"
 
 hi link juliaComma Comment
 hi link juliaParDelim Comment
