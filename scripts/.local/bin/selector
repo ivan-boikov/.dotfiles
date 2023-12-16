@@ -1,0 +1,20 @@
+#!/bin/bash
+
+if [ -z "$DISPLAY" ]; then
+   # if not running X11 -- bash prompt
+   readarray -t items
+   # display prompt text in stderr to not mix with selection output
+   >&2 echo "$1"
+   select item in "${items[@]}"; do
+      echo ${item};
+      break
+   done < /dev/tty
+else
+   # X11 prompt with (possibly colored) dmenu
+   dmenu="$(command -v cdmenu)"
+   if [ -z "$dmenu" ]; then
+      dmenu="dmenu"
+   fi
+
+   cat | $dmenu -p "$1"
+fi
