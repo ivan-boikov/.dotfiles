@@ -95,7 +95,7 @@ export XCOMPOSECACHE="$XDG_CACHE_HOME/x11/xcompose"
 # setting $MBOX to maildir/cur will treat it as a file, which does not help
 # so override standard to avoid a mess
 export MAIL="$XDG_DATA_HOME/mail/$USER@localhost/INBOX"
-# also override mailutils's mail as it will create it's own mail directory 
+# also override mailutils's mail as it will create it's own mail directory
 alias mail='mutt -f $MAIL'
 # bash will also detect new mail in $MAIL every $MAILCHECK seconds (60 by default)
 export MAILCLIENT="mutts"
@@ -172,6 +172,9 @@ if [[ -n "$SSH_CONNECTION" ]] ;then
 fi
 
 source "${XDG_CONFIG_HOME:-$HOME/.config}/shell/pass-completion"
+
+# system-wide pipewire
+export PULSE_SERVER=tcp:127.0.0.1:4713
 
 # start graphical server on user's current tty if not already running.
 [ "$(tty)" = "/dev/tty1" ] && ! pidof -s Xorg >/dev/null 2>&1 && exec startx "$XINITRC"

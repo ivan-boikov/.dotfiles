@@ -96,3 +96,9 @@ alias beet='$XDG_DATA_HOME/venv/beets/bin/beet'
 # beet completion is lazy and will only load after <Tab>ing the actual command
 # load manually then
 # source /usr/share/bash-completion/completions/<whatever>
+
+
+
+# due to how terminal works, this will echo and then type the command
+# 'tput el1; echo' will erase the echo, leaving previous line blank
+alias fzh='xdotool type "$(grep -v '^#' $XDG_STATE_HOME/bash_history | uniq -u | fzf --tac)"; tput el1; echo'
