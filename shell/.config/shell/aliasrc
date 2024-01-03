@@ -63,10 +63,8 @@ alias nsel='nsel_internal | xargs '
 
 alias detach='bg && disown'
 
-# window swallowing, also autoplay gifs in sxiv
-alias sxiv='devour sxiv -a'
-alias mpv='devour mpv'
-alias zathura='devour zathura'
+# autoplay gifs
+alias sxiv='sxiv -a'
 
 # required for $HOME cleanup
 alias nvidia-settings='nvidia-settings --config=$XDG_CONFIG_HOME/nvidia/settings'
@@ -75,8 +73,6 @@ alias yarn='yarn --use-yarnrc $XDG_CONFIG_HOME/yarn/config'
 
 #alias monerod='monerod --data-dir $XDG_DATA_HOME/bitmonero'
 #alias monero-wallet-cli='monero-wallet-cli --wallet-file $XDG_DATA_HOME/bitmonero/monero-wallet'
-
-#alias wttr='curl https://wttr.in/paris-france'
 
 [ -d "$XDG_CONFIG_HOME/abook/" ] || mkdir -p "$XDG_CONFIG_HOME/abook/"
 [ -d "$XDG_DATA_HOME/abook/" ] || mkdir -p "$XDG_DATA_HOME/abook/"
@@ -98,7 +94,6 @@ alias beet='$XDG_DATA_HOME/venv/beets/bin/beet'
 # source /usr/share/bash-completion/completions/<whatever>
 
 
-
 # due to how terminal works, this will echo and then type the command
 # 'tput el1; echo' will erase the echo, leaving previous line blank
-alias fzh='xdotool type "$(grep -v '^#' $XDG_STATE_HOME/bash_history | uniq -u | fzf --tac)"; tput el1; echo'
+alias fzh='xdotool type --delay 0 "$(grep -v '^#' $XDG_STATE_HOME/bash_history | uniq -u | fzf --tac)"; tput el1; echo'
