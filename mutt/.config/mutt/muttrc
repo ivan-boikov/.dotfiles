@@ -4,7 +4,7 @@
 
 set realname = "Ivan Boikov"
 set folder = "$XDG_DATA_HOME/mail/$my_email"
-set from = $my_email 
+set from = $my_email
 
 set spoolfile = "+INBOX"
 # save drafts on the server
@@ -25,7 +25,7 @@ source $XDG_CONFIG_HOME/mutt/themes/xresources
 #source $XDG_CONFIG_HOME/mutt/themes/vombatidae
 
 #set strict_threads = yes
-set sort = threads 
+set sort = threads
 set sort_thread_groups = reverse-date
 
 
@@ -53,5 +53,5 @@ set date_format="!%d/%m/%y %a %H:%M"
 set index_format="%4C %Z  %s %*   %-30.30F %d"
 
 
-set query_command = "abook --mutt-query '%s'"
-
+#set query_command = "abook --mutt-query '%s'"
+set query_command="khard email --parsable '%s'"

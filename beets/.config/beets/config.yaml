@@ -8,7 +8,7 @@ import:
   log: ~/.cache/beets.log
   resume: ask
 
-plugins: fetchart lastgenre ftintitle convert albumtypes embedart mbsync missing edit unimported VGMplug playlist scrub lyrics zero replaygain
+plugins: fetchart lastgenre ftintitle convert albumtypes embedart mbsync missing edit unimported VGMplug playlist scrub lyrics zero replaygain info
 
 # albumtypes
 paths:
@@ -19,18 +19,15 @@ paths:
 
 convert:
   dest: ~/audio/music-phone
-    #copy_album_art: yes
-    #  never_convert_lossy_files: yes
-
-    #album_art_maxwidth: 256
+  copy_album_art: yes
+  # album_art_maxwidth: 512
   embed: no
   max_bitrate: 1
   format: opus
-  quiet: true
+  # quiet: true
   formats:
     opus:
-      command: /media/wdblue/audio/music-phone/convert-to-opus-if-not-blacklisted.sh "$source" "$dest"
-        #extension: opus
+      command: ffmpeg -i "$source" "$dest"
 
 embedart:
   auto: no
@@ -42,7 +39,7 @@ fetchart:
 playlist:
   auto: yes
   relative_to: ~/audio/music
-  playlist_dir: ~/sync/playlists
+  playlist_dir: ~/audio/playlists
 
 ftintitle:
   drop: yes

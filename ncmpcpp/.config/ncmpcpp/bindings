@@ -62,6 +62,8 @@
 #
 #def_key "space"
 #  add_item_to_playlist
+def_key "space"
+   select_item
 #
 #def_key "space"
 #  toggle_lyrics_update_on_song_change
@@ -439,9 +441,9 @@ def_key "N"
 
 # not used but bound
 def_key "J"
-    move_sort_order_down
+    move_selected_items_down
 def_key "K"
-    move_sort_order_up
+    move_selected_items_up
 def_key "h"
   jump_to_parent_directory
 def_key "l"

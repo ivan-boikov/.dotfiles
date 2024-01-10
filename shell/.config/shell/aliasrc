@@ -76,7 +76,6 @@ alias yarn='yarn --use-yarnrc $XDG_CONFIG_HOME/yarn/config'
 
 [ -d "$XDG_CONFIG_HOME/abook/" ] || mkdir -p "$XDG_CONFIG_HOME/abook/"
 [ -d "$XDG_DATA_HOME/abook/" ] || mkdir -p "$XDG_DATA_HOME/abook/"
-alias abook='abook --config $XDG_CONFIG_HOME/abook/abookrc --datafile $XDG_DATA_HOME/abook/addressbook'
 
 alias beet='$XDG_DATA_HOME/venv/beets/bin/beet'
 

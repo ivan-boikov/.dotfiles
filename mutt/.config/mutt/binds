@@ -165,18 +165,19 @@ macro index,pager gS "<change-folder>=$my_spam<enter>"   "go to Spam"
 macro index,pager gf "<change-folder>?"                  "go to mailbox..."
 
 
-macro index,pager A "<enter-command>set my_pipe_decode=\$pipe_decode pipe_decode<return><pipe-message>abook --add-email<return><enter-command>set pipe_decode=\$my_pipe_decode; unset my_pipe_decode<return>" "add the sender address to abook"
+# macro index,pager A "<enter-command>set my_pipe_decode=\$pipe_decode pipe_decode<return><pipe-message>abook --config "$XDG_CONFIG_HOME"/abook/abookrc --datafile "$XDG_DATA_HOME"/abook/addressbook --add-email<return><enter-command>set pipe_decode=\$my_pipe_decode; unset my_pipe_decode<return>" "add the sender address to abook"
+macro index,pager A "<pipe-message>khard add-email<return>" "add the sender email address to khard"
 
 
 bind editor <Tab> complete-query
 
 bind editor <Left> backward-char
-bind editor <Right> forward-char 
+bind editor <Right> forward-char
 bind editor <C-Left> backward-word
 bind editor <C-Right> forward-word
 
-bind editor <BackSpace> backspace 
-bind editor <Delete> delete-char 
+bind editor <BackSpace> backspace
+bind editor <Delete> delete-char
 
 bind editor <Home> bol
 bind editor <End> eol
@@ -184,6 +185,3 @@ bind editor <End> eol
 # disable buffy-cycle
 bind editor <space> noop
 bind editor ^@ buffy-cycle # ctrl-space
-
-
-
