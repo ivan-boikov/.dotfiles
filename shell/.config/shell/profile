@@ -174,7 +174,7 @@ fi
 source "${XDG_CONFIG_HOME:-$HOME/.config}/shell/pass-completion"
 
 # system-wide pipewire
-export PULSE_SERVER=tcp:127.0.0.1:4713
+# export PULSE_SERVER=tcp:127.0.0.1:4713
 
 # start graphical server on user's current tty if not already running.
 [ "$(tty)" = "/dev/tty1" ] && ! pidof -s Xorg >/dev/null 2>&1 && exec startx "$XINITRC"
