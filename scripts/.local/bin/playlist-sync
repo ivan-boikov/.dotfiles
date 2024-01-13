@@ -1,0 +1,24 @@
+#!/bin/bash
+
+DIR="$HOME/audio/playlists"
+
+
+cd "$DIR" || exit
+for playlist_path in "$DIR"/*.m3u; do
+	playlist="$(basename "$playlist_path")"
+	# -nt is a bashism
+	if [ "$DIR/$playlist" -nt "$DIR/phone/$playlist" ]; then
+		echo "$playlist: desktop > phone"
+		sed -e 's/^/Music\/library\//g' \
+			-e 's/flac$/opus/g' -e 's/mp3$/opus/g'  -e 's/wav$/opus/g' \
+			"$DIR/$playlist" > "$DIR/phone/$playlist"
+	else
+		echo "$playlist: phone > desktop"
+		sed -e 's/^Music\/library\///g' \
+			-e '/-FLAC\//s/opus$/flac/g' -e '/-MP3\//s/opus$/mp3/g' -e '/-WAVE\//s/opus$/wav/g'\
+			-e '/^#/d' \
+			"$DIR/phone/$playlist" > "$DIR/$playlist"
+		git add "$DIR/$playlist" > /dev/null 2>&1
+		git commit -m "Updated $playlist" > /dev/null 2>&1
+	fi
+done
