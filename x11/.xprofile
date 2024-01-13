@@ -3,25 +3,25 @@
 # This file runs when a DM logs you into a graphical session.
 # If you use startx/xinit this file will also be sourced.
 
-xrdb $HOME/.Xresources
+xrdb "$HOME/.Xresources"
 xrdbpid=$!
 
 # Ensure that xrdb has finished running
 [ -n "$xrdbpid" ] && wait "$xrdbpid"
 
 # HiDPI scaling
-if [ $(xdpyinfo | awk '/dimensions/ {print $2}') == '3840x2160' ]; then
+if [ "$(xdpyinfo | awk '/dimensions/ {print $2}')" == '3840x2160' ]; then
 	xrdb -merge <<< "Xft.dpi: 192"
-	xrdb -merge <<< "*.font: monospace:size=12"
+	xrdb -merge <<< "*.font: monospace:pixelsize=12"
 fi
 
 # generate configs with colors from .Xresources
-mkdir -pv $HOME/.config/zathura && $HOME/.local/bin/genzathurarc > $HOME/.config/zathura/zathurarc
-mkdir -pv $HOME/.config/dunst && $HOME/.local/bin/gendunstrc > $HOME/.config/dunst/dunstrc
+mkdir -pv "$HOME/.config/zathura" && "$HOME/.local/bin/genzathurarc" > "$HOME/.config/zathura/zathurarc"
+mkdir -pv "$HOME/.config/dunst" && "$HOME/.local/bin/gendunstrc" > "$HOME/.config/dunst/dunstrc"
 
-$HOME/.local/bin/setbg
+"$HOME/.local/bin/setbg"
 
-$HOME/.local/bin/remaps
+"$HOME/.local/bin/remaps"
 
 autostart=(
 	"xcompmgr"
@@ -34,10 +34,10 @@ autostart=(
 )
 
 for program in "${autostart[@]}" ; do
-	pidof -s "${program%% *}" || setsid -f $program
-done >$XDG_CACHE_HOME/xprofile.errors 2>&1
+	pidof -s "${program%% *}" || setsid -f "$program"
+done >"$XDG_CACHE_HOME/xprofile.errors" 2>&1
 
-$HOME/.local/bin/startxautolock
+"$HOME/.local/bin/startxautolock"
 
 gentoo-pipewire-launcher restart &
 

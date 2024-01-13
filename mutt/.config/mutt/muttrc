@@ -55,3 +55,5 @@ set index_format="%4C %Z  %s %*   %-30.30F %d"
 
 #set query_command = "abook --mutt-query '%s'"
 set query_command="khard email --parsable '%s'"
+# give more space to emails and names (French names can be rather long!)
+set query_format="%4c %t %-55.55a %-35.35n %?e?(%e)?"

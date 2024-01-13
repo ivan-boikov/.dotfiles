@@ -1,8 +1,14 @@
 #!/bin/sh
 
-# This loop will update the mpd statusbar module whenever a command changes the
-# music player's status. mpd must be running on X's start for this to work.
+# when a command changes MPD state, print it to file for slstatus to pick up
+
+[ $(pgrep -cu "$(whoami)" "$(basename "$0")") -gt 1 ] && exit
 
 while : ; do
-	mpc idle >/dev/null && kill -45 "$(pidof "${STATUSBAR:-dwmblocks}")" || break
+	if mpc idle > /dev/null; then
+		#kill -45 "$(pidof "${STATUSBAR:-dwmblocks}")"
+		mpc status > "/tmp/mpd.playing"
+	else
+		break
+	fi
 done

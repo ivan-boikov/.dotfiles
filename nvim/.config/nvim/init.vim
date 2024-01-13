@@ -64,6 +64,8 @@ call minpac#add('ivan-boikov/friendly-snippets')
 call minpac#add('lervag/vimtex')
 call minpac#add('vimwiki/vimwiki')
 
+call minpac#add('voldikss/vim-translator')
+
 "call minpac#add('')
 
 if empty(glob("~/.config/nvim/pack/minpac/start/friendly-snippets"))
@@ -273,9 +275,9 @@ require'nvim-treesitter.configs'.setup {
 EOF
 
 
-lua << EOF
-    require'lspconfig'.julials.setup{}
-EOF
+" lua << EOF
+"     require'lspconfig'.julials.setup{}
+" EOF
 nmap <leader>ld :lua vim.lsp.buf.declaration()<CR>
 nmap <leader><leader> :lua vim.lsp.buf.hover()<CR>
 nmap <leader>ll :lua vim.lsp.util.show_line_diagnostics()<CR>
@@ -353,7 +355,7 @@ lua <<EOF
             ['<C-Space>'] = cmp.mapping.complete(),
             ['<C-e>'] = cmp.mapping.abort(),
             -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
-            ['<CR>'] = cmp.mapping.confirm({ select = true }),
+            ['<CR>'] = cmp.mapping.confirm({ select = false }),
             ["<Tab>"] = cmp.mapping(function(fallback)
                 if cmp.visible() then
                     cmp.select_next_item()
@@ -424,9 +426,9 @@ lua <<EOF
     require('lspconfig')['cmake'].setup {
         capabilities = capabilities
     }
-    require('lspconfig')['julials'].setup {
-        capabilities = capabilities
-    }
+    -- require('lspconfig')['julials'].setup {
+    --     capabilities = capabilities
+    -- }
 
     require'cmp'.setup {
         sources = {
@@ -465,3 +467,31 @@ hi link juliaComma Comment
 hi link juliaParDelim Comment
 hi link juliaSemicolon Comment
 hi link juliaFunctionCall Function
+
+
+
+
+" learning French with vim-translator!
+
+function! LearnFrenchMode()
+    " Echo translation in the cmdline
+    nmap <silent> <Leader>t :Translate<CR>
+    vmap <silent> <Leader>t :TranslateV<CR>
+    " Display translation in a window
+    nmap <silent> <Leader>w :TranslateW<CR>
+    vmap <silent> <Leader>w :TranslateWV<CR>
+    " Translate the text in clipboard
+    nmap <silent> <Leader>x :TranslateX<CR>
+    " Replace the text with translation
+    "nmap <silent> <Leader>e :TranslateR<CR> \| :let g:translator_target_lang='fr'<CR>
+    "nmap <silent> <Leader>f :TranslateR<CR> \| :let g:translator_target_lang='en'<CR>
+
+    nmap <silent> <Leader>e <S-y> \| :pu<CR> \| :let g:translator_target_lang='en'<CR> \| <S-v> \| :TranslateR<CR>:sleep 1500m<CR>
+    "\| <S-i> \| <Tab> \| <Esc>
+    nmap <silent> <Leader>r <S-y> \| :pu<CR> \| :let g:translator_target_lang='fr'<CR> \| <S-v> \| :TranslateR<CR>:sleep 1500m<CR>
+
+    nmap <silent> <Leader>f 0<Leader>eI<Tab><esc><Esc><Leader>rI<Tab><esc>o<backspace><Esc>
+
+    set spl=fr
+endfunction
+au BufEnter,BufNew *.french :call LearnFrenchMode()

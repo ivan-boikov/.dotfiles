@@ -20,7 +20,8 @@ bind generic,index k previous-entry
 bind generic,index j next-entry
 bind generic,index,pager <PageUp> previous-page
 bind generic,index,pager <PageDown> next-page
-
+bind generic,index,pager \Cd half-down
+bind generic,index,pager \Cu half-up
 
 # Other odds and ends
 bind generic,index,pager / search
@@ -64,6 +65,7 @@ bind  index D delete-thread
 #macro index j s=Trash\n   "Move to trash"
 
 bind index tc collapse-thread
+bind index tac collapse-all
 
 bind index,pager H display-toggle-weed
 
