@@ -1,19 +1,19 @@
 let MINPAC_DIR = "~/.config/nvim/pack/minpac/opt/minpac/"
 if empty(glob(MINPAC_DIR . "/autoload/minpac.vim"))
-    call system("mkdir -p " . MINPAC_DIR . "&& git clone https://github.com/k-takata/minpac.git " . MINPAC_DIR)
-    " packadd minpac
-    " call minpac#init()
-    " call minpac#add('k-takata/minpac', {'type': 'opt'})
-    " call minpac#update()
-    echo 'minpac installed, restart nvim'
-    finish
+	call system("mkdir -p " . MINPAC_DIR . "&& git clone https://github.com/k-takata/minpac.git " . MINPAC_DIR)
+	" packadd minpac
+	" call minpac#init()
+	" call minpac#add('k-takata/minpac', {'type': 'opt'})
+	" call minpac#update()
+	echo 'minpac installed, restart nvim'
+	finish
 endif
 
 packadd minpac
 call minpac#init()
 
 command! PackUpdate packadd minpac | source $MYVIMRC | redraw | call minpac#update()
-command! PackClean  packadd minpac | source $MYVIMRC | call minpac#clean()
+command! PackClean	packadd minpac | source $MYVIMRC | call minpac#clean()
 
 let mapleader = " "
 
@@ -27,7 +27,7 @@ call minpac#add('tpope/vim-eunuch') " UNIX stuff: :Wall, :Delete, :Remove
 call minpac#add('tpope/vim-sleuth') " autodetect shiftwidth
 call minpac#add('tpope/vim-surround') " <cs"'> inside "Hello" changes to 'Hello'
 call minpac#add('nelstrom/vim-visual-star-search') " visual select + <*> = find selected
-call minpac#add('godlygeek/tabular') "  :Tabularize /,/r0 = align by , and align right
+call minpac#add('godlygeek/tabular') "	:Tabularize /,/r0 = align by , and align right
 call minpac#add('luukvbaal/nnn.nvim')
 call minpac#add('folke/which-key.nvim')
 call minpac#add('roblillack/vim-bufferlist')
@@ -42,7 +42,7 @@ call minpac#add('JuliaEditorSupport/julia-vim')
 call minpac#add('christoomey/vim-tmux-navigator')
 call minpac#add('neovim/nvim-lspconfig')
 call minpac#add('nvim-treesitter/nvim-treesitter')
-"call minpac#add('Issafalcon/lsp-overloads.nvim')
+call minpac#add('Issafalcon/lsp-overloads.nvim')
 call minpac#add('kyazdani42/nvim-web-devicons')
 call minpac#add('folke/trouble.nvim')
 call minpac#add('hrsh7th/cmp-nvim-lsp')
@@ -53,6 +53,7 @@ call minpac#add('amarakon/nvim-cmp-buffer-lines')
 
 " snippets
 call minpac#add('hrsh7th/nvim-cmp')
+call minpac#add('kdheepak/cmp-latex-symbols')
 call minpac#add('hrsh7th/cmp-buffer')
 call minpac#add('hrsh7th/cmp-path')
 call minpac#add('hrsh7th/cmp-cmdline')
@@ -69,9 +70,9 @@ call minpac#add('voldikss/vim-translator')
 "call minpac#add('')
 
 if empty(glob("~/.config/nvim/pack/minpac/start/friendly-snippets"))
-    call minpac#update()
-    echo "Wait for packages to install, then restart nvim one last time"
-    finish
+	call minpac#update()
+	echo "Wait for packages to install, then restart nvim one last time"
+	finish
 endif
 
 
@@ -79,24 +80,58 @@ endif
 map <silent> <C-b> :call BufferList()<CR>
 
 
+"let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
+"let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
+"set termguicolors
+
+
+"Use 24-bit (true-color) mode in Vim/Neovim when outside tmux.
+"If you're using tmux version 2.2 or later, you can remove the outermost $TMUX check and use tmux's 24-bit color support
+"(see < http://sunaku.github.io/tmux-24bit-color.html#usage > for more information.)
+if (empty($TMUX))
+	if (has("nvim"))
+		"For Neovim 0.1.3 and 0.1.4 < https://github.com/neovim/neovim/pull/2198 >
+		let $NVIM_TUI_ENABLE_TRUE_COLOR=1
+	endif
+	"For Neovim > 0.1.5 and Vim > patch 7.4.1799 < https://github.com/vim/vim/commit/61be73bb0f965a895bfb064ea3e55476ac175162 >
+	"Based on Vim patch 7.4.1770 (`guicolors` option) < https://github.com/vim/vim/commit/8a633e3427b47286869aa4b96f2bfc1fe65b25cd >
+	" < https://github.com/neovim/neovim/wiki/Following-HEAD#20160511 >
+	if (has("termguicolors"))
+		set termguicolors
+	endif
+endif
+
+
+syntax on
 set background=dark
 set termguicolors
+" Set to 256 for 256-color terminals (the default), or set to 16 to use your terminal emulator's native 16 colors.
+let g:onedark_termcolors=1
+" Set to 1 if your terminal emulator supports italics; 0 otherwise (the default).
+let g:onedark_terminal_italics=1
+
 colorscheme onedark
 let g:lightline = {
   \ 'colorscheme': 'onedark',
   \ }
 
+"" use 256 colors in terminal
+"if !has("gui_running")
+"    set t_Co=256
+"    set term=screen-256color
+"endif
+
 " Indenting
-set tabstop=4       " The width of a TAB is set to 4.
-                    " Still it is a \t. It is just that
-                    " Vim will interpret it to be having
-                    " a width of 4.
-set shiftwidth=4    " Indents will have a width of 4
-set softtabstop=4   " Sets the number of columns for a TAB
-set noexpandtab       " Expand TABs to spaces
-set shiftround  " Round indent to multiple of 'shiftwidth'
+set tabstop=4		" The width of a TAB is set to 4.
+					" Still it is a \t. It is just that
+					" Vim will interpret it to be having
+					" a width of 4.
+set shiftwidth=4	" Indents will have a width of 4
+set softtabstop=4	" Sets the number of columns for a TAB
+set noexpandtab		  " Expand TABs to spaces
+set shiftround	" Round indent to multiple of 'shiftwidth'
 set smartindent " Do smart indenting when starting a new line
-set autoindent  " Copy indent from current line, over to the new line
+set autoindent	" Copy indent from current line, over to the new line
 
 " This is necessary for VimTeX to load properly. The "indent" is optional.
 " Note that most plugin managers will do this automatically.
@@ -161,14 +196,14 @@ cnoremap w!! execute 'silent! write !sudo tee % >/dev/null' <bar> edit!
 
 " automatically delete all trailing whitespace and newlines at end of file on save
 fun! TrimWhitespace()
-    let l:save = winsaveview()
-    keeppatterns %s/\s\+$//e
-    call winrestview(l:save)
+	let l:save = winsaveview()
+	keeppatterns %s/\s\+$//e
+	call winrestview(l:save)
 endfun
 fun! TrimTrailingLines()
-    let l:save = winsaveview()
-    keeppatterns :v/\_s*\S/d
-    call winrestview(l:save)
+	let l:save = winsaveview()
+	keeppatterns :v/\_s*\S/d
+	call winrestview(l:save)
 endfun
 autocmd BufWritePre * call TrimWhitespace()
 autocmd BufWritePre * call TrimTrailingLines()
@@ -176,7 +211,7 @@ autocmd BufWritePre * call TrimTrailingLines()
 
 " turn off highlighting on the bits of code that are changed, so the line that is changed is highlighted but the actual text that has changed stands out on the line and is readable
 if &diff
-    highlight! link DiffText MatchParen
+	highlight! link DiffText MatchParen
 endif
 
 " disable autocommenting on newline
@@ -227,57 +262,57 @@ nnoremap <C-k> :TmuxNavigateRight<CR>
 
 lua << EOF
 require'nvim-treesitter.configs'.setup {
-    -- A list of parser names, or "all"
-    ensure_installed = {{
-        "c", "lua", "cpp", "bash", "python",
-        "git_rebase", "gitattributes", "gitcommit", "gitignore", "git_config",
-        "make", "regex", "vim",
-        "html", "css", "javascript", "json", "yaml", "markdown"}},
+	-- A list of parser names, or "all"
+	ensure_installed = {{
+		"c", "lua", "cpp", "bash", "python",
+		"git_rebase", "gitattributes", "gitcommit", "gitignore", "git_config",
+		"make", "regex", "vim",
+		"html", "css", "javascript", "json", "yaml", "markdown"}},
 
-    -- Install parsers synchronously (only applied to `ensure_installed`)
-    sync_install = false,
+	-- Install parsers synchronously (only applied to `ensure_installed`)
+	sync_install = false,
 
-    -- Automatically install missing parsers when entering buffer
-    -- Recommendation: set to false if you don't have `tree-sitter` CLI installed locally
-    auto_install = false,
+	-- Automatically install missing parsers when entering buffer
+	-- Recommendation: set to false if you don't have `tree-sitter` CLI installed locally
+	auto_install = false,
 
-    -- List of parsers to ignore installing (for "all")
-    ignore_install = { "latex", "julia" },
+	-- List of parsers to ignore installing (for "all")
+	ignore_install = { "latex", "julia" },
 
-    ---- If you need to change the installation directory of the parsers (see -> Advanced Setup)
-    -- parser_install_dir = "/some/path/to/store/parsers", -- Remember to run vim.opt.runtimepath:append("/some/path/to/store/parsers")!
+	---- If you need to change the installation directory of the parsers (see -> Advanced Setup)
+	-- parser_install_dir = "/some/path/to/store/parsers", -- Remember to run vim.opt.runtimepath:append("/some/path/to/store/parsers")!
 
-    highlight = {
-        -- `false` will disable the whole extension
-        enable = true,
+	highlight = {
+		-- `false` will disable the whole extension
+		enable = true,
 
-        -- NOTE: these are the names of the parsers and not the filetype. (for example if you want to
-        -- disable highlighting for the `tex` filetype, you need to include `latex` in this list as this is
-        -- the name of the parser)
-        -- list of language that will be disabled
-        disable = { "latex", "julia" },
-        -- Or use a function for more flexibility, e.g. to disable slow treesitter highlight for large files
-        disable = function(lang, buf)
-        local max_filesize = 16 * 1024 -- 16 KB
-        local ok, stats = pcall(vim.loop.fs_stat, vim.api.nvim_buf_get_name(buf))
-            if ok and stats and stats.size > max_filesize then
-                return true
-                end
-            end,
+		-- NOTE: these are the names of the parsers and not the filetype. (for example if you want to
+		-- disable highlighting for the `tex` filetype, you need to include `latex` in this list as this is
+		-- the name of the parser)
+		-- list of language that will be disabled
+		disable = { "latex", "julia" },
+		-- Or use a function for more flexibility, e.g. to disable slow treesitter highlight for large files
+		disable = function(lang, buf)
+		local max_filesize = 16 * 1024 -- 16 KB
+		local ok, stats = pcall(vim.loop.fs_stat, vim.api.nvim_buf_get_name(buf))
+			if ok and stats and stats.size > max_filesize then
+				return true
+				end
+			end,
 
-        -- Setting this to true will run `:h syntax` and tree-sitter at the same time.
-        -- Set this to `true` if you depend on 'syntax' being enabled (like for indentation).
-        -- Using this option may slow down your editor, and you may see some duplicate highlights.
-        -- Instead of true it can also be a list of languages
-        additional_vim_regex_highlighting = false
-        },
+		-- Setting this to true will run `:h syntax` and tree-sitter at the same time.
+		-- Set this to `true` if you depend on 'syntax' being enabled (like for indentation).
+		-- Using this option may slow down your editor, and you may see some duplicate highlights.
+		-- Instead of true it can also be a list of languages
+		additional_vim_regex_highlighting = false
+		},
 }
 EOF
 
 
-" lua << EOF
-"     require'lspconfig'.julials.setup{}
-" EOF
+lua << EOF
+        require'lspconfig'.julials.setup{}
+EOF
 nmap <leader>ld :lua vim.lsp.buf.declaration()<CR>
 nmap <leader><leader> :lua vim.lsp.buf.hover()<CR>
 nmap <leader>ll :lua vim.lsp.util.show_line_diagnostics()<CR>
@@ -288,24 +323,24 @@ let g:vimtex_view_method = "zathura"
 let g:vimtex_compiler_method = 'latexmk'
 
 "let g:vimtex_compiler_latexmk = {
-"            \ 'hooks' : [],
-"            \ 'executable' : 'latexmk',
-"            \ 'callback' : 1,
-"            \ 'continuous' : 1,
-"            \ 'options' : [
-"            \ '-shell-escape',
-"            \ 'interaction=nonstopmode',
-"            \ '-file-line-error'
-"            \ ],
-"            \ }
+"			 \ 'hooks' : [],
+"			 \ 'executable' : 'latexmk',
+"			 \ 'callback' : 1,
+"			 \ 'continuous' : 1,
+"			 \ 'options' : [
+"			 \ '-shell-escape',
+"			 \ 'interaction=nonstopmode',
+"			 \ '-file-line-error'
+"			 \ ],
+"			 \ }
 
 let g:vimtex_compiler_latexmk = {
-            \ 'options' : [
-            \ '-shell-escape',
-            \ '-synctex=1',
-            \ '-interaction=nonstopmode',
-            \ ],
-            \ }
+			\ 'options' : [
+			\ '-shell-escape',
+			\ '-synctex=1',
+			\ '-interaction=nonstopmode',
+			\ ],
+			\ }
 
 let g:vimwiki_ext2syntax = { '.Rmd': 'markdown', '.rmd': 'markdown', '.md': 'markdown', '.markdown': 'markdown', '.mdown': 'markdown' }
 " require("custom.plugins.mappings").vimwiki()
@@ -325,128 +360,153 @@ let g:vimwiki_list = [{ 'path' : '~/sync/vimwiki', 'syntax' : 'markdown', 'ext' 
 set completeopt=menu,menuone,noselect
 
 lua <<EOF
-    local luasnip = require("luasnip")
-    local cmp = require("cmp")
+	local luasnip = require("luasnip")
+	local cmp = require("cmp")
 
-    local has_words_before = function()
-        local line, col = unpack(vim.api.nvim_win_get_cursor(0))
-        return col ~= 0 and vim.api.nvim_buf_get_lines(0, line - 1, line, true)[1]:sub(col, col):match("%s") == nil
-    end
+	local has_words_before = function()
+		unpack = unpack or table.unpack
+		local line, col = unpack(vim.api.nvim_win_get_cursor(0))
+		return col ~= 0 and vim.api.nvim_buf_get_lines(0, line - 1, line, true)[1]:sub(col, col):match("%s") == nil
+	end
 
-    cmp.setup({
-        snippet = {
-            -- REQUIRED - you must specify a snippet engine
-            expand = function(args)
-            -- vim.fn["vsnip#anonymous"](args.body) -- For `vsnip` users.
-            require('luasnip').lsp_expand(args.body) -- For `luasnip` users.
-            -- require('snippy').expand_snippet(args.body) -- For `snippy` users.
-            -- vim.fn["UltiSnips#Anon"](args.body) -- For `ultisnips` users.
-            end,
-        },
+	cmp.setup({
+		snippet = {
+			-- REQUIRED - you must specify a snippet engine
+			expand = function(args)
+			-- vim.fn["vsnip#anonymous"](args.body) -- For `vsnip` users.
+			require('luasnip').lsp_expand(args.body) -- For `luasnip` users.
+			-- require('snippy').expand_snippet(args.body) -- For `snippy` users.
+			-- vim.fn["UltiSnips#Anon"](args.body) -- For `ultisnips` users.
+			end,
+		},
 
-        window = {
-            completion = cmp.config.window.bordered(),
-            documentation = cmp.config.window.bordered(),
-        },
+		window = {
+			completion = cmp.config.window.bordered(),
+			documentation = cmp.config.window.bordered(),
+		},
 
-        mapping = cmp.mapping.preset.insert({
-            ['<C-p>'] = cmp.mapping.select_prev_item(),
-            ['<C-n>'] = cmp.mapping.select_next_item(),
-            ['<C-Space>'] = cmp.mapping.complete(),
-            ['<C-e>'] = cmp.mapping.abort(),
-            -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
-            ['<CR>'] = cmp.mapping.confirm({ select = false }),
-            ["<Tab>"] = cmp.mapping(function(fallback)
-                if cmp.visible() then
-                    cmp.select_next_item()
-                elseif luasnip.expand_or_jumpable() then
-                    luasnip.expand_or_jump()
-                elseif has_words_before() then
-                    cmp.complete()
-                else
-                    fallback()
-                end
-            end, { "i", "s" }),
-            ["<S-Tab>"] = cmp.mapping(function(fallback)
-                if cmp.visible() then
-                    cmp.select_prev_item()
-                elseif luasnip.jumpable(-1) then
-                    luasnip.jump(-1)
-                else
-                    fallback()
-                end
-            end, { "i", "s" }),
-        }),
+		view = {
+			entries = "custom", -- can be "custom", "wildmenu" or "native"
+		},
 
-        sources = cmp.config.sources({
-                { name = 'nvim_lsp_signature_help' },
-                { name = 'buffer-lines' },
-                { name = 'nvim_lsp' },
-                -- { name = 'vsnip' }, -- For vsnip users.
-                { name = 'luasnip' }, -- For luasnip users.
-                -- { name = 'ultisnips' }, -- For ultisnips users.
-                -- { name = 'snippy' }, -- For snippy users
-            },
-            {{ name = 'buffer' }
-        })
-    })
+		mapping = cmp.mapping.preset.insert(
+			{
+				['<C-b>'] = cmp.mapping.scroll_docs(-4),
+				['<C-f>'] = cmp.mapping.scroll_docs(4),
+				['<C-Space>'] = cmp.mapping.complete(),
+				['<C-e>'] = cmp.mapping.abort(),
+				--['<CR>'] = cmp.mapping.confirm({ select = false }), -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
+				["<Tab>"] = cmp.mapping(function(fallback)
+					if cmp.visible() then
+						cmp.select_next_item()
+						-- You could replace the expand_or_jumpable() calls with expand_or_locally_jumpable()
+						-- that way you will only jump inside the snippet region
+					elseif luasnip.expand_or_jumpable() then
+						luasnip.expand_or_jump()
+					elseif has_words_before() then
+						cmp.complete()
+					else
+						fallback()
+					end
+				end, { "i", "s" }),
+				["<S-Tab>"] = cmp.mapping(function(fallback)
+					if cmp.visible() then
+						cmp.select_prev_item()
+					elseif luasnip.jumpable(-1) then
+						luasnip.jump(-1)
+					else
+						fallback()
+					end
+				end, { "i", "s" }),
+				['<CR>'] = cmp.mapping({
+					i = function(fallback)
+						if cmp.visible() and cmp.get_active_entry() then
+							cmp.confirm({ behavior = cmp.ConfirmBehavior.Replace, select = false })
+						else
+							fallback()
+						end
+					end,
+					-- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
+					s = cmp.mapping.confirm({ select = false }),
+					c = cmp.mapping.confirm({ behavior = cmp.ConfirmBehavior.Replace, select = false }),
+				}),
+			}
+		),
 
-    -- Set configuration for specific filetype.
-    cmp.setup.filetype('gitcommit', {
-        sources = cmp.config.sources({
-        { name = 'cmp_git' }, -- You can specify the `cmp_git` source if you were installed it.
-        }, {
-            { name = 'buffer' },
-        })
-        })
+		sources = cmp.config.sources(
+			{
+				{
+					name = "latex_symbols",
+					option = {
+						strategy = 0, -- mixed
+					},
+				},
+				{ name = 'nvim_lsp_signature_help' },
+				{ name = 'buffer-lines' },
+				{ name = 'nvim_lsp' },
+				-- { name = 'vsnip' }, -- For vsnip users.
+				{ name = 'luasnip' }, -- For luasnip users.
+				-- { name = 'ultisnips' }, -- For ultisnips users.
+				-- { name = 'snippy' }, -- For snippy users
+			},
+			{{ name = 'buffer' }
+			}),
+	})
 
-    -- Use buffer source for `/` and `?` (if you enabled `native_menu`, this won't work anymore).
-    cmp.setup.cmdline({ '/', '?' }, {
-        mapping = cmp.mapping.preset.cmdline(),
-        sources = {
-            { name = 'nvim_lsp_document_symbol' },
-            { name = 'buffer' }
-        }
-    })
+	-- Set configuration for specific filetype.
+	cmp.setup.filetype(
+		'gitcommit',
+		{
+			sources = cmp.config.sources(
+				{
+					{ name = 'cmp_git' }, -- You can specify the `cmp_git` source if you were installed it.
+				},
+				{
+					{ name = 'buffer' },
+				}
+			)
+		}
+	)
 
-    -- Use cmdline & path source for ':' (if you enabled `native_menu`, this won't work anymore).
-    cmp.setup.cmdline(':', {
-        mapping = cmp.mapping.preset.cmdline(),
-        sources = cmp.config.sources(
-            {{ name = 'path' }},
-            {{ name = 'cmdline' }}
-        )
-    })
+	-- Use buffer source for `/` and `?` (if you enabled `native_menu`, this won't work anymore).
+	cmp.setup.cmdline({ '/', '?' }, {
+		mapping = cmp.mapping.preset.cmdline(),
+		sources = {
+			{ name = 'nvim_lsp_document_symbol' },
+			{ name = 'buffer' }
+		}
+	})
 
-    -- Set up lspconfig.
-    local capabilities = require('cmp_nvim_lsp').default_capabilities()
-    require('lspconfig')['clangd'].setup {
-        capabilities = capabilities
-    }
-    require('lspconfig')['cmake'].setup {
-        capabilities = capabilities
-    }
-    -- require('lspconfig')['julials'].setup {
-    --     capabilities = capabilities
-    -- }
+	-- Use cmdline & path source for ':' (if you enabled `native_menu`, this won't work anymore).
+	cmp.setup.cmdline(':', {
+		mapping = cmp.mapping.preset.cmdline(),
+		sources = cmp.config.sources(
+			{{ name = 'path' }},
+			{{ name = 'cmdline' }}
+		)
+	})
 
-    require'cmp'.setup {
-        sources = {
-            { name = "luasnip" },
-            { name = "nvim_lsp" },
-            { name = "buffer" },
-            { name = "nvim_lua" },
-            { name = "path" },
-            },
-    }
-    require("luasnip.loaders.from_vscode").lazy_load()
+	-- Set up lspconfig.
+	-- The nvim-cmp almost supports LSP's capabilities so You should advertise it to LSP servers..
+	local capabilities = require('cmp_nvim_lsp').default_capabilities()
+	require('lspconfig')['clangd'].setup {
+		capabilities = capabilities
+	}
+	require('lspconfig')['cmake'].setup {
+		capabilities = capabilities
+	}
+	require('lspconfig')['julials'].setup {
+	        capabilities = capabilities
+	}
+
+	require("luasnip.loaders.from_vscode").lazy_load()
 EOF
 
 
 
 " nnn browser integration
 lua << EOF
-    require("nnn").setup()
+	require("nnn").setup()
 EOF
 nmap <C-n> :NnnPicker cmd=nnn -deAU<CR>
 
@@ -458,7 +518,7 @@ let g:julia_indent_align_brackets = 0
 let g:julia_indent_align_funcargs = 0
 let g:julia_set_indentation = 0
 
-let g:latex_to_unicode_tab = "insert"
+let g:latex_to_unicode_tab = 0
 let g:latex_to_unicode_keymap = 0
 let g:latex_to_unicode_auto = 0
 "let g:latex_to_unicode_file_types = ".jl"
@@ -474,24 +534,24 @@ hi link juliaFunctionCall Function
 " learning French with vim-translator!
 
 function! LearnFrenchMode()
-    " Echo translation in the cmdline
-    nmap <silent> <Leader>t :Translate<CR>
-    vmap <silent> <Leader>t :TranslateV<CR>
-    " Display translation in a window
-    nmap <silent> <Leader>w :TranslateW<CR>
-    vmap <silent> <Leader>w :TranslateWV<CR>
-    " Translate the text in clipboard
-    nmap <silent> <Leader>x :TranslateX<CR>
-    " Replace the text with translation
-    "nmap <silent> <Leader>e :TranslateR<CR> \| :let g:translator_target_lang='fr'<CR>
-    "nmap <silent> <Leader>f :TranslateR<CR> \| :let g:translator_target_lang='en'<CR>
+	" Echo translation in the cmdline
+	nmap <silent> <Leader>t :Translate<CR>
+	vmap <silent> <Leader>t :TranslateV<CR>
+	" Display translation in a window
+	nmap <silent> <Leader>w :TranslateW<CR>
+	vmap <silent> <Leader>w :TranslateWV<CR>
+	" Translate the text in clipboard
+	nmap <silent> <Leader>x :TranslateX<CR>
+	" Replace the text with translation
+	"nmap <silent> <Leader>e :TranslateR<CR> \| :let g:translator_target_lang='fr'<CR>
+	"nmap <silent> <Leader>f :TranslateR<CR> \| :let g:translator_target_lang='en'<CR>
 
-    nmap <silent> <Leader>e <S-y> \| :pu<CR> \| :let g:translator_target_lang='en'<CR> \| <S-v> \| :TranslateR<CR>:sleep 1500m<CR>
-    "\| <S-i> \| <Tab> \| <Esc>
-    nmap <silent> <Leader>r <S-y> \| :pu<CR> \| :let g:translator_target_lang='fr'<CR> \| <S-v> \| :TranslateR<CR>:sleep 1500m<CR>
+	nmap <silent> <Leader>e <S-y> \| :pu<CR> \| :let g:translator_target_lang='en'<CR> \| <S-v> \| :TranslateR<CR>:sleep 1500m<CR>
+	"\| <S-i> \| <Tab> \| <Esc>
+	nmap <silent> <Leader>r <S-y> \| :pu<CR> \| :let g:translator_target_lang='fr'<CR> \| <S-v> \| :TranslateR<CR>:sleep 1500m<CR>
 
-    nmap <silent> <Leader>f 0<Leader>eI<Tab><esc><Esc><Leader>rI<Tab><esc>o<backspace><Esc>
+	nmap <silent> <Leader>f 0<Leader>eI<Tab><esc><Esc><Leader>rI<Tab><esc>o<backspace><Esc>
 
-    set spl=fr
+	set spl=fr
 endfunction
 au BufEnter,BufNew *.french :call LearnFrenchMode()
