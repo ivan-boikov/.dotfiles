@@ -1,6 +1,0 @@
-#!/bin/sh
-pinfile="/etc/portage/package.mask/pins"
-if [ -f "$pinfile" ]; then
-    echo "Removing pin file $pinfile, need root permissions"
-    sudo -A rm -v "$pinfile"
-fi
