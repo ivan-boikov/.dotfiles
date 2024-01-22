@@ -6,4 +6,4 @@ echo "Cleaning old user-dirs.dirs"
 rm ~/.config/user-dirs.dirs
 
 echo "Stowing configs"
-stow -R $(ls -d */)
+stow -R $(ls -d */) -t "$HOME/"
