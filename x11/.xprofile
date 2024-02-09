@@ -39,6 +39,8 @@ done >"$XDG_CACHE_HOME/xprofile.errors" 2>&1
 
 "$HOME/.local/bin/startxautolock"
 
+xset b off
+
 gentoo-pipewire-launcher restart &
 
 if [ -x /usr/bin/gpg-agent ]; then
