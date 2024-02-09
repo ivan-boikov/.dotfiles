@@ -34,7 +34,7 @@ autostart=(
 )
 
 for program in "${autostart[@]}" ; do
-	pidof -s "${program%% *}" || setsid -f "$program"
+	pidof -s "${program%% *}" || setsid -f $program
 done >"$XDG_CACHE_HOME/xprofile.errors" 2>&1
 
 "$HOME/.local/bin/startxautolock"
