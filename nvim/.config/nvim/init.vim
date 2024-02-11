@@ -49,6 +49,7 @@ call minpac#add('hrsh7th/cmp-nvim-lsp')
 call minpac#add('hrsh7th/cmp-nvim-lsp-document-symbol')
 call minpac#add('hrsh7th/cmp-nvim-lsp-signature-help')
 call minpac#add('amarakon/nvim-cmp-buffer-lines')
+call minpac#add('tpope/vim-commentary')
 
 
 " snippets
@@ -529,6 +530,7 @@ hi link juliaSemicolon Comment
 hi link juliaFunctionCall Function
 
 
+noremap <C-_> :Commentary<CR>
 
 
 " learning French with vim-translator!
