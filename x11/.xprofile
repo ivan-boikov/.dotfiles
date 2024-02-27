@@ -30,7 +30,7 @@ autostart=(
 	"unclutter"
 	"syncthing --no-browser"
 	"redshift -l40:2"
-	"dwmblocks"
+	"slstatus"
 )
 
 for program in "${autostart[@]}" ; do
