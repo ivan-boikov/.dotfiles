@@ -33,7 +33,7 @@ call minpac#add('folke/which-key.nvim')
 call minpac#add('roblillack/vim-bufferlist')
 
 " theming
-call minpac#add('joshdick/onedark.vim')
+call minpac#add('NLKNguyen/papercolor-theme')
 call minpac#add('itchyny/lightline.vim')
 
 " dev
@@ -104,16 +104,16 @@ endif
 
 
 syntax on
-set background=dark
+" change theme based on time of day
+" if strftime("%H") >= 7 && strftime("%H") < 20
+"   set background=light
+" else
+"   set background=dark
+" endif
 set termguicolors
-" Set to 256 for 256-color terminals (the default), or set to 16 to use your terminal emulator's native 16 colors.
-let g:onedark_termcolors=1
-" Set to 1 if your terminal emulator supports italics; 0 otherwise (the default).
-let g:onedark_terminal_italics=1
-
-colorscheme onedark
+colorscheme PaperColor
 let g:lightline = {
-  \ 'colorscheme': 'onedark',
+  \ 'colorscheme': 'PaperColor',
   \ }
 
 "" use 256 colors in terminal
