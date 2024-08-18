@@ -312,7 +312,8 @@ EOF
 
 
 lua << EOF
-        require'lspconfig'.julials.setup{}
+	require'lspconfig'.julials.setup{}
+	require'lspconfig'.pylyzer.setup{}
 EOF
 nmap <leader>ld :lua vim.lsp.buf.declaration()<CR>
 nmap <leader><leader> :lua vim.lsp.buf.hover()<CR>
