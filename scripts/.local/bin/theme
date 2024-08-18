@@ -1,0 +1,29 @@
+#!/bin/sh
+
+theme="dark"
+oppositetheme="light"
+gtktheme="Adwaita-dark"
+wallpaper="$XDG_DATA_HOME/wallpapers/space-cat.jpg"
+if [ "$1" = "light" ]; then
+	theme="light"
+	oppositetheme="dark"
+	gtktheme="Adwaita"
+	wallpaper="$XDG_DATA_HOME/wallpapers/abstract.jpg"
+fi
+
+rm "$HOME/.Xresources" && ln -s "$HOME/.Xresources.$theme" "$HOME/.Xresources" && xrdb -merge "$HOME/.Xresources"
+echo "Net/ThemeName \"$gtktheme\"" > "$XDG_RUNTIME_DIR/xsettings"
+ln -fs "$wallpaper" "$XDG_DATA_HOME/wallpapers/bg"
+sed -i "s/background=$oppositetheme/background=$theme/" "$XDG_CONFIG_HOME/nvim/init.vim"
+# https://shapeshed.com/vim-tmux-alacritty-theme-switcher/
+tmux list-panes -a -F '#{pane_id} #{pane_current_command}' |
+    grep vim |
+    cut -d ' ' -f 1 |
+    xargs -I PANE tmux send-keys -t PANE ESCAPE \
+      ":set background=$theme" ENTER
+
+setbg
+pidof st | xargs kill -s USR1
+pgrep xsettings && pkill xsettingsd
+xsettingsd -c "$XDG_RUNTIME_DIR/xsettings" &
+sysact "renew dwm"
