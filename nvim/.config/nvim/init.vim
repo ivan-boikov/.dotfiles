@@ -49,7 +49,8 @@ call minpac#add('hrsh7th/cmp-nvim-lsp-document-symbol')
 call minpac#add('hrsh7th/cmp-nvim-lsp-signature-help')
 call minpac#add('amarakon/nvim-cmp-buffer-lines')
 call minpac#add('tpope/vim-commentary')
-
+call minpac#add('Thyrum/vim-stabs') " tabs for beginning of lines, spaces otherwise
+call minpac#add('vim-autoformat/vim-autoformat')
 
 " snippets
 call minpac#add('hrsh7th/nvim-cmp')
@@ -306,6 +307,12 @@ require'nvim-treesitter.configs'.setup {
 		},
 }
 EOF
+
+map gq :Autoformat<CR>
+" use LSP gq binding for julia
+au FileType julia noremap gq gq
+let g:formatters_python=['ruff', 'autopep8', 'yapf', 'black']
+let g:formatdef_ruff = '"ruff format -"'
 
 
 lua << EOF
