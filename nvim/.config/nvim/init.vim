@@ -24,7 +24,7 @@ call minpac#add('lukas-reineke/indent-blankline.nvim')
 call minpac#add('tpope/vim-characterize') " improvements to <ga>
 call minpac#add('tpope/vim-commentary') " comment out: <gc> selection, <gcc> line
 call minpac#add('tpope/vim-eunuch') " UNIX stuff: :Wall, :Delete, :Remove
-call minpac#add('tpope/vim-sleuth') " autodetect shiftwidth
+call minpac#add('Darazaki/indent-o-matic') " autodetect alignment
 call minpac#add('tpope/vim-surround') " <cs"'> inside "Hello" changes to 'Hello'
 call minpac#add('nelstrom/vim-visual-star-search') " visual select + <*> = find selected
 call minpac#add('godlygeek/tabular') "	:Tabularize /,/r0 = align by , and align right
@@ -141,8 +141,6 @@ filetype plugin indent on
 " VimTeX features will not work (see ":help vimtex-requirements" for more
 " info).
 syntax enable
-
-let g:sleuth_tex_defaults = 'tabstop=4'
 
 " search
 set ignorecase " obligatory before smartcase
