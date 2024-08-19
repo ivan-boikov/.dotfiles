@@ -524,7 +524,8 @@ EOF
 lua << EOF
 	require("nnn").setup()
 EOF
-nmap <C-n> :NnnPicker cmd=nnn -deAU<CR>
+nnoremap <C-n> :NnnPicker cmd=nnn -deAU<CR>
+nnoremap <C-b> :NnnPicker cmd=nnn -deAU<CR>
 
 
 
