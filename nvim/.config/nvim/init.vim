@@ -260,6 +260,11 @@ let g:slime_default_config = { "socket_name" : "default", "target_pane" : "{last
 let g:slime_dont_ask_default = 1
 let g:slime_cell_delimiter = "\n"
 
+" send script to julia
+" send relative path
+au FileType julia nmap <M-Enter> :SlimeSend0 "include(\"".fnamemodify(expand("%"), ":~:.")."\")\r"<CR>
+" send full path
+au FileType julia nmap <M-S-Enter> :SlimeSend0 "include(\"".expand("%")."\")\r"<CR>
 
 " disable automatic mappings
 let g:tmux_navigator_no_mappings = 1
