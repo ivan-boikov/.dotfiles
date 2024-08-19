@@ -116,6 +116,17 @@ let g:lightline = {
   \ 'colorscheme': 'PaperColor',
   \ }
 
+
+" show full path to file in statusbar
+if !exists('g:lightline')
+  let g:lightline = {}
+endif
+if !exists('g:lightline.component')
+  let g:lightline.component = {}
+endif
+let g:lightline.component.filename='%F'
+
+
 "" use 256 colors in terminal
 "if !has("gui_running")
 "    set t_Co=256
