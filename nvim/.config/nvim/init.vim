@@ -22,7 +22,6 @@ call minpac#add('k-takata/minpac', {'type': 'opt'})
 " general improvements
 call minpac#add('lukas-reineke/indent-blankline.nvim')
 call minpac#add('tpope/vim-characterize') " improvements to <ga>
-call minpac#add('tpope/vim-commentary') " comment out: <gc> selection, <gcc> line
 call minpac#add('tpope/vim-eunuch') " UNIX stuff: :Wall, :Delete, :Remove
 call minpac#add('Darazaki/indent-o-matic') " autodetect alignment
 call minpac#add('tpope/vim-surround') " <cs"'> inside "Hello" changes to 'Hello'
