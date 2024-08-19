@@ -2,4 +2,4 @@
 
 on_song_change
 sxiv -b /tmp/mpd.cover &
-$TERMINAL -e ncmpcpp
+$TERMINAL -c musicplayer -e ncmpcpp
