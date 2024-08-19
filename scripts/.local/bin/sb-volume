@@ -8,8 +8,16 @@ else
     vol="$(pamixer --get-volume)"
 fi
 
+if ! command -v pamixer ;then
+    vol="$(wpctl get-volume @DEFAULT_AUDIO_SINK@)"
+    case "$vol" in
+        *MUTED*) vol="MUT" ;;
+        *) vol=$(echo "100*$(echo "$vol" | cut -d' ' -f2)/1" | bc) ;;
+    esac
+fi
+
 # for slstatus
 printf "%s" "$vol" > /tmp/volume
 
 # for dwmblocks
-printf "%3d" $vol
+printf "%3d" "$vol"
