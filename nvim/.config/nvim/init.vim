@@ -182,6 +182,7 @@ set listchars=tab:>-
 nmap <M-Tab> :bnext<CR>
 nmap <M-w> :bd<CR>
 nmap <S-Tab> :bprev<CR>
+map <C-a> <esc>ggVG<CR>
 
 
 
