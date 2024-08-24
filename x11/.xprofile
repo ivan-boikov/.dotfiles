@@ -38,6 +38,7 @@ for program in "${autostart[@]}" ; do
 done >"$XDG_CACHE_HOME/xprofile.errors" 2>&1
 
 "$HOME/.local/bin/startxautolock"
+"$HOME/.local/bin/sb-music"
 
 xset b off
 
