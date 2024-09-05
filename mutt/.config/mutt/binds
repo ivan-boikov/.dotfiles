@@ -70,6 +70,7 @@ bind index tac collapse-all
 bind index,pager H display-toggle-weed
 
 macro index <Space> "<tag-entry>"
+bind index T tag-pattern
 
 bind browser h exit
 
