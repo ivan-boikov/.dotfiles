@@ -197,10 +197,7 @@ nmap <leader>t mz:execute TabSpaceToggle()<CR>'z
 nmap <M-Tab> :bnext<CR>
 nmap <M-w> :bd<CR>
 nmap <S-Tab> :bprev<CR>
-map <C-a> <esc>ggVG<CR>
-
-
-
+nnoremap <leader>a ggVG
 
 
 
