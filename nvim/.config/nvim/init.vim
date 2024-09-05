@@ -37,7 +37,6 @@ call minpac#add('itchyny/lightline.vim')
 
 " dev
 call minpac#add('jpalardy/vim-slime')
-call minpac#add('JuliaEditorSupport/julia-vim')
 call minpac#add('christoomey/vim-tmux-navigator')
 call minpac#add('neovim/nvim-lspconfig')
 call minpac#add('nvim-treesitter/nvim-treesitter')
