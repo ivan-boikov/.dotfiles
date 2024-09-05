@@ -4,3 +4,15 @@
 [credential]
 	helper = cache
 	helper = !type pass-git-helper >/dev/null && pass-git-helper $@
+[diff]
+	tool = nvimdiff
+[difftool]
+	prompt = false
+	# Be able to abort all diffs with `:cq` or `:cquit`
+	trustExitCode = true
+[alias]
+	st = status -sb
+	ci = commit -v
+	d = difftool
+	lol = log --graph --decorate --pretty=oneline --abbrev-commit
+	lola = log --graph --decorate --pretty=oneline --abbrev-commit --all
