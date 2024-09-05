@@ -106,7 +106,7 @@ endif
 syntax on
 " change theme based on time of day
 " if strftime("%H") >= 7 && strftime("%H") < 20
-"   set background=light
+"   set background=dark
 " else
 "   set background=dark
 " endif
@@ -345,7 +345,7 @@ EOF
 
 map gq :Autoformat<CR>
 " use LSP gq binding for julia
-au FileType julia noremap gq gq
+au FileType julia noremap gq gq=
 let g:formatters_python=['ruff', 'autopep8', 'yapf', 'black']
 let g:formatdef_ruff = '"ruff format -"'
 
