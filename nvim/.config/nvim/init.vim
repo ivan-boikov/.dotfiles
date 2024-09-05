@@ -56,7 +56,6 @@ call minpac#add('hrsh7th/nvim-cmp')
 call minpac#add('kdheepak/cmp-latex-symbols')
 call minpac#add('hrsh7th/cmp-buffer')
 call minpac#add('hrsh7th/cmp-path')
-call minpac#add('hrsh7th/cmp-cmdline')
 call minpac#add('hrsh7th/cmp-nvim-lua')
 call minpac#add('L3MON4D3/LuaSnip')
 call minpac#add('saadparwaiz1/cmp_luasnip')
@@ -499,24 +498,6 @@ lua <<EOF
 			)
 		}
 	)
-
-	-- Use buffer source for `/` and `?` (if you enabled `native_menu`, this won't work anymore).
-	cmp.setup.cmdline({ '/', '?' }, {
-		mapping = cmp.mapping.preset.cmdline(),
-		sources = {
-			{ name = 'nvim_lsp_document_symbol' },
-			{ name = 'buffer' }
-		}
-	})
-
-	-- Use cmdline & path source for ':' (if you enabled `native_menu`, this won't work anymore).
-	cmp.setup.cmdline(':', {
-		mapping = cmp.mapping.preset.cmdline(),
-		sources = cmp.config.sources(
-			{{ name = 'path' }},
-			{{ name = 'cmdline' }}
-		)
-	})
 
 	-- Set up lspconfig.
 	-- The nvim-cmp almost supports LSP's capabilities so You should advertise it to LSP servers..
