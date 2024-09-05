@@ -200,6 +200,10 @@ nmap <S-Tab> :bprev<CR>
 nnoremap <leader>a ggVG
 
 
+" faster scrolling, allegedly
+set re=1
+set ttyfast
+set lazyredraw
 
 " runs a script that cleans out tex build files whenever I close out of a .tex file.
 autocmd VimLeave *.tex !texclear %
