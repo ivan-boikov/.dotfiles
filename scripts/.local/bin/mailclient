@@ -3,5 +3,5 @@
 for file in "$XDG_CONFIG_HOME/mutt/accounts"/*; do
     title="mutt: $(grep "set my_email" "$file" | cut -d'=' -f2 | xargs)"
     "$TERMINAL" -T "$title" mutt -F "$file" &
-    sleep 0.05
+    sleep 0.1
 done
