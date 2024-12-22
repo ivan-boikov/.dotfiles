@@ -8,7 +8,7 @@ import:
   log: ~/.cache/beets.log
   resume: ask
 
-plugins: fetchart lastgenre ftintitle convert albumtypes embedart mbsync missing edit unimported VGMplug playlist scrub lyrics zero replaygain info
+plugins: fetchart lastgenre ftintitle convert albumtypes embedart mbsync missing edit unimported playlist scrub lyrics zero replaygain info
 
 # albumtypes
 paths:
