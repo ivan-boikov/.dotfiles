@@ -21,7 +21,7 @@ alias \
         mv='mv -iv' \
         rm='rm -vI' \
         mkd='mkdir -pv' \
-        yt='youtube-dl --add-metadata -i' \
+        yt='yt-dlp --continue --retries 4 --write-info-json --write-description --write-thumbnail --write-annotations --all-subs --ignore-errors -f bestvideo+bestaudio --add-metadata -i' \
         yta='yt -x -f bestaudio/best' \
         ffmpeg='ffmpeg -hide_banner' \
     	nnn='nnn -deARU'
@@ -35,8 +35,6 @@ alias \
 
 
 alias \
-        yt='youtube-dl --add-metadata -ic' \
-        yta='youtube-dl --add-metadata -xic' \
         ka='killall' \
         g='git' \
         f='$FILE' \
