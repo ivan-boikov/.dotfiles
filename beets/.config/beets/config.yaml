@@ -23,6 +23,7 @@ convert:
   # album_art_maxwidth: 512
   embed: no
   max_bitrate: 1
+  never_convert_lossy_files: no
   format: opus
   # quiet: true
   formats:
