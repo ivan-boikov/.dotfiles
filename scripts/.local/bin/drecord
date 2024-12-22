@@ -33,7 +33,7 @@ screencast() { \
 	-framerate 60 \
 	-s "$(xdpyinfo | awk '/dimensions/ {print $2;}')" \
 	-i "$DISPLAY" \
-	-f alsa -i default \
+	-f pulse -i combined.monitor \
 	-r 30 \
  	-c:v h264 -crf 0 -preset ultrafast -c:a aac \
 	"$HOME/screencast-$(date '+%y%m%d-%H%M-%S').mp4" &
