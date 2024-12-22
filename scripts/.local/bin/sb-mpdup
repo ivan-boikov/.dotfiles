@@ -6,8 +6,8 @@
 
 while : ; do
 	if mpc idle > /dev/null; then
-		#kill -45 "$(pidof "${STATUSBAR:-dwmblocks}")"
-		mpc status > "/tmp/mpd.playing"
+		mpc status > "$XDG_RUNTIME_DIR/mpd.playing"
+		pkill --signal SIGUSR1 slstatus
 	else
 		break
 	fi

@@ -17,7 +17,7 @@ if ! command -v pamixer ;then
 fi
 
 # for slstatus
-printf "%s" "$vol" > /tmp/volume
+printf "%s" "$vol" > "$XDG_RUNTIME_DIR/volume"
 
 # for dwmblocks
 printf "%3d" "$vol"
