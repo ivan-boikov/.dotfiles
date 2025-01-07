@@ -2,6 +2,7 @@
 ! Generated with :
 ! XRDB2Xreources.py
 !
+*.accent:      #232322
 *.foreground:  #232322
 *.background:  #eaeaea
 *.cursorColor: #16afca

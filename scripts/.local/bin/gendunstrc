@@ -12,7 +12,7 @@ cat <<CONF
     transparency = 0
     font = Liberation Mono 10
     format = "<b>%s</b>\n%b"
-    frame_width=5
+    frame_width=3
     corner_radius=0
 	# handle legacy versions
 	geometry=0x0-0-0
@@ -20,14 +20,14 @@ cat <<CONF
 
 [urgency_low]
     background = "$(getxcolor background:)"
-    foreground = "$(getxcolor foreground:)" # color7
-    frame_color = "$(getxcolor foreground:)" # color7
+    foreground = "$(getxcolor accent:)" # color7
+    frame_color = "$(getxcolor accent:)" # color7
     timeout = 3
 
 [urgency_normal]
     background = "$(getxcolor background:)" # color0
-    foreground = "$(getxcolor foreground:)" # color4
-    frame_color = "$(getxcolor foreground:)" # color4
+    foreground = "$(getxcolor accent:)" # color4
+    frame_color = "$(getxcolor accent:)" # color4
     timeout = 5
 
 [urgency_critical]
