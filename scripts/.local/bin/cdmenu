@@ -4,4 +4,4 @@
 getcolor() {
     xrdb -query | awk '/*.'"$1":'/ { print substr($2,2) }'
 }
-dmenu -nb "#$(getcolor background)" -nf "#$(getcolor foreground)" -sb "#$(getcolor foreground)" -sf "#$(getcolor background)" "$@"
+dmenu -nb "#$(getcolor background)" -nf "#$(getcolor accent)" -sb "#$(getcolor accent)" -sf "#$(getcolor background)" "$@"

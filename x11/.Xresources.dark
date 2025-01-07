@@ -1,6 +1,9 @@
-! special
-*.foreground:   #d19a66
-*.background:   #0a0a0a
+/* custom color to separate default text color */
+*.accent:       #5f8787
+
+*.foreground:   #cccccc
+
+*.background:   #1c1c1c
 *.cursorColor:  #d19a66
 
 ! black
