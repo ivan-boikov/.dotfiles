@@ -12,7 +12,7 @@ endif
 packadd minpac
 call minpac#init()
 
-command! PackUpdate packadd minpac | source $MYVIMRC | redraw | call minpac#update()
+command! PackUpdate packadd minpac | source $MYVIMRC | redraw | call minpac#update() | :TSUpdate
 command! PackClean	packadd minpac | source $MYVIMRC | call minpac#clean()
 
 let mapleader = " "
