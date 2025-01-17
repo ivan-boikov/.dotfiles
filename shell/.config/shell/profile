@@ -165,9 +165,6 @@ if [ -d "$HOME/platform-tools" ] ; then
     export PATH="$HOME/platform-tools:$PATH"
 fi
 
-# variable for vim's quick access to bibliography
-export BIB="$HOME/dox/phd/bibliography.bib"
-
 # Changing pinentry for SSH logins
 export GPG_TTY=$(tty)
 if [[ -n "$SSH_CONNECTION" ]] ;then
