@@ -69,22 +69,11 @@ call minpac#add('vimwiki/vimwiki')
 
 call minpac#add('voldikss/vim-translator')
 
-"call minpac#add('')
-
 if empty(glob("~/.config/nvim/pack/minpac/start/friendly-snippets"))
 	call minpac#update()
 	echo "Wait for packages to install, then restart nvim one last time"
 	finish
 endif
-
-
-
-map <silent> <C-b> :call BufferList()<CR>
-
-
-"let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
-"let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
-"set termguicolors
 
 
 "Use 24-bit (true-color) mode in Vim/Neovim when outside tmux.
@@ -116,32 +105,22 @@ let g:slime_config_defaults = {}
 syntax on
 " change theme based on time of day
 " if strftime("%H") >= 7 && strftime("%H") < 20
-"   set background=dark
-" else
-"   set background=dark
+"	set background=dark
 " endif
 set termguicolors
 colorscheme PaperColor
-let g:lightline = {
-  \ 'colorscheme': 'PaperColor',
-  \ }
+let g:lightline = { 'colorscheme': 'PaperColor' }
 
 
 " show full path to file in statusbar
 if !exists('g:lightline')
-  let g:lightline = {}
+	let g:lightline = {}
 endif
 if !exists('g:lightline.component')
-  let g:lightline.component = {}
+	let g:lightline.component = {}
 endif
 let g:lightline.component.filename='%F'
 
-
-"" use 256 colors in terminal
-"if !has("gui_running")
-"    set t_Co=256
-"    set term=screen-256color
-"endif
 
 " Indenting
 set tabstop=4		" The width of a TAB is set to 4.
@@ -220,13 +199,6 @@ autocmd VimLeave *.tex !texclear %
 
 " Filetype detection
 set filetype
-" Ensure files are read as what I want:
-"autocmd BufRead,BufNewFile /tmp/calcurse*,~/.calcurse/notes/* set filetype=markdown
-"autocmd BufRead,BufNewFile *.ms,*.me,*.mom,*.man set filetype=groff
-
-"autocmd BufRead,BufNewFile *.jl set filetype=julia
-"autocmd BufRead,BufNewFile *.jl let g:did_load_filetypes=1
-"autocmd BufRead,BufNewFile *.jl let g:do_filetype_lua=0
 
 " save file as sudo on files that require root permission
 cnoremap w!! execute 'silent! write !sudo tee % >/dev/null' <bar> edit!
@@ -253,9 +225,6 @@ endif
 
 " disable autocommenting on newline
 autocmd FileType * setlocal formatoptions-=c formatoptions-=r formatoptions-=o
-
-" autocompile dwmblocks
-" vim.cmd("autocmd BufWritePost ~/.local/src/dwmblocks/config.h !cd ~/.local/src/dwmblocks/; sudo make install && { killall -q dwmblocks;setsid dwmblocks & "})
 
 " join vim's and system's clipboards
 " unnamed is X11's PRIMARY register, unnamedplus is CLIPBOARD
@@ -302,7 +271,8 @@ require'nvim-treesitter.configs'.setup {
 		"c", "lua", "cpp", "bash", "python",
 		"git_rebase", "gitattributes", "gitcommit", "gitignore", "git_config",
 		"make", "regex", "vim",
-		"html", "css", "javascript", "json", "yaml", "markdown"}},
+		"html", "css", "javascript", "json", "yaml", "markdown"
+	}},
 
 	-- Install parsers synchronously (only applied to `ensure_installed`)
 	sync_install = false,
@@ -382,13 +352,6 @@ let g:vimwiki_ext2syntax = { '.Rmd': 'markdown', '.rmd': 'markdown', '.md': 'mar
 nmap <leader>ww :VimwikiIndex<CR>
 "local HOME = os.getenv("HOME")
 let g:vimwiki_list = [{ 'path' : '~/sync/vimwiki', 'syntax' : 'markdown', 'ext' : '.md' }]
-
-
-
-
-
-
-
 
 
 set completeopt=menu,menuone,noselect
@@ -513,7 +476,7 @@ lua <<EOF
 		capabilities = capabilities
 	}
 	require('lspconfig')['julials'].setup {
-	        capabilities = capabilities
+		capabilities = capabilities
 	}
 
 	require("luasnip.loaders.from_vscode").lazy_load()
