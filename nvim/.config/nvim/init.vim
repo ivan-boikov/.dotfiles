@@ -51,6 +51,9 @@ call minpac#add('tpope/vim-commentary')
 call minpac#add('Thyrum/vim-stabs') " tabs for beginning of lines, spaces otherwise
 call minpac#add('vim-autoformat/vim-autoformat')
 
+call minpac#add('nvim-lua/plenary.nvim') " dep for refactoring
+call minpac#add('ThePrimeagen/refactoring.nvim')
+
 " snippets
 call minpac#add('hrsh7th/nvim-cmp')
 call minpac#add('kdheepak/cmp-latex-symbols')
@@ -544,6 +547,22 @@ hi link juliaFunctionCall Function
 
 
 noremap <C-_> :Commentary<CR>
+
+
+lua <<EOF
+require('refactoring').setup({})
+vim.keymap.set("x", "<leader>re", ":Refactor extract ")
+vim.keymap.set("x", "<leader>rf", ":Refactor extract_to_file ")
+
+vim.keymap.set("x", "<leader>rv", ":Refactor extract_var ")
+
+vim.keymap.set({ "n", "x" }, "<leader>ri", ":Refactor inline_var")
+
+vim.keymap.set( "n", "<leader>rI", ":Refactor inline_func")
+
+vim.keymap.set("n", "<leader>rb", ":Refactor extract_block")
+vim.keymap.set("n", "<leader>rbf", ":Refactor extract_block_to_file")
+EOF
 
 
 " learning French with vim-translator!
