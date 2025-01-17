@@ -1,10 +1,6 @@
 let MINPAC_DIR = "~/.config/nvim/pack/minpac/opt/minpac/"
 if empty(glob(MINPAC_DIR . "/autoload/minpac.vim"))
 	call system("mkdir -p " . MINPAC_DIR . "&& git clone https://github.com/k-takata/minpac.git " . MINPAC_DIR)
-	" packadd minpac
-	" call minpac#init()
-	" call minpac#add('k-takata/minpac', {'type': 'opt'})
-	" call minpac#update()
 	echo 'minpac installed, restart nvim'
 	finish
 endif
