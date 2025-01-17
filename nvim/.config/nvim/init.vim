@@ -81,6 +81,13 @@ let g:slime_default_config = { "socket_name" : "default", "target_pane" : "{last
 let g:slime_dont_ask_default = 1
 let g:slime_cell_delimiter = "\n"
 let g:slime_config_defaults = {}
+" send script to julia
+" send relative path
+au FileType julia nmap <M-Enter> :SlimeSend0 "include(\"".fnamemodify(expand("%"), ":~:.")."\")\r"<CR>
+" send full path
+au FileType julia nmap <M-S-Enter> :SlimeSend0 "include(\"".expand("%")."\")\r"<CR>
+
+
 
 " change theme based on time of day
 " if strftime("%H") >= 7 && strftime("%H") < 20
@@ -225,12 +232,6 @@ nmap <F7> :make<CR>
 
 
 
-
-" send script to julia
-" send relative path
-au FileType julia nmap <M-Enter> :SlimeSend0 "include(\"".fnamemodify(expand("%"), ":~:.")."\")\r"<CR>
-" send full path
-au FileType julia nmap <M-S-Enter> :SlimeSend0 "include(\"".expand("%")."\")\r"<CR>
 
 " disable automatic mappings
 let g:tmux_navigator_no_mappings = 1
