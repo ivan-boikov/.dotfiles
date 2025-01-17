@@ -265,7 +265,8 @@ set clipboard=unnamedplus
 " search and replace
 nnoremap S :%s//g<Left><Left>
 " check file in shellcheck
-nmap <leader>s :!clear && shellcheck -x %<CR>
+autocmd FileType sh nmap <leader>s :!clear && shellcheck -x %<CR>
+autocmd FileType python nmap <leader>s :!ruff check %<CR>
 " -- open bibliography file in split
 nmap <leader>b :vsp<space>$BIB<CR>
 nmap <leader>r :vsp<space>$REFER<CR>
