@@ -82,7 +82,6 @@ let g:slime_dont_ask_default = 1
 let g:slime_cell_delimiter = "\n"
 let g:slime_config_defaults = {}
 
-syntax on
 " change theme based on time of day
 " if strftime("%H") >= 7 && strftime("%H") < 20
 "	set background=dark
