@@ -356,7 +356,8 @@ let g:formatdef_ruff = '"ruff format -"'
 
 lua << EOF
 	require'lspconfig'.julials.setup{}
-	require'lspconfig'.pylyzer.setup{}
+	require'lspconfig'.pylsp.setup{}
+	require'lspconfig'.ruff.setup{}
 EOF
 nmap <leader>ld :lua vim.lsp.buf.declaration()<CR>
 nmap <leader><leader> :lua vim.lsp.buf.hover()<CR>
