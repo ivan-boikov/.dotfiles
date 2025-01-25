@@ -1,5 +1,0 @@
-#!/bin/sh
-
-# based on https://github.com/Orienfish/RPi_Useful_Script/blob/master/get_cpu_freq.sh
-
-awk -F " " '{ total += $1; count++ } END { printf "%.1f\n", total/count/1e6 }' /sys/devices/system/cpu/cpu*/cpufreq/scaling_cur_freq
