@@ -179,7 +179,14 @@ source "${XDG_CONFIG_HOME:-$HOME/.config}/shell/pass-completion"
 parse_git_branch() {
     git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/ [\1]/'
 }
-export PS1="\[\e[01;36m\]\u@\h \[\e[01;32m\]\w\[\e[01;31m\]\$(parse_git_branch)\[\e[36m\] \$\[\e[00m\] "
+# \n = newline
+# \u = username
+# \h = hostname
+# \w = working directory path
+# \[\e[1;92m\] = sets cursor color to bold green
+# \[\e[m\] = sets all following text color back to white, else everything would remain green.
+export PS1="\[\e[1;36m\]\u@\h \[\e[1;32m\]\w\[\e[1;31m\]\$(parse_git_branch)\[\e[1;36m\] \$\[\e[m\] "
+
 
 # start graphical server on user's current tty if not already running.
 [ "$(tty)" = "/dev/tty1" ] && ! pidof -s Xorg >/dev/null 2>&1 && exec startx "$XINITRC"
