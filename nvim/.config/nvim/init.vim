@@ -319,7 +319,18 @@ let g:formatdef_ruff = '"ruff format -"'
 
 lua << EOF
 	require'lspconfig'.julials.setup{}
-	require'lspconfig'.pylsp.setup{}
+	require'lspconfig'.pylsp.setup{
+		settings = {
+			pylsp = {
+				plugins = {
+					mccabe = {
+						-- 10 is a recommended threshold
+						threshold = 10,
+					}
+				}
+			}
+		}
+	}
 	require'lspconfig'.ruff.setup{}
 EOF
 nmap <leader>ld :lua vim.lsp.buf.declaration()<CR>
