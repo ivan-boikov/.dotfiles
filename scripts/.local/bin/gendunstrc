@@ -8,7 +8,7 @@ cat <<CONF
     follow = keyboard
     origin = bottom-right
     offset = 0x0
-    padding = 10
+    padding = 5
     transparency = 0
     font = Liberation Mono 10
     format = "<b>%s</b>\n%b"
