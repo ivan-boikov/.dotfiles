@@ -2,4 +2,3 @@
 param="$1"
 char=${param:0:1}
 printf '%x' \'"$char" | xargs -I{} fc-list ":charset={}"
-

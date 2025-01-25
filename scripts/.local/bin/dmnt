@@ -44,11 +44,11 @@ $normalparts" | sed "/^$/d;s/ *$//")"
 test -n "$alldrives"
 
 # Feed all found drives to dmenu and get user choice.
-chosen="$(echo "$alldrives" | $DMENU -l 16 -p "Mount which drive?" -i)"
+chosen="$(echo "$alldrives" | $DMENU -l 16 -p "Mount which drive" -i)"
 
 # Function for prompting user for a mountpoint.
 getmount(){
-	mp="$(find /mnt /media /mount /home -maxdepth 1 -type d 2>/dev/null | $DMENU -i -p "Mount this drive where?")"
+	mp="$(find /mnt /media /mount /home -maxdepth 1 -type d 2>/dev/null | $DMENU -i -p "Set mount point")"
 	test -n "$mp"
 	if [ ! -d "$mp" ]; then
 		mkdiryn=$(printf "No\\nYes" | $DMENU -i -p "$mp does not exist. Create it?")
@@ -59,7 +59,7 @@ getmount(){
 attemptmount(){
 		# Attempt to mount without a mountpoint, to see if drive is in fstab.
 		sudo -A mount "$1" || return 1
-		notify-send "💾Drive Mounted." "$chosen mounted."
+		notify-send "Drive mounted" "$chosen"
 		exit
 }
 
@@ -69,7 +69,7 @@ case "$chosen" in
 		chosen="${chosen:1}"	# This is a bashism.
 		attemptmount "$chosen" || getmount
 		sudo -A mount "$chosen" "$mp" -o uid="$(id -u)",gid="$(id -g)"
-		notify-send "💾Drive Mounted." "$chosen mounted to $mp."
+		notify-send "Drive mounted" "$chosen -> $mp."
 		;;
 
 	🔒*)
@@ -104,16 +104,16 @@ case "$chosen" in
 			sudo -A mount -o uid="$(id -u)",gid="$(id -g)" "/dev/mapper/usb$num" "$mp"
 		fi
 
-		notify-send "🔓Decrypted drive Mounted." "$chosen decrypted and mounted to $mp."
+		notify-send "Drive mounted" "$chosen -> $mp"
 
 		;;
 
 	📱*)
-		notify-send "❗Note" "Remember to allow file access on your phone now."
+		notify-send "Allow file access on your phone"
 		getmount
 		chosen="${chosen%%:*}"
 		chosen="${chosen:1}"	# This is a bashism.
 		sudo -A simple-mtpfs -o allow_other --device "$chosen" "$mp"
-		notify-send "🤖 Android Mounted." "Android device mounted to $mp."
+		notify-send "Android mounted" "$mp"
 		;;
 esac

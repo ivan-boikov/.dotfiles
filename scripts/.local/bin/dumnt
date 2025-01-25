@@ -26,7 +26,7 @@ if [ -n "$bprocs" ]; then
     action=$(printf 'nothing\nlazy\nterminate\nkill' | "$DMENU" -i -p "$chosen is busy: (abort), (lazy) unmount or (terminate)/(kill) blocking processes")
     case $action in
         nothing)
-            notify-send "Unmount of $chosen aborted" ""
+            notify-send "Unmount aborted" "$chosen"
             exit 1;;
         lazy)       sudo -A umount -l "/${chosen#*/}";;
         terminate)  echo "$bPIDs" | while IFS="$(printf '\n')" read -r pid ; do kill "$pid"; done ;;
@@ -35,11 +35,11 @@ if [ -n "$bprocs" ]; then
 fi
 
 sudo -A umount "/${chosen#*/}"
-notify-send "Device unmounted." "$chosen has been unmounted."
+notify-send "Unmounted" "$chosen"
 
 # Close the chosen drive if decrypted.
 cryptid="$(echo "$lsblkoutput" | grep "/${chosen#*/}$")"
 cryptid="${cryptid%% *}"
 test -b /dev/mapper/"${cryptid##*/}"
 sudo -A cryptsetup close "$cryptid"
-notify-send "🔒Device dencryption closed." "Drive is now securely locked again."
+notify-send "Encryption closed" "$chosen"
