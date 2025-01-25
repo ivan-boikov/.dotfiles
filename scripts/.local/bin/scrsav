@@ -1,0 +1,16 @@
+#!/bin/sh
+
+if [ "$1" = 'on' ]; then
+	xset s on
+	xset s blank
+	xset +dpms
+	notify-send "Screensaver: ON"
+elif [ "$1" = 'off' ]; then
+	xset s off
+	xset s noblank
+	xset -dpms
+	notify-send "Screensaver: OFF"
+else
+	echo "Usage: scrsav [on/off]"
+	notify-send "Usage: scrsav [on/off]"
+fi

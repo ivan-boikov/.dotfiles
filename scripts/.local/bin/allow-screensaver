@@ -1,5 +1,0 @@
-#!/bin/sh
-xset s on
-xset s blank
-xset +dpms
-notify-send "Screensaver ON"
