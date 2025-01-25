@@ -153,6 +153,7 @@ set formatoptions-=t
 set list
 set listchars=tab:>-
 set listchars+=space:·
+set listchars+=eol:$
 
 function TabSpaceToggle()
 	if &expandtab
