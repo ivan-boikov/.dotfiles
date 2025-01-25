@@ -90,6 +90,8 @@ export ERRFILE="$XDG_STATE_HOME/x11/xsession-errors"
 # libx11
 export XCOMPOSEFILE="$XDG_CONFIG_HOME/x11/xcompose"
 export XCOMPOSECACHE="$XDG_CACHE_HOME/x11/xcompose"
+export PYENV_DIR="$XDG_DATA_HOME/pyenv"
+export PYENV_ROOT="$XDG_DATA_HOME/pyenv"
 
 # POSIX standard says: send read local mail to ~/mbox, an mbox database
 # gentoo uses maildir by default, it is also recommended over mbox
