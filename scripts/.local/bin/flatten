@@ -1,0 +1,38 @@
+#!/bin/sh
+
+# flatten the directory tree
+# example: dir1/dir2/file1 -> dir1_dir2_file1
+
+DIR="${1:-.}"
+
+_flatten(){
+	cmd="$1"
+	find "$DIR" -mindepth 2 -type f -exec bash -c 'file=${1#./}; '"$cmd"' "$file" "${file//\//_}"' _ '{}' \;
+}
+
+toflat=$(_flatten "echo mv")
+if [ -z "$toflat" ]; then
+	echo "Abort: nothing to do"; exit
+fi
+
+echo "Flattening will do:"
+echo "$toflat"
+printf "Proceed? [y/N] "
+read -r yn
+case $yn in
+	[Yy]* ) ;;
+	* ) echo "Abort" ; exit;;
+esac
+_flatten "mv"
+
+
+todel="$(find . -type d -empty -print)"
+[ -z "$todel" ] && exit
+echo "Empty subdirectories:"
+echo "$todel"
+printf "Remove subdirectories? [y/N]"
+read -r yn
+case $yn in
+	[Yy]* ) find . -type d -empty -delete;;
+	* ) echo "Abort" ; exit;;
+esac
