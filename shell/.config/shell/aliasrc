@@ -75,8 +75,6 @@ alias yarn='yarn --use-yarnrc $XDG_CONFIG_HOME/yarn/config'
 [ -d "$XDG_CONFIG_HOME/abook/" ] || mkdir -p "$XDG_CONFIG_HOME/abook/"
 [ -d "$XDG_DATA_HOME/abook/" ] || mkdir -p "$XDG_DATA_HOME/abook/"
 
-alias beet='$XDG_DATA_HOME/venv/beets/bin/beet'
-
 # https://unix.stackexchange.com/questions/224227/how-do-you-make-an-alias-or-function-that-retains-tab-completion
 # First find out which complete-function is used for the systemctl command:
 #   complete | grep " systemctl$"
