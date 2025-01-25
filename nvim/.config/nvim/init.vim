@@ -47,8 +47,9 @@ call minpac#add('tpope/vim-commentary')
 call minpac#add('Thyrum/vim-stabs') " tabs for beginning of lines, spaces otherwise
 call minpac#add('vim-autoformat/vim-autoformat')
 
-call minpac#add('nvim-lua/plenary.nvim') " dep for refactoring
+call minpac#add('nvim-lua/plenary.nvim') " dep for refactoring and coverage
 call minpac#add('ThePrimeagen/refactoring.nvim')
+call minpac#add('andythigpen/nvim-coverage')
 
 " snippets
 call minpac#add('hrsh7th/nvim-cmp')
@@ -522,6 +523,35 @@ vim.keymap.set( "n", "<leader>rI", ":Refactor inline_func")
 vim.keymap.set("n", "<leader>rb", ":Refactor extract_block")
 vim.keymap.set("n", "<leader>rbf", ":Refactor extract_block_to_file")
 EOF
+
+
+
+lua <<EOF
+require("coverage").setup({
+	commands = true, -- create commands
+	highlights = {
+		-- customize highlight groups created by the plugin
+		covered = { fg = "#C3E88D" },   -- supports style, fg, bg, sp (see :h highlight-gui)
+		uncovered = { fg = "#F07178" },
+	},
+	signs = {
+		-- use your own highlight groups or text markers
+		covered = { hl = "CoverageCovered", text = "▎" },
+		uncovered = { hl = "CoverageUncovered", text = "▎" },
+	},
+	summary = {
+		-- customize the summary pop-up
+		min_coverage = 80.0,      -- minimum coverage threshold (used for highlighting)
+	},
+	lang = {
+		-- customize language specific settings
+	},
+})
+EOF
+nmap <Leader>cc :Coverage<CR>
+nmap <Leader>ct :CoverageToggle<CR>
+nmap <Leader>cs :CoverageSummary<CR>
+
 
 
 " learning French with vim-translator!
