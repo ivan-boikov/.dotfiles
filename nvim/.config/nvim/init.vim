@@ -231,6 +231,11 @@ autocmd FileType python nmap <leader>s :!ruff check %<CR>
 nmap <F5> :!make run<CR>
 nmap <F7> :make<CR>
 
+au FileType tex nmap <F5> :VimtexCompile<CR>
+" F17 = S-F5
+au FileType tex nmap <F17> :VimtexClean<CR>
+
+
 
 
 
