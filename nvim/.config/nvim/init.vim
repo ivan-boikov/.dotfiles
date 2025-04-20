@@ -263,12 +263,12 @@ nnoremap <C-k> :TmuxNavigateRight<CR>
 lua << EOF
 require'nvim-treesitter.configs'.setup {
 	-- A list of parser names, or "all"
-	ensure_installed = {{
-		"c", "lua", "cpp", "bash", "python",
-		"git_rebase", "gitattributes", "gitcommit", "gitignore", "git_config",
-		"make", "regex", "vim",
-		"html", "css", "javascript", "json", "yaml", "markdown"
-	}},
+	--ensure_installed = {{
+	--	"c", "lua", "cpp", "bash", "python",
+	--	"git_rebase", "gitattributes", "gitcommit", "gitignore", "git_config",
+	--	"make", "regex", "vim",
+	--	"html", "css", "javascript", "json", "yaml", "markdown"
+	--}},
 
 	-- Install parsers synchronously (only applied to `ensure_installed`)
 	sync_install = false,
