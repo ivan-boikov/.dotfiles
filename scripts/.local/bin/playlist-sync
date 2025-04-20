@@ -2,22 +2,27 @@
 
 DIR="$HOME/audio/playlists"
 
-
 cd "$DIR" || exit
-for playlist_path in "$DIR"/*.m3u; do
+
+# phone -> desktop
+for playlist_path in "$DIR"/phone-export/*; do
+	playlist="$(basename "$playlist_path")"
+	# normalize filenames to <playlist name>.m3u
+	tmp="$(echo $playlist | sed 's/.m3u8$//g' | sed 's/.m3u$//g').m3u"
+	mv "phone-export/$playlist" "phone-export/$tmp" > /dev/null 2>&1
+	# \r\n -> \n
+	sed -i 's/\r$//g' "phone-export/$tmp"
+done
+# actual import
+for playlist_path in "$DIR"/phone-export/*; do
 	playlist="$(basename "$playlist_path")"
 	# -nt is a bashism
-	if [ "$DIR/$playlist" -nt "$DIR/phone/$playlist" ]; then
-		echo "$playlist: desktop > phone"
-		sed -e 's/^/Music\/library\//g' \
-			-e 's/flac$/opus/g' -e 's/mp3$/opus/g'  -e 's/wav$/opus/g' \
-			"$DIR/$playlist" > "$DIR/phone/$playlist"
-	else
-		echo "$playlist: phone > desktop"
-		sed -e 's/^Music\/library\///g' \
+	if [ "$DIR/phone-export/$playlist" -nt "$DIR/$playlist" ]; then
+		echo "Importing $playlist"
+		sed -e 's/^primary\/Music\/library\///g' \
 			-e '/-FLAC\//s/opus$/flac/g' -e '/-MP3\//s/opus$/mp3/g' -e '/-WAVE\//s/opus$/wav/g'\
 			-e '/^#/d' \
-			"$DIR/phone/$playlist" > "$DIR/$playlist"
+			"$DIR/phone-export/$playlist" > "$DIR/$playlist"
 		git add "$DIR/$playlist" > /dev/null 2>&1
 		git commit -m "Updated $playlist" > /dev/null 2>&1
 	fi
