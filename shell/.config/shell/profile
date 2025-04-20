@@ -150,8 +150,20 @@ export NNN_TRASH=1
 export NNN_SSHFS="sshfs -o follow_symlinks"
 export NNN_FIFO="/tmp/nnn.fifo.$(whoami)"
 export NNN_ARCHIVE="\\.(7z|a|ace|alz|arc|arj|bz|bz2|cab|cpio|deb|gz|jar|lha|lz|lzh|lzma|lzo|rar|rpm|rz|t7z|tar|tbz|tbz2|tgz|tlz|txz|tZ|tzo|war|xpi|xz|Z|zip)$"
-# white color for files, default for the rest
-export NNN_FCOLORS=c1e2272eff6033f7c6d6abc4
+BLOCKDEVICE="C1"
+CHARDEVICE="E2"
+DIRECTORY="27"
+EXECUTABLE="2E"
+REGULAR="00"
+HARDLINK="60"
+SYMBOLICLINK="33"
+MISSINGORFILEDETAILS="F7"
+ORPHANEDSYMBOLICLINK="C6"
+FIFO="D6"
+SOCKET="AB"
+UNKNOWN="C4"
+export NNN_FCOLORS="$BLOCKDEVICE$CHARDEVICE$DIRECTORY$EXECUTABLE$REGULAR$HARDLINK$SYMBOLICLINK$MISSINGORFILEDETAILS$ORPHANEDSYMBOLICLINK$FIFO$SOCKET$UNKNOWN"
+export NNN_TERMINAL="$TERMINAL"
 # for nnn's fzf plugin
 export FZF_DEFAULT_OPTS="--layout=reverse --height 40%"
 
