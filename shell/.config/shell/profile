@@ -171,8 +171,8 @@ export FZF_DEFAULT_OPTS="--layout=reverse --height 100%"
 export _JAVA_AWT_WM_NONREPARENTING=1
 
 # fixing SVP won't picking up vapoursynth library
-# TODO change 3.9 to whatever may be later
-export PYTHONPATH=/usr/local/lib/python3.9/site-packages
+PYTHONVER="$(python --version | cut -d' ' -f 2 | cut -d'.' -f1-2)"
+export PYTHONPATH="/usr/lib/python$PYTHONVER"
 
 # possibly Android stuff? why can't they honor XDG??
 if [ -d "$HOME/platform-tools" ] ; then
